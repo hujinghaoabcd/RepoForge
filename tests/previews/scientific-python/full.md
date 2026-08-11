@@ -1,6 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="SpatialTools" width="160">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="SpatialTools" width="160">
 
 # SpatialTools
 
@@ -8,10 +8,14 @@
 
 [![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation-and-reproducibility) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
+
 English · 简体中文
 
-Documentation · Examples · API · Citation
 
+Documentation · Examples · API · Citation
+</div>
+
+---
 ## What SpatialTools is
 
 SpatialTools is a reusable scientific Python package for neighborhood-based spatial analysis. It provides common numerical foundations for spatial weights, local regression, diagnostics, result objects, and geospatial export while keeping scientific conventions explicit.

@@ -1,20 +1,18 @@
-{% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
-</p>
+<div align="center">
 
-{% endif %}{% if demo_image %}<p align="center">
-  <img src="{{ demo_image }}" alt="{{ project_name }} demo" width="{{ demo_width | default(900) }}">
-</p>
-
-{% endif %}# {{ project_name }}
+{% if logo_path %}<img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
+{% endif %}{{ "\n" }}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
+{% endif %}{{ "\n" }}
+{% if navigation %}{{ navigation }}
+{% endif %}
+</div>
 
-{% endif %}{% if navigation %}{{ navigation }}
-
-{% endif %}## Why {{ display_name }}?
+---
+## Why {{ display_name }}?
 
 {{ why_text }}
 
@@ -27,7 +25,15 @@
 
 {{ demo_url }}
 
-{% endif %}## Installation
+{% endif %}## Preview
+
+{% if demo_image %}<p align="center">
+  <img src="{{ demo_image }}" alt="{{ project_name }} demo" width="{{ demo_width | default(800) }}">
+</p>
+
+{% endif %}
+
+## Installation
 
 ```bash
 {{ install_command }}

@@ -72,19 +72,13 @@ RepoForge follows several practical rules:
 - Web and desktop products foreground how users actually run, install, deploy, or upgrade them.
 - Generated output remains ordinary Markdown that can still be edited by humans.
 
-## Preview gallery
+## Preview
 
 <p align="center">
-  <img src="assets/screenshots/repoforge-preview.webp" alt="RepoForge README generation concept" width="820">
+  <img src="assets/placeholders/screenshot.svg" alt="RepoForge preview placeholder" width="820">
 </p>
 
-<p align="center"><em>README generation concept using the Minimal / Standard / Full profile model.</em></p>
-
-<p align="center">
-  <img src="assets/screenshots/repoforge-workflow.webp" alt="RepoForge workflow concept" width="820">
-</p>
-
-<p align="center"><em>Workflow concept from repository input to a generated README. These visuals describe the product direction; the current implementation is the CLI renderer documented below.</em></p>
+<p align="center"><em>Reserved for real RepoForge screenshots. The committed placeholder intentionally contains no mock interface or fabricated product output.</em></p>
 
 ## Template matrix
 
@@ -263,6 +257,27 @@ Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the architecture and tem
 - **Examples and previews are renderer-backed so design regressions are testable.**
 - **Incomplete configuration should fail explicitly.**
 - **Generated output remains readable, editable Markdown.**
+
+## Usability today
+
+RepoForge is **usable now for explicit, configuration-driven README rendering**. From a source checkout you can select any of the seven project types, choose `minimal`, `standard`, or `full`, provide YAML configuration, and render a Markdown README with the strict CLI.
+
+Available now:
+
+- `repoforge render`;
+- 7 project types × 3 independent profiles;
+- strict Jinja/YAML validation;
+- committed examples and golden previews;
+- renderer-backed stress tests and Python 3.11–3.13 CI.
+
+Not implemented yet:
+
+- automatic project detection;
+- `init`, `apply`, `diff`, and `check` repository workflows;
+- managed partial updates to an existing hand-edited README;
+- a published PyPI release.
+
+So the current release is already useful as a **template renderer and standards reference**, but it is not yet the final zero-configuration repository automation tool.
 
 ## Project status
 

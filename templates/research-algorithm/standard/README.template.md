@@ -1,20 +1,18 @@
-{% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
-</p>
+<div align="center">
 
-{% endif %}{% if method_figure %}<p align="center">
-  <img src="{{ method_figure }}" alt="{{ project_name }} method overview" width="{{ figure_width | default(760) }}">
-</p>
-
-{% endif %}# {{ project_name }}
+{% if logo_path %}<img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
+{% endif %}{{ "\n" }}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
+{% endif %}{{ "\n" }}
+{% if navigation %}{{ navigation }}
+{% endif %}
+</div>
 
-{% endif %}{% if navigation %}{{ navigation }}
-
-{% endif %}## Scientific Problem
+---
+## Scientific Problem
 
 {{ problem_text }}
 
@@ -24,6 +22,12 @@
 {% if method_overview.equation %}
 
 {{ method_overview.equation }}
+{% endif %}
+
+{% if method_figure %}<p align="center">
+  <img src="{{ method_figure }}" alt="{{ project_name }} method overview" width="{{ figure_width | default(760) }}">
+</p>
+
 {% endif %}
 
 ## Key Contributions

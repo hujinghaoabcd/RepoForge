@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="LatentMap" width="160">
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-workflow.webp" alt="LatentMap method overview" width="780">
-</p>
+<img src="../../../assets/logo.svg" alt="LatentMap" width="160">
 
 # LatentMap
 
@@ -12,8 +8,11 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Paper · Method Guide · Validation · Examples · API · Citation
 
+Paper · Method Guide · Validation · Examples · API · Citation
+</div>
+
+---
 ## Scientific Problem
 
 Many scientific workflows assume that observed-space Euclidean distance is the relevant notion of similarity. When the task depends on structure that is not aligned with that metric, neighborhoods and downstream local models can be poorly matched to the scientific target.
@@ -43,6 +42,11 @@ $$z_i=f_\theta(x_i), \qquad d_{ij}^{(z)}=\lVert z_i-z_j\rVert_2.$$
 3. **Construct latent geometry** — expose fitted embeddings and latent-distance operations.
 4. **Validate** — evaluate recovery, stability, and downstream behavior under documented cases.
 5. **Apply downstream** — use latent distances only in workflows whose interpretation matches the trained objective.
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="LatentMap method overview" width="760">
+</p>
+
 
 ## Key Contributions
 

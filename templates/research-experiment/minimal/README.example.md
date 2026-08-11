@@ -1,9 +1,16 @@
+<div align="center">
+
+
 # ForecastBench
 
 **Minimal reproducible code for a short-horizon traffic forecasting study.**
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#environment) [![Paper](https://img.shields.io/badge/paper-study-blue)](#citation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
+
+</div>
+
+---
 Paper: docs/paper.md
 
 ## Environment

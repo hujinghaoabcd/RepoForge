@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="LatentMap" width="160">
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-workflow.webp" alt="LatentMap method overview" width="780">
-</p>
+<img src="../../../assets/logo.svg" alt="LatentMap" width="160">
 
 # LatentMap
 
@@ -12,8 +8,11 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Paper · Documentation · Examples · API · Citation
 
+Paper · Documentation · Examples · API · Citation
+</div>
+
+---
 ## Scientific Problem
 
 Many workflows rely on fixed Euclidean distance even when the scientific task depends on a different notion of similarity. LatentMap addresses this mismatch by learning a representation whose geometry is optimized for a documented task objective.
@@ -23,6 +22,11 @@ Many workflows rely on fixed Euclidean distance even when the scientific task de
 LatentMap learns a mapping from observed features into a lower-dimensional latent space, then evaluates neighborhood structure using distances in that learned space. The learned geometry is part of the model and must be interpreted together with the training objective.
 
 $$z_i = f_\theta(x_i), \qquad d_{ij}^{(z)} = \lVert z_i-z_j \rVert_2.$$
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="LatentMap method overview" width="760">
+</p>
+
 
 ## Key Contributions
 

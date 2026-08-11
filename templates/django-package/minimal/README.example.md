@@ -1,13 +1,17 @@
+<div align="center">
+
+
 # django-audit-panel
 
 **Lightweight model-change auditing for Django projects.**
 
 [![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Django](https://img.shields.io/badge/Django-package-green)](#compatibility) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)
 
+
 Installation · Setup · Quick Start · Compatibility
+</div>
 
-django-audit-panel is a reusable Django application that records selected model changes and exposes a small query API for project code.
-
+---
 ## Installation
 
 ```bash

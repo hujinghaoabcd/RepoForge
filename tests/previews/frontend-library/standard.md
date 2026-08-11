@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="MapWidget" width="160">
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="MapWidget demo" width="780">
-</p>
+<img src="../../../assets/logo.svg" alt="MapWidget" width="160">
 
 # MapWidget
 
@@ -12,8 +8,11 @@
 
 [![npm](https://img.shields.io/badge/npm-package-red)](#installation) [![TypeScript](https://img.shields.io/badge/TypeScript-ready-blue)](#api-overview) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#development-and-testing) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Demo · Install · Quick Start · API · Compatibility
 
+Demo · Install · Quick Start · API · Compatibility
+</div>
+
+---
 ## Why MapWidget?
 
 Map applications repeatedly rebuild layer switching, visibility state, keyboard behavior, and map-engine glue. MapWidget keeps the UI framework-neutral and exposes small adapters rather than requiring a new application framework.
@@ -28,6 +27,13 @@ Map applications repeatedly rebuild layer switching, visibility state, keyboard 
 ## Demo
 
 https://example.org/map-widget/demo
+
+## Preview
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="MapWidget demo" width="760">
+</p>
+
 
 ## Installation
 

@@ -1,11 +1,17 @@
+<div align="center">
+
+
 # django-audit-panel
 
 **A production-oriented reusable Django auditing application with admin, API, retention, and integration contracts.**
 
 [![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Django](https://img.shields.io/badge/Django-tested-green)](#compatibility-matrix) [![Python](https://img.shields.io/badge/Python-tested-blue)](#compatibility-matrix) [![Tests](https://img.shields.io/badge/tests-matrix-brightgreen)](#testing) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)
 
-Why · Features · Setup · API · Security · Compatibility · Upgrade
 
+Why · Features · Setup · API · Security · Compatibility · Upgrade
+</div>
+
+---
 ## Why django-audit-panel?
 
 Auditing is deceptively cross-cutting. A reusable package must coordinate model registration, migrations, admin visibility, request/user attribution, retention, templates, permissions, and stable query APIs without taking ownership of the host project's authentication or authorization policy. django-audit-panel exposes those boundaries explicitly.
@@ -18,6 +24,9 @@ Auditing is deceptively cross-cutting. A reusable package must coordinate model 
 - **Stable query surface** — consume audit records through documented managers and helper functions.
 - **Retention controls** — prune old records with a management command and project-owned scheduling.
 - **Optional frontend assets** — provide a small timeline component without replacing the host design system.
+
+## Preview
+
 
 ## Installation
 

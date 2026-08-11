@@ -1,6 +1,5 @@
-<p align="center">
-  <img src="docs/assets/geoboard-overview.png" alt="GeoBoard screenshot" width="920">
-</p>
+<div align="center">
+
 
 # GeoBoard
 
@@ -8,8 +7,11 @@
 
 [![Build](https://img.shields.io/badge/build-passing-brightgreen)](#testing) [![Docker](https://img.shields.io/badge/docker-ready-blue)](#deployment) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Demo · Features · Local Development · Deployment · Documentation
 
+Demo · Features · Local Development · Deployment · Documentation
+</div>
+
+---
 ## Overview
 
 GeoBoard combines a browser map, a small application API, and PostgreSQL/PostGIS persistence so teams can publish repeatable spatial dashboards without maintaining a separate GIS desktop workflow for every viewer.
@@ -17,6 +19,11 @@ GeoBoard combines a browser map, a small application API, and PostgreSQL/PostGIS
 **Demo:** https://demo.example.org
 
 ## Screenshots / Demo
+
+<p align="center">
+  <img src="docs/assets/geoboard-overview.png" alt="GeoBoard screenshot" width="800">
+</p>
+
 
 The overview page combines the map, indicator filters, saved views, and dataset status in one workspace.
 

@@ -1,17 +1,14 @@
-<h1 align="center">GeoDesk</h1>
-<p align="center"><strong>A cross-platform GIS desktop application for browsing, styling, and organizing local spatial data.</strong></p>
-<p align="center">
-  <a href="https://github.com/example/geodesk/releases"><img src="https://img.shields.io/badge/release-v1.2.0-blue" alt="Latest release"></a>
-  <a href="#platform-compatibility"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey" alt="Platforms"></a>
-  <a href="#development-and-testing"><img src="https://img.shields.io/badge/tests-passing-brightgreen" alt="Tests"></a>
-  <a href="docs/"><img src="https://img.shields.io/badge/docs-online-blue" alt="Docs"></a>
-  <a href="#license"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
-</p>
-<p align="center">
-  <a href="#download-and-install">Download</a> ·  <a href="docs/">Documentation</a> ·  <a href="CHANGELOG.md">Changelog</a> ·  <a href="https://github.com/example/geodesk/issues">Issues</a></p>
-<p align="center">
-  <img src="docs/images/geodesk-main.png" alt="GeoDesk screenshot" width="900">
-</p>
+<div align="center">
+
+
+# GeoDesk
+
+**A cross-platform GIS desktop application for browsing, styling, and organizing local spatial data.**
+
+<a href="https://github.com/example/geodesk/releases"><img src="https://img.shields.io/badge/release-v1.2.0-blue" alt="Latest release"></a> <a href="#platform-compatibility"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey" alt="Platforms"></a> <a href="#development-and-testing"><img src="https://img.shields.io/badge/tests-passing-brightgreen" alt="Tests"></a> <a href="docs/"><img src="https://img.shields.io/badge/docs-online-blue" alt="Docs"></a> <a href="#license"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
+<a href="#download-and-install">Download</a> · <a href="docs/">Documentation</a> · <a href="CHANGELOG.md">Changelog</a> · <a href="https://github.com/example/geodesk/issues">Issues</a></div>
+
+---
 
 ## Overview
 
@@ -35,6 +32,13 @@ GeoDesk is a local-first desktop GIS for analysts who need to inspect and organi
 ## First Launch
 
 On first launch, GeoDesk creates its user configuration directory and an empty recent-project list. Open a dataset directly or create a `.geodesk` project. No account is required.
+
+## Preview
+
+<p align="center">
+  <img src="docs/images/geodesk-main.png" alt="GeoDesk screenshot" width="900">
+</p>
+
 
 ## Platform Compatibility
 

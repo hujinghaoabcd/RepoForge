@@ -1,6 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="MapWidget" width="160">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="MapWidget" width="160">
 
 # MapWidget
 
@@ -8,6 +8,10 @@
 
 [![npm](https://img.shields.io/badge/npm-package-red)](#install) [![TypeScript](https://img.shields.io/badge/TypeScript-ready-blue)](#quick-start) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
+
+</div>
+
+---
 ## Install
 
 ```bash
