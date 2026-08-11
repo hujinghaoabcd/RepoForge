@@ -4,16 +4,16 @@
 {% endif %}<h1 align="center">{{ project_name }}</h1>
 <p align="center"><strong>{{ tagline }}</strong></p>
 {% if badges %}<p align="center">
-{% for badge in badges %}  <a href="{{ badge.link }}"><img src="{{ badge.image }}" alt="{{ badge.alt }}"></a>{% if not loop.last %} {% endif %}
+{% for badge in badges %}  <a href="{{ badge.link }}"><img src="{{ badge.image }}" alt="{{ badge.alt }}"></a>
 {% endfor %}</p>
 {% endif %}{% if navigation %}<p align="center">
-{% for item in navigation %}  <a href="{{ item.link }}">{{ item.label }}</a>{% if not loop.last %} · {% endif %}
+{% for item in navigation %}  <a href="{{ item.link }}">{{ item.label }}</a>{% if not loop.last %} ·{% endif %}
 {% endfor %}</p>
 {% endif %}{% if screenshot_path %}<p align="center">
   <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(900) }}">
 </p>
-{% endif %}
-## Why {{ display_name }}?
+
+{% endif %}## Why {{ display_name }}?
 
 {{ why_text }}
 
@@ -54,7 +54,8 @@
 
 {% endif %}{% if file_formats %}## Project and File Formats
 
-{% for item in file_formats %}- **{{ item.name }}:** {{ item.description }}{% if item.compatibility %} — {{ item.compatibility }}{% endif %}
+{% for item in file_formats %}
+- **{{ item.name }}:** {{ item.description }}{% if item.compatibility %} — {{ item.compatibility }}{% endif %}
 {% endfor %}
 
 {% endif %}{% if extensions_text %}## Plugins and Extensions
@@ -94,13 +95,16 @@
 
 {{ packaging_text }}
 
-{% for item in packaging_steps %}- **{{ item.name }}:** {{ item.description }}{% if item.command %}
-  ```bash
-  {{ item.command }}
-  ```{% endif %}
-{% endfor %}
+{% for item in packaging_steps %}
+### {{ item.name }}
 
-## Development and Testing
+{{ item.description }}
+
+{% if item.command %}```bash
+{{ item.command }}
+```
+
+{% endif %}{% endfor %}## Development and Testing
 
 {{ development_text }}
 

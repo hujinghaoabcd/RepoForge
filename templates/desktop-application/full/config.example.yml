@@ -105,7 +105,7 @@ data_locations:
     location: user-selected `.geodesk` files
     purpose: versioned metadata; back up together with externally referenced datasets when required
 file_formats:
-  - name: `.geodesk`
+  - name: '`.geodesk`'
     description: JSON-based project metadata containing layer references, style state, view state, and schema version.
     compatibility: backward migration is documented between supported major schema versions.
   - name: Imported datasets

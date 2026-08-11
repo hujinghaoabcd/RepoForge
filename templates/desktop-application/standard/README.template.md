@@ -4,16 +4,16 @@
 {% endif %}<h1 align="center">{{ project_name }}</h1>
 <p align="center"><strong>{{ tagline }}</strong></p>
 {% if badges %}<p align="center">
-{% for badge in badges %}  <a href="{{ badge.link }}"><img src="{{ badge.image }}" alt="{{ badge.alt }}"></a>{% if not loop.last %} {% endif %}
+{% for badge in badges %}  <a href="{{ badge.link }}"><img src="{{ badge.image }}" alt="{{ badge.alt }}"></a>
 {% endfor %}</p>
 {% endif %}{% if navigation %}<p align="center">
-{% for item in navigation %}  <a href="{{ item.link }}">{{ item.label }}</a>{% if not loop.last %} · {% endif %}
+{% for item in navigation %}  <a href="{{ item.link }}">{{ item.label }}</a>{% if not loop.last %} ·{% endif %}
 {% endfor %}</p>
 {% endif %}{% if screenshot_path %}<p align="center">
   <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(900) }}">
 </p>
-{% endif %}
-## Overview
+
+{% endif %}## Overview
 
 {{ overview_text }}
 
