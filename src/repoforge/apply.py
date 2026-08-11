@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
@@ -36,6 +37,13 @@ GITHUB_ISSUE_OUTPUTS = {
 
 PULL_REQUEST_OUTPUT = Path(".github/pull_request_template.md")
 
+STANDARD_KEYS = {
+    *COMMUNITY_OUTPUTS,
+    "issue_forms",
+    "pull_request_template",
+    *METADATA_OUTPUTS,
+}
+
 
 @dataclass(frozen=True)
 class PlannedFile:
@@ -51,7 +59,17 @@ class ApplyResult:
     source: str
 
 
-def _selected(state: str, policy: StandardsPolicy) -> bool:
+def _selected(
+    name: str,
+    state: str,
+    policy: StandardsPolicy,
+    include: set[str],
+    exclude: set[str],
+) -> bool:
+    if name in exclude:
+        return False
+    if name in include:
+        return True
     if policy == "none":
         return False
     if policy == "default":
@@ -61,15 +79,33 @@ def _selected(state: str, policy: StandardsPolicy) -> bool:
     raise ValueError(f"Unsupported standards policy: {policy}")
 
 
+def _validate_overrides(include: set[str], exclude: set[str]) -> None:
+    unknown = (include | exclude) - STANDARD_KEYS
+    if unknown:
+        raise ValueError(f"Unknown repository standard(s): {', '.join(sorted(unknown))}")
+    overlap = include & exclude
+    if overlap:
+        raise ValueError(
+            f"Repository standard cannot be both included and excluded: "
+            f"{', '.join(sorted(overlap))}"
+        )
+
+
 def build_apply_plan(
     project_type: str,
     profile: str,
     config: dict[str, Any],
     *,
     standards_policy: StandardsPolicy = "default",
+    include: set[str] | None = None,
+    exclude: set[str] | None = None,
     template_root: str | Path | None = None,
     standards_root: str | Path | None = None,
 ) -> list[PlannedFile]:
+    include_set = set(include or ())
+    exclude_set = set(exclude or ())
+    _validate_overrides(include_set, exclude_set)
+
     files = [
         PlannedFile(
             path=Path("README.md"),
@@ -83,12 +119,14 @@ def build_apply_plan(
         )
     ]
 
-    if standards_policy == "none":
-        return files
-
     community = standard_plan(project_type, profile, standards_root=standards_root)
-    for name, state in community.items():
-        if not _selected(state, standards_policy):
+    selected_community = {
+        name
+        for name, state in community.items()
+        if _selected(name, state, standards_policy, include_set, exclude_set)
+    }
+    for name in COMMUNITY_OUTPUTS:
+        if name not in selected_community:
             continue
         files.append(
             PlannedFile(
@@ -101,18 +139,40 @@ def build_apply_plan(
         )
 
     github = github_plan(project_type, profile, standards_root=standards_root)
-    if _selected(github["issue_forms"], standards_policy):
+    issue_forms_selected = _selected(
+        "issue_forms",
+        github["issue_forms"],
+        standards_policy,
+        include_set,
+        exclude_set,
+    )
+    pull_request_selected = _selected(
+        "pull_request_template",
+        github["pull_request_template"],
+        standards_policy,
+        include_set,
+        exclude_set,
+    )
+
+    if issue_forms_selected:
+        github_config = deepcopy(config)
+        issue_forms = github_config.get("issue_forms")
+        if not isinstance(issue_forms, dict):
+            raise ValueError("Config section must be a mapping: issue_forms")
+        issue_forms["support_link_enabled"] = "support" in selected_community
+        issue_forms["security_link_enabled"] = "security" in selected_community
         for name, output in GITHUB_ISSUE_OUTPUTS.items():
             files.append(
                 PlannedFile(
                     path=output,
                     content=render_github_standard(
-                        name, config, standards_root=standards_root
+                        name, github_config, standards_root=standards_root
                     ),
                     source=f"github:{name}",
                 )
             )
-    if _selected(github["pull_request_template"], standards_policy):
+
+    if pull_request_selected:
         files.append(
             PlannedFile(
                 path=PULL_REQUEST_OUTPUT,
@@ -126,8 +186,9 @@ def build_apply_plan(
         )
 
     metadata = metadata_plan(project_type, profile, standards_root=standards_root)
-    for name, state in metadata.items():
-        if not _selected(state, standards_policy):
+    for name in METADATA_OUTPUTS:
+        state = metadata[name]
+        if not _selected(name, state, standards_policy, include_set, exclude_set):
             continue
         files.append(
             PlannedFile(
