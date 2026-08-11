@@ -9,6 +9,7 @@ from repoforge.renderer import render_from_config
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATES = ROOT / "templates"
+PREVIEWS = ROOT / "tests" / "previews"
 
 
 @pytest.mark.parametrize(
@@ -78,3 +79,17 @@ def test_research_algorithm_profiles_have_distinct_depth():
 
     assert len(outputs["minimal"].splitlines()) < len(outputs["standard"].splitlines())
     assert len(outputs["standard"].splitlines()) < len(outputs["full"].splitlines())
+
+
+def test_research_algorithm_examples_match_visible_previews():
+    for profile in ("minimal", "standard", "full"):
+        example = (
+            TEMPLATES / "research-algorithm" / profile / "README.example.md"
+        ).read_text(encoding="utf-8")
+        preview = (PREVIEWS / "research-algorithm" / f"{profile}.md").read_text(
+            encoding="utf-8"
+        )
+
+        assert example == preview
+        assert "# LatentMap" in preview
+        assert "MethodX" not in preview
