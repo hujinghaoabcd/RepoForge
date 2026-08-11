@@ -1,0 +1,116 @@
+name: sync-diff-readme
+
+on:
+  push:
+    branches: [feature/diff-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/diff-v1
+
+      - name: Update README status
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(text: str, old: str, new: str, label: str) -> str:
+              if old not in text:
+                  raise SystemExit(f"missing expected block: {label}")
+              return text.replace(old, new, 1)
+
+          p = Path("README.md")
+          text = p.read_text(encoding="utf-8")
+          text = replace_once(
+              text,
+              "Review `repoforge.yml`, then preview and apply it:\n\n```bash\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```\n\n`init` records the explicit project type/profile in the config, so normal `apply` does not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md) and [`docs/APPLY.md`](docs/APPLY.md).",
+              "Review `repoforge.yml`, inspect the exact text changes, then apply it:\n\n```bash\nrepoforge diff /path/to/project --config /path/to/project/repoforge.yml\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```\n\n`init` records the explicit project type/profile in the config, so normal `diff` and `apply` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), and [`docs/APPLY.md`](docs/APPLY.md).",
+              "english quick start",
+          )
+          text = replace_once(
+              text,
+              "The current CLI implements `repoforge render`, explicit `repoforge init`, and the safety-first `repoforge apply` workflow.",
+              "The current CLI implements `repoforge render`, explicit `repoforge init`, review-first `repoforge diff`, and the safety-first `repoforge apply` workflow.",
+              "english cli summary",
+          )
+          text = replace_once(
+              text,
+              "GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13**, performs CLI render smoke tests for all seven template families, and exercises `repoforge apply` against a temporary repository.",
+              "GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13**, performs CLI render smoke tests for all seven template families, and exercises the full `init → diff → apply` workflow against a temporary repository.",
+              "english ci summary",
+          )
+          text = replace_once(
+              text,
+              "- `repoforge init` for one combined, explicitly typed `repoforge.yml`;\n- `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;",
+              "- `repoforge init` for one combined, explicitly typed `repoforge.yml`;\n- `repoforge diff` for unified, no-write review of the exact selected apply plan;\n- `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;",
+              "english available commands",
+          )
+          text = replace_once(
+              text,
+              "- `diff` and `check` repository workflows;",
+              "- the `check` repository workflow;",
+              "english remaining workflow",
+          )
+          text = replace_once(
+              text,
+              "The repository standards packs, `init`, and the first safe `apply` workflow are now implemented. The next workflow layer is:\n\n```text\nrepoforge diff .       # planned: show textual diffs for the apply plan\nrepoforge check .      # planned: validate repository documentation contracts\n```\n\nThe currently supported CLI commands are `repoforge render`, `repoforge init`, and `repoforge apply`.",
+              "The repository standards packs plus `init`, `diff`, and the first safe `apply` workflow are now implemented. The next workflow layer is:\n\n```text\nrepoforge check .      # planned: validate repository documentation contracts\n```\n\nThe currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, and `repoforge apply`.",
+              "english project status",
+          )
+          p.write_text(text, encoding="utf-8")
+
+          p = Path("README.zh-CN.md")
+          text = p.read_text(encoding="utf-8")
+          text = replace_once(
+              text,
+              "编辑生成的 `repoforge.yml` 后，可以直接预览并应用：\n\n```bash\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```\n\n`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)。",
+              "编辑生成的 `repoforge.yml` 后，先查看精确文本差异，再应用：\n\n```bash\nrepoforge diff /path/to/project --config /path/to/project/repoforge.yml\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```\n\n`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)、[`docs/DIFF.md`](docs/DIFF.md) 和 [`docs/APPLY.md`](docs/APPLY.md)。",
+              "chinese quick start",
+          )
+          text = replace_once(
+              text,
+              "当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init` 和安全优先的 `repoforge apply`。",
+              "当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init`、用于精确审查的 `repoforge diff` 和安全优先的 `repoforge apply`。",
+              "chinese cli summary",
+          )
+          text = replace_once(
+              text,
+              "GitHub Actions 会在 Python **3.11、3.12、3.13** 上运行测试，对全部七类模板执行 CLI Render Smoke Test，并在临时仓库上真实执行 `repoforge apply`。",
+              "GitHub Actions 会在 Python **3.11、3.12、3.13** 上运行测试，对全部七类模板执行 CLI Render Smoke Test，并在临时仓库上真实执行完整的 `init → diff → apply` 流程。",
+              "chinese ci summary",
+          )
+          text = replace_once(
+              text,
+              "- `repoforge init`，生成包含显式项目类型/Profile 的统一 `repoforge.yml`；\n- `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；",
+              "- `repoforge init`，生成包含显式项目类型/Profile 的统一 `repoforge.yml`；\n- `repoforge diff`，以 Unified Diff 无写入审查当前 Apply 计划的精确变化；\n- `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；",
+              "chinese available commands",
+          )
+          text = replace_once(
+              text,
+              "- `diff`、`check` 等仓库工作流；",
+              "- `check` 仓库工作流；",
+              "chinese remaining workflow",
+          )
+          text = replace_once(
+              text,
+              "仓库标准层、`init` 和第一版安全 Apply 工作流已经实现。下一阶段是：\n\n```text\nrepoforge diff .       # 计划：展示 Apply 计划的文本 Diff\nrepoforge check .      # 计划：检查仓库文档合同\n```\n\n当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init` 和 `repoforge apply`。",
+              "仓库标准层以及 `init`、`diff` 和第一版安全 Apply 工作流已经实现。下一阶段是：\n\n```text\nrepoforge check .      # 计划：检查仓库文档合同\n```\n\n当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init`、`repoforge diff` 和 `repoforge apply`。",
+              "chinese project status",
+          )
+          p.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Remove one-shot workflow and commit
+        run: |
+          rm .github/workflows/sync-diff-readme.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md README.zh-CN.md .github/workflows/sync-diff-readme.yml
+          git commit -m "docs: publish diff workflow status"
+          git push origin HEAD:feature/diff-v1
