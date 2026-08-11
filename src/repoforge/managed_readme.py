@@ -7,7 +7,7 @@ READ_ME_MODES = {"whole-file", "managed-sections"}
 MANAGED_SECTION_NAMES = ("identity", "badges", "navigation")
 
 _HEADER_PREFIX = '<div align="center">\n\n'
-_HEADER_SUFFIX = "\n</div>\n\n---\n"
+_HEADER_CLOSE = "</div>"
 _SECTION_RE = re.compile(
     r"<!-- repoforge:start (?P<name>[a-z0-9-]+) -->\n"
     r"(?P<body>.*?)"
@@ -62,24 +62,64 @@ def _badges_content(config: dict[str, Any]) -> str:
     badges = config.get("badges")
     if badges is None:
         return ""
-    if not isinstance(badges, str):
-        raise ValueError("Managed README badges must be a string or null.")
-    return badges
+    if isinstance(badges, str):
+        return badges
+    if isinstance(badges, list):
+        rendered: list[str] = []
+        for badge in badges:
+            if not isinstance(badge, dict):
+                raise ValueError("Managed README badge entries must be mappings.")
+            image = badge.get("image")
+            link = badge.get("link")
+            alt = badge.get("alt")
+            if not all(isinstance(value, str) and value for value in (image, link, alt)):
+                raise ValueError(
+                    "Managed README badge entries require non-empty alt, image, and link."
+                )
+            rendered.append(f'<a href="{link}"><img src="{image}" alt="{alt}"></a>')
+        return " ".join(rendered)
+    raise ValueError("Managed README badges must be a string, list, or null.")
 
 
 def _navigation_content(config: dict[str, Any]) -> str:
     parts: list[str] = []
     language_switch = config.get("language_switch")
-    navigation = config.get("navigation")
     if language_switch:
         if not isinstance(language_switch, str):
             raise ValueError("Managed README language_switch must be a string or null.")
         parts.append(language_switch)
-    if navigation:
-        if not isinstance(navigation, str):
-            raise ValueError("Managed README navigation must be a string or null.")
+
+    navigation = config.get("navigation")
+    if isinstance(navigation, str) and navigation:
         parts.append(navigation)
+    elif isinstance(navigation, list):
+        rendered: list[str] = []
+        for item in navigation:
+            if not isinstance(item, dict):
+                raise ValueError("Managed README navigation entries must be mappings.")
+            label = item.get("label")
+            link = item.get("link")
+            if not all(isinstance(value, str) and value for value in (label, link)):
+                raise ValueError(
+                    "Managed README navigation entries require non-empty label and link."
+                )
+            rendered.append(f'<a href="{link}">{label}</a>')
+        if rendered:
+            parts.append(" · ".join(rendered))
+    elif navigation is not None:
+        raise ValueError("Managed README navigation must be a string, list, or null.")
+
     return "\n\n".join(parts)
+
+
+def _split_centered_header(generated: str) -> tuple[str, str]:
+    if not generated.startswith(_HEADER_PREFIX):
+        raise ValueError("Managed README requires RepoForge's centered header contract.")
+    close_index = generated.find(_HEADER_CLOSE)
+    if close_index < 0:
+        raise ValueError("Managed README centered header has no closing </div>.")
+    tail_index = close_index + len(_HEADER_CLOSE)
+    return generated[:tail_index], generated[tail_index:]
 
 
 def build_managed_readme(generated: str, config: dict[str, Any]) -> str:
@@ -88,19 +128,13 @@ def build_managed_readme(generated: str, config: dict[str, Any]) -> str:
     The body after the shared centered header remains ordinary Markdown and is not
     managed in v1.
     """
-    if not generated.startswith(_HEADER_PREFIX) or _HEADER_SUFFIX not in generated:
-        raise ValueError(
-            "Managed README requires RepoForge's centered header contract."
-        )
-
-    _, body = generated.split(_HEADER_SUFFIX, 1)
+    _, tail = _split_centered_header(generated)
     blocks = [
         _managed_block("identity", _identity_content(config)),
         _managed_block("badges", _badges_content(config)),
         _managed_block("navigation", _navigation_content(config)),
     ]
-    header = _HEADER_PREFIX + "\n\n".join(blocks) + _HEADER_SUFFIX
-    return header + body
+    return _HEADER_PREFIX + "\n\n".join(blocks) + "\n" + _HEADER_CLOSE + tail
 
 
 def _sections(text: str) -> dict[str, str]:
