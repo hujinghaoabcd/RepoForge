@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoPortal" width="280">
-</p>
-
 # GeoPortal
 
 **A lightweight web application for exploring and sharing geospatial datasets.**
