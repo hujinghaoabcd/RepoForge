@@ -1,0 +1,6 @@
+include LICENSE
+include README.md
+include README.zh-CN.md
+include setup.py
+recursive-include templates *.md *.yml *.yaml *.cff *.svg
+recursive-include standards *.md *.yml *.yaml *.cff
