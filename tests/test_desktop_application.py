@@ -86,8 +86,11 @@ def test_desktop_application_profiles_render(profile, required, forbidden):
         template_root=TEMPLATES,
     )
 
-    assert '<h1 align="center">GeoDesk</h1>' in rendered
-    assert '<p align="center"><strong>' in rendered
+    header = rendered.split("\n## ", 1)[0]
+    assert rendered.startswith('<div align="center">')
+    assert "# GeoDesk" in header
+    assert "img.shields.io" in header
+    assert "</div>" in header
     assert rendered.endswith("\n")
     assert rendered.count("```") % 2 == 0
     for token in required:
@@ -105,9 +108,9 @@ def test_desktop_application_header_is_centered_and_badged():
         )
         first_section = rendered.split("\n## ", 1)[0]
 
-        assert '<h1 align="center">' in first_section
-        assert '<p align="center"><strong>' in first_section
-        assert first_section.count('<p align="center">') >= 3
+        assert first_section.startswith('<div align="center">')
+        assert "# GeoDesk" in first_section
+        assert "</div>" in first_section
         assert len(config["badges"]) >= 4
         assert "Release" in {badge["alt"] for badge in config["badges"]} or "Latest release" in {
             badge["alt"] for badge in config["badges"]
@@ -115,7 +118,9 @@ def test_desktop_application_header_is_centered_and_badged():
         assert any("Platform" in badge["alt"] or "build" in badge["alt"].lower() for badge in config["badges"])
         assert any(badge["alt"] == "License" for badge in config["badges"])
         for badge in config["badges"]:
-            assert f'alt="{badge["alt"]}"' in first_section
+            marker = f'alt="{badge["alt"]}"'
+            assert marker in first_section
+            assert first_section.index(marker) < first_section.index("</div>")
 
 
 def test_desktop_application_profiles_have_distinct_depth():

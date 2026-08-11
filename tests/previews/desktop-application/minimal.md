@@ -1,25 +1,28 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoDesk" width="160">
-</p>
-<h1 align="center">GeoDesk</h1>
-<p align="center"><strong>A lightweight cross-platform desktop viewer for local geospatial datasets.</strong></p>
-<p align="center">
-  <a href="https://github.com/example/geodesk/releases"><img src="https://img.shields.io/badge/release-v0.4.0-blue" alt="Release"></a>
-  <a href="#supported-platforms"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey" alt="Platforms"></a>
-  <a href="#run-from-source"><img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build"></a>
-  <a href="#license"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
-</p>
-<p align="center">
-  <a href="#download-and-install">Download</a> ·  <a href="docs/">Docs</a> ·  <a href="https://github.com/example/geodesk/issues">Issues</a></p>
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="GeoDesk screenshot" width="780">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="GeoDesk" width="160">
+
+# GeoDesk
+
+**A lightweight cross-platform desktop viewer for local geospatial datasets.**
+
+<a href="https://github.com/example/geodesk/releases"><img src="https://img.shields.io/badge/release-v0.4.0-blue" alt="Release"></a> <a href="#supported-platforms"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey" alt="Platforms"></a> <a href="#run-from-source"><img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build"></a> <a href="#license"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
+<a href="#download-and-install">Download</a> · <a href="docs/">Docs</a> · <a href="https://github.com/example/geodesk/issues">Issues</a></div>
+
+---
 
 ## Features
 
 - **Local-first maps** — open GeoPackage, GeoJSON, Shapefile, and GeoTIFF datasets without a server.
 - **Layer inspection** — toggle layers, inspect attributes, and view basic metadata.
 - **Cross-platform desktop UI** — the same project format works on Windows, macOS, and Linux.
+
+## Preview
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="GeoDesk screenshot" width="760">
+</p>
+
 
 ## Download and Install
 

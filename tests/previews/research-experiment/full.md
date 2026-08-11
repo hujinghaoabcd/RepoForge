@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="ForecastBench" width="160">
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-workflow.webp" alt="ForecastBench overview" width="780">
-</p>
+<img src="../../../assets/logo.svg" alt="ForecastBench" width="160">
 
 # ForecastBench
 
@@ -12,8 +8,11 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#environment-and-hardware) [![Paper](https://img.shields.io/badge/paper-study-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#reproducibility-boundaries) [![Reproducibility](https://img.shields.io/badge/reproducibility-full-brightgreen)](#experiment-protocol) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Paper · Data · Protocol · Main Results · Ablations · Artifacts · Citation
 
+Paper · Data · Protocol · Main Results · Ablations · Artifacts · Citation
+</div>
+
+---
 Paper: docs/paper.md
 
 ## Highlights
@@ -26,6 +25,11 @@ Paper: docs/paper.md
 ## Model Overview
 
 ForecastBench evaluates a graph-based spatiotemporal forecasting model and a controlled set of temporal, graph, and adaptive-graph baselines under one shared data and evaluation contract.
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="ForecastBench experiment overview" width="760">
+</p>
+
 
 ## Datasets and Data Identity
 

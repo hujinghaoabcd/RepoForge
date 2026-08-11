@@ -1,26 +1,30 @@
-{% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
-</p>
+<div align="center">
 
-{% endif %}{% if screenshot_path %}<p align="center">
-  <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(920) }}">
-</p>
-
-{% endif %}# {{ project_name }}
+{% if logo_path %}<img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
+{% endif %}{{ "\n" }}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
+{% endif %}{{ "\n" }}
+{% if navigation %}{{ navigation }}
+{% endif %}
+</div>
 
-{% endif %}{% if navigation %}{{ navigation }}
-
-{% endif %}## Overview
+---
+## Overview
 
 {{ overview_text }}
 
 {% if demo_link %}**Demo:** {{ demo_link }}
 
 {% endif %}## Screenshots / Demo
+
+{% if screenshot_path %}<p align="center">
+  <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(800) }}">
+</p>
+
+{% endif %}
 
 {{ screenshot_text }}
 

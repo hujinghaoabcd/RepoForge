@@ -43,12 +43,14 @@ def test_desktop_application_stress_cases_render_cleanly():
     for case in _manifest():
         rendered = _render_case(case)
         line_count = len(rendered.splitlines())
+        header = rendered.split("\n## ", 1)[0]
 
         assert case["min_lines"] <= line_count <= case["max_lines"], (case["name"], line_count)
         assert branding["logo_path"] in rendered
         assert f'width="{branding["logo_width"]}"' in rendered
-        assert '<h1 align="center">' in rendered.split("\n## ", 1)[0]
-        assert rendered.split("\n## ", 1)[0].count('<p align="center">') >= 3
+        assert header.startswith('<div align="center">')
+        assert "img.shields.io" in header
+        assert "</div>" in header
         assert rendered.count("```") % 2 == 0
         for heading in case["required_sections"]:
             assert heading in rendered, (case["name"], heading)
@@ -85,5 +87,6 @@ def test_desktop_badges_remain_inside_centered_header():
     for case in _manifest():
         rendered = _render_case(case)
         header = rendered.split("\n## ", 1)[0]
+        assert header.startswith('<div align="center">')
         assert "img.shields.io" in header
-        assert header.count('<p align="center">') >= 3
+        assert header.index("img.shields.io") < header.index("</div>")

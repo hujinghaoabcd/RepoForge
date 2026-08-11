@@ -1,6 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="SpatialTools" width="160">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="SpatialTools" width="160">
 
 # SpatialTools
 
@@ -8,8 +8,13 @@
 
 [![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Documentation · Examples · API · Citation
 
+
+
+Documentation · Examples · API · Citation
+</div>
+
+---
 ## Why SpatialTools?
 
 Many spatial analyses repeat the same tasks: define neighborhoods, construct weights, fit local models, inspect spatially varying results, and validate numerical behavior. SpatialTools provides a small, explicit API for these workflows while keeping distances, weights, fitted results, and validation choices visible.

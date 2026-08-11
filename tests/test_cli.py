@@ -25,5 +25,8 @@ def test_render_cli_writes_markdown(tmp_path):
 
     assert exit_code == 0
     text = output.read_text(encoding="utf-8")
-    assert text.startswith("# SpatialTools")
+    header = text.split("\n## ", 1)[0]
+    assert text.startswith('<div align="center">')
+    assert "# SpatialTools" in header
+    assert "img.shields.io" in header
     assert "## Quick Start" in text

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from repoforge.renderer import load_config, render_from_config
+from repoforge.renderer import load_config, render_from_config, render_readme
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -74,7 +74,11 @@ def test_research_experiment_profiles_render(profile, required, forbidden):
         template_root=TEMPLATES,
     )
 
-    assert rendered.startswith("# ForecastBench")
+    header = rendered.split("\n## ", 1)[0]
+    assert rendered.startswith('<div align="center">')
+    assert "# ForecastBench" in header
+    assert "img.shields.io" in header
+    assert "</div>" in header
     assert rendered.endswith("\n")
     assert "{{" not in rendered
     assert "{%" not in rendered
@@ -119,21 +123,26 @@ def test_full_research_experiment_keeps_evidence_identity_visible():
 
 
 def test_research_experiment_examples_and_previews_track_renderer():
-    logo_path = load_config(BRANDING)["logo_path"]
+    branding = load_config(BRANDING)
 
     for profile in ("minimal", "standard", "full"):
         profile_dir = TEMPLATES / "research-experiment" / profile
-        rendered = render_from_config(
-            "research-experiment",
-            profile,
-            profile_dir / "config.example.yml",
-            template_root=TEMPLATES,
+        config = load_config(profile_dir / "config.example.yml")
+        rendered = render_readme(
+            "research-experiment", profile, config, template_root=TEMPLATES
         )
         example = (profile_dir / "README.example.md").read_text(encoding="utf-8")
+
+        branded_config = dict(config)
+        branded_config.update(branding)
+        branded = render_readme(
+            "research-experiment", profile, branded_config, template_root=TEMPLATES
+        )
         preview = (PREVIEWS / "research-experiment" / f"{profile}.md").read_text(
             encoding="utf-8"
         )
 
         assert example == rendered
-        assert logo_path in preview
-        assert preview.rstrip().endswith(rendered.rstrip())
+        assert preview == branded
+        assert branding["logo_path"] in preview
+        assert f'width="{branding["logo_width"]}"' in preview

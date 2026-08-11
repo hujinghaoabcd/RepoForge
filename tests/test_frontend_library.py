@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from repoforge.renderer import load_config, render_from_config
+from repoforge.renderer import load_config, render_from_config, render_readme
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,7 +63,11 @@ def test_frontend_library_profiles_render(profile, required, forbidden):
         template_root=TEMPLATES,
     )
 
-    assert rendered.startswith("# MapWidget")
+    header = rendered.split("\n## ", 1)[0]
+    assert rendered.startswith('<div align="center">')
+    assert "# MapWidget" in header
+    assert "img.shields.io" in header
+    assert "</div>" in header
     assert rendered.endswith("\n")
     assert rendered.count("```") % 2 == 0
     for token in required:
@@ -92,19 +96,23 @@ def test_frontend_library_examples_and_previews_track_renderer():
 
     for profile in ("minimal", "standard", "full"):
         profile_dir = TEMPLATES / "frontend-library" / profile
-        rendered = render_from_config(
-            "frontend-library",
-            profile,
-            profile_dir / "config.example.yml",
-            template_root=TEMPLATES,
+        config = load_config(profile_dir / "config.example.yml")
+        rendered = render_readme(
+            "frontend-library", profile, config, template_root=TEMPLATES
         )
         example = (profile_dir / "README.example.md").read_text(encoding="utf-8")
+
+        branded_config = dict(config)
+        branded_config.update(branding)
+        branded = render_readme(
+            "frontend-library", profile, branded_config, template_root=TEMPLATES
+        )
         preview = (PREVIEWS / "frontend-library" / f"{profile}.md").read_text(encoding="utf-8")
 
         assert example == rendered
+        assert preview == branded
         assert branding["logo_path"] in preview
         assert f'width="{branding["logo_width"]}"' in preview
-        assert preview.rstrip().endswith(rendered.rstrip())
 
 
 def test_full_frontend_library_keeps_distribution_contracts_visible():

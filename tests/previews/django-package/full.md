@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="django-audit-panel" width="160">
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="django-audit-panel screenshot" width="780">
-</p>
+<img src="../../../assets/logo.svg" alt="django-audit-panel" width="160">
 
 # django-audit-panel
 
@@ -12,8 +8,11 @@
 
 [![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Django](https://img.shields.io/badge/Django-tested-green)](#compatibility-matrix) [![Python](https://img.shields.io/badge/Python-tested-blue)](#compatibility-matrix) [![Tests](https://img.shields.io/badge/tests-matrix-brightgreen)](#testing) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)
 
-Why · Features · Setup · API · Security · Compatibility · Upgrade
 
+Why · Features · Setup · API · Security · Compatibility · Upgrade
+</div>
+
+---
 ## Why django-audit-panel?
 
 Auditing is deceptively cross-cutting. A reusable package must coordinate model registration, migrations, admin visibility, request/user attribution, retention, templates, permissions, and stable query APIs without taking ownership of the host project's authentication or authorization policy. django-audit-panel exposes those boundaries explicitly.
@@ -26,6 +25,13 @@ Auditing is deceptively cross-cutting. A reusable package must coordinate model 
 - **Stable query surface** — consume audit records through documented managers and helper functions.
 - **Retention controls** — prune old records with a management command and project-owned scheduling.
 - **Optional frontend assets** — provide a small timeline component without replacing the host design system.
+
+## Preview
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="django-audit-panel screenshot" width="760">
+</p>
+
 
 ## Installation
 

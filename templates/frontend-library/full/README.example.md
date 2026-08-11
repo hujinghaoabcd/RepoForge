@@ -1,11 +1,17 @@
+<div align="center">
+
+
 # MapWidget
 
 **A modular TypeScript map-control toolkit with a framework-neutral core, official adapters, and explicit runtime contracts.**
 
 [![npm](https://img.shields.io/badge/npm-packages-red)](#packages-and-installation) [![TypeScript](https://img.shields.io/badge/TypeScript-ready-blue)](#typescript-support) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#development-and-testing) [![Bundle](https://img.shields.io/badge/tree--shaking-supported-blue)](#bundle-and-tree-shaking) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Demo · Packages · API · Adapters · Compatibility · Accessibility
 
+Demo · Packages · API · Adapters · Compatibility · Accessibility
+</div>
+
+---
 ## Why MapWidget?
 
 Layer-control UI becomes complex when applications need stable state, keyboard interaction, theming, multiple map engines, framework wrappers, and predictable package boundaries. MapWidget separates a small framework-neutral core from optional integrations.
@@ -21,6 +27,9 @@ Layer-control UI becomes complex when applications need stable state, keyboard i
 ## Live Demo
 
 https://example.org/map-widget/playground
+
+## Preview
+
 
 ## Packages and Installation
 

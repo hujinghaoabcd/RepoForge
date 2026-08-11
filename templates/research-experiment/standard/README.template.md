@@ -1,16 +1,18 @@
-{% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
-</p>
+<div align="center">
 
-{% endif %}# {{ project_name }}
+{% if logo_path %}<img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
+{% endif %}{{ "\n" }}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
+{% endif %}{{ "\n" }}
+{% if navigation %}{{ navigation }}
+{% endif %}
+</div>
 
-{% endif %}{% if navigation %}{{ navigation }}
-
-{% endif %}{% if paper_link %}Paper: {{ paper_link }}
+---
+{% if paper_link %}Paper: {{ paper_link }}
 
 {% endif %}## Overview
 

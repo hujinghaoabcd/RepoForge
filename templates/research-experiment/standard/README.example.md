@@ -1,11 +1,17 @@
+<div align="center">
+
+
 # ForecastBench
 
 **Reproducible benchmark code for short-horizon traffic forecasting across standard sensor datasets.**
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#environment) [![Paper](https://img.shields.io/badge/paper-study-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#environment) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Paper · Data · Reproduction · Results · Citation
 
+Paper · Data · Reproduction · Results · Citation
+</div>
+
+---
 Paper: docs/paper.md
 
 ## Overview

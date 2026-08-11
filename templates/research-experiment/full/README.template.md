@@ -1,20 +1,18 @@
-{% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
-</p>
+<div align="center">
 
-{% endif %}{% if figure_path %}<p align="center">
-  <img src="{{ figure_path }}" alt="{{ project_name }} overview" width="{{ figure_width | default(860) }}">
-</p>
-
-{% endif %}# {{ project_name }}
+{% if logo_path %}<img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
+{% endif %}{{ "\n" }}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
+{% endif %}{{ "\n" }}
+{% if navigation %}{{ navigation }}
+{% endif %}
+</div>
 
-{% endif %}{% if navigation %}{{ navigation }}
-
-{% endif %}{% if paper_link %}Paper: {{ paper_link }}
+---
+{% if paper_link %}Paper: {{ paper_link }}
 
 {% endif %}## Highlights
 
@@ -24,6 +22,12 @@
 ## Model Overview
 
 {{ model_text }}
+
+{% if figure_path %}<p align="center">
+  <img src="{{ figure_path }}" alt="{{ project_name }} experiment overview" width="{{ figure_width | default(800) }}">
+</p>
+
+{% endif %}
 
 ## Datasets and Data Identity
 

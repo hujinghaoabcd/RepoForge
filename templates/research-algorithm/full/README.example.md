@@ -1,11 +1,17 @@
+<div align="center">
+
+
 # LatentMap
 
 **A research method for learning task-aware latent geometry with explicit optimization, interpretation, and validation contracts.**
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Paper · Method Guide · Validation · Examples · API · Citation
 
+Paper · Method Guide · Validation · Examples · API · Citation
+</div>
+
+---
 ## Scientific Problem
 
 Many scientific workflows assume that observed-space Euclidean distance is the relevant notion of similarity. When the task depends on structure that is not aligned with that metric, neighborhoods and downstream local models can be poorly matched to the scientific target.
@@ -35,6 +41,7 @@ $$z_i=f_\theta(x_i), \qquad d_{ij}^{(z)}=\lVert z_i-z_j\rVert_2.$$
 3. **Construct latent geometry** — expose fitted embeddings and latent-distance operations.
 4. **Validate** — evaluate recovery, stability, and downstream behavior under documented cases.
 5. **Apply downstream** — use latent distances only in workflows whose interpretation matches the trained objective.
+
 
 ## Key Contributions
 
@@ -76,6 +83,7 @@ result = model.fit(X, y)
 
 print(result.embedding_.shape)
 print(result.pairwise_distances()[:3, :3])
+
 ```
 
 ## Inputs, Outputs, and Interpretation
@@ -128,18 +136,12 @@ The dominant cost is representation optimization plus pairwise or neighborhood d
 
 ## Documentation
 
-- **Method Guide:** docs/method/index.md — formulation, assumptions, and interpretation
-- **Validation Guide:** docs/validation/index.md — recovery, sensitivity, references, and claim boundaries
-- **Examples:** examples/ — complete runnable workflows
-- **API Reference:** docs/api.md — fitted objects and public operations
-- **Reproducibility Guide:** docs/reproducibility.md — commands, seeds, configs, and archived evidence
-
+- **Method Guide:** docs/method/index.md — formulation, assumptions, and interpretation- **Validation Guide:** docs/validation/index.md — recovery, sensitivity, references, and claim boundaries- **Examples:** examples/ — complete runnable workflows- **API Reference:** docs/api.md — fitted objects and public operations- **Reproducibility Guide:** docs/reproducibility.md — commands, seeds, configs, and archived evidence
 ## Citation
 
 Cite the LatentMap method paper for the scientific contribution and the software release when this implementation contributes materially to the analysis.
 
 Method paper: docs/paper.md
-
 Software citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## Support and Contributing

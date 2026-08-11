@@ -1,6 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="LatentMap" width="160">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="LatentMap" width="160">
 
 # LatentMap
 
@@ -8,10 +8,10 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Paper: docs/paper.md
 
-LatentMap learns a low-dimensional representation in which pairwise distances are optimized for a documented prediction or similarity objective.
+</div>
 
+---
 ## Installation
 
 ```bash

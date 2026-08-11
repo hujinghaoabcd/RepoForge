@@ -1,6 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="ForecastBench" width="160">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="ForecastBench" width="160">
 
 # ForecastBench
 
@@ -8,8 +8,11 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#environment) [![Paper](https://img.shields.io/badge/paper-study-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#environment) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Paper · Data · Reproduction · Results · Citation
 
+Paper · Data · Reproduction · Results · Citation
+</div>
+
+---
 Paper: docs/paper.md
 
 ## Overview

@@ -1,9 +1,16 @@
+<div align="center">
+
+
 # MapWidget
 
 **A tiny TypeScript layer-control widget for browser maps.**
 
 [![npm](https://img.shields.io/badge/npm-package-red)](#install) [![TypeScript](https://img.shields.io/badge/TypeScript-ready-blue)](#quick-start) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
+
+</div>
+
+---
 ## Install
 
 ```bash

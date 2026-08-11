@@ -1,21 +1,28 @@
-{% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
-</p>
-{% endif %}<h1 align="center">{{ project_name }}</h1>
-<p align="center"><strong>{{ tagline }}</strong></p>
-{% if badges %}<p align="center">
-{% for badge in badges %}  <a href="{{ badge.link }}"><img src="{{ badge.image }}" alt="{{ badge.alt }}"></a>
-{% endfor %}</p>
-{% endif %}{% if navigation %}<p align="center">
-{% for item in navigation %}  <a href="{{ item.link }}">{{ item.label }}</a>{% if not loop.last %} ·{% endif %}
-{% endfor %}</p>
-{% endif %}{% if screenshot_path %}<p align="center">
-  <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(900) }}">
-</p>
-{% endif %}{{ "\n" }}## Features
+<div align="center">
+
+{% if logo_path %}<img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
+{% endif %}{{ "\n" }}# {{ project_name }}
+
+**{{ tagline }}**
+
+{% if badges %}{% for badge in badges %}<a href="{{ badge.link }}"><img src="{{ badge.image }}" alt="{{ badge.alt }}"></a>{% if not loop.last %} {% endif %}{% endfor %}
+{% endif %}{{ "\n" }}{% if navigation %}{% for item in navigation %}<a href="{{ item.link }}">{{ item.label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
+{% endif %}</div>
+
+---
+
+## Features
 
 {% for feature in features %}- **{{ feature.name }}** — {{ feature.description }}
 {% endfor %}
+
+## Preview
+
+{% if screenshot_path %}<p align="center">
+  <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(800) }}">
+</p>
+
+{% endif %}
 
 ## Download and Install
 

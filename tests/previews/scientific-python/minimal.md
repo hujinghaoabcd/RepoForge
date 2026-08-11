@@ -1,6 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="SpatialTools" width="160">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="SpatialTools" width="160">
 
 # SpatialTools
 
@@ -8,8 +8,10 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![License](https://img.shields.io/badge/License-MIT-green)](#license)
 
-Small, explicit spatial-analysis utilities with NumPy-friendly inputs.
 
+</div>
+
+---
 ## Installation
 
 ```bash

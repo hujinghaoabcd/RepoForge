@@ -1,12 +1,13 @@
 logo_path: ../../../assets/logo.svg
 logo_width: 160
 
-# RepoForge's committed preview matrix uses the same real project visuals.
-# These are preview-only overrides; user-facing README.example.md files stay neutral.
-method_figure: ../../../assets/screenshots/repoforge-workflow.webp
-figure_path: ../../../assets/screenshots/repoforge-workflow.webp
-screenshot_path: ../../../assets/screenshots/repoforge-preview.webp
-demo_image: ../../../assets/screenshots/repoforge-preview.webp
-figure_width: 780
-screenshot_width: 780
-demo_width: 780
+# RepoForge's committed preview matrix uses a neutral placeholder for optional
+# screenshots, figures, and demos. User-facing README.example.md files remain
+# project-neutral and can supply real project media through their own configs.
+method_figure: ../../../assets/placeholders/screenshot.svg
+figure_path: ../../../assets/placeholders/screenshot.svg
+screenshot_path: ../../../assets/placeholders/screenshot.svg
+demo_image: ../../../assets/placeholders/screenshot.svg
+figure_width: 760
+screenshot_width: 760
+demo_width: 760

@@ -1,21 +1,15 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoDesk" width="160">
-</p>
-<h1 align="center">GeoDesk</h1>
-<p align="center"><strong>A production-oriented cross-platform GIS workstation with local projects, optional Python plugins, and explicit release compatibility.</strong></p>
-<p align="center">
-  <a href="https://github.com/example/geodesk/releases"><img src="https://img.shields.io/badge/release-v2.0.0-blue" alt="Latest release"></a>
-  <a href="#platform-compatibility"><img src="https://img.shields.io/badge/Windows-passing-brightgreen" alt="Windows build"></a>
-  <a href="#platform-compatibility"><img src="https://img.shields.io/badge/macOS-passing-brightgreen" alt="macOS build"></a>
-  <a href="#platform-compatibility"><img src="https://img.shields.io/badge/Linux-passing-brightgreen" alt="Linux build"></a>
-  <a href="#development-and-testing"><img src="https://img.shields.io/badge/tests-passing-brightgreen" alt="Tests"></a>
-  <a href="#license"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
-</p>
-<p align="center">
-  <a href="#downloads-and-release-channels">Download</a> ·  <a href="docs/user-guide.md">User Guide</a> ·  <a href="docs/plugins.md">Plugins</a> ·  <a href="docs/building.md">Build</a> ·  <a href="https://github.com/example/geodesk/issues">Issues</a></p>
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="GeoDesk screenshot" width="780">
-</p>
+<div align="center">
+
+<img src="../../../assets/logo.svg" alt="GeoDesk" width="160">
+
+# GeoDesk
+
+**A production-oriented cross-platform GIS workstation with local projects, optional Python plugins, and explicit release compatibility.**
+
+<a href="https://github.com/example/geodesk/releases"><img src="https://img.shields.io/badge/release-v2.0.0-blue" alt="Latest release"></a> <a href="#platform-compatibility"><img src="https://img.shields.io/badge/Windows-passing-brightgreen" alt="Windows build"></a> <a href="#platform-compatibility"><img src="https://img.shields.io/badge/macOS-passing-brightgreen" alt="macOS build"></a> <a href="#platform-compatibility"><img src="https://img.shields.io/badge/Linux-passing-brightgreen" alt="Linux build"></a> <a href="#development-and-testing"><img src="https://img.shields.io/badge/tests-passing-brightgreen" alt="Tests"></a> <a href="#license"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
+<a href="#downloads-and-release-channels">Download</a> · <a href="docs/user-guide.md">User Guide</a> · <a href="docs/plugins.md">Plugins</a> · <a href="docs/building.md">Build</a> · <a href="https://github.com/example/geodesk/issues">Issues</a></div>
+
+---
 
 ## Why GeoDesk?
 
@@ -28,6 +22,13 @@ Desktop GIS projects become difficult to maintain when project files, native geo
 - **Optional Python plugins** — trusted user-installed plugins extend importers and tools through a versioned plugin API.
 - **Cross-platform releases** — Windows installers, notarized macOS bundles, and Linux AppImages are built from one release tag.
 - **Transparent network behavior** — core project editing is offline; optional update checks and online basemap requests are documented separately.
+
+## Preview
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="GeoDesk screenshot" width="760">
+</p>
+
 
 ## Downloads and Release Channels
 

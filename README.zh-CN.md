@@ -26,7 +26,7 @@
   <a href="#快速开始">快速开始</a> ·
   <a href="#模板矩阵">模板</a> ·
   <a href="#profiles">Profiles</a> ·
-  <a href="#预览图库">预览</a> ·
+  <a href="#预览">预览</a> ·
   <a href="docs/ARCHITECTURE.md">架构</a> ·
   <a href="#测试与压力测试">测试</a>
 </p>
@@ -72,19 +72,13 @@ RepoForge 的核心规则包括：
 - Web 与桌面项目优先回答用户如何运行、安装、部署或升级；
 - 最终输出仍然是普通 Markdown，可以继续人工维护。
 
-## 预览图库
+## 预览
 
 <p align="center">
-  <img src="assets/screenshots/repoforge-preview.webp" alt="RepoForge README 生成概念图" width="820">
+  <img src="assets/placeholders/screenshot.svg" alt="RepoForge 截图占位图" width="820">
 </p>
 
-<p align="center"><em>以 Minimal / Standard / Full 为核心的 README 生成概念图。</em></p>
-
-<p align="center">
-  <img src="assets/screenshots/repoforge-workflow.webp" alt="RepoForge 工作流概念图" width="820">
-</p>
-
-<p align="center"><em>从代码仓库输入到 README 输出的工作流概念图。图片表达产品方向；当前已经实现的是下文说明的 CLI Renderer。</em></p>
+<p align="center"><em>这里预留给未来真实的 RepoForge 截图；仓库中的占位图刻意不包含虚构界面或虚构输出。</em></p>
 
 ## 模板矩阵
 
@@ -187,17 +181,16 @@ Renderer 使用 Jinja2 `StrictUndefined`。模板需要但配置缺失的变量�
 tests/previews/<project-type>/<profile>.md
 ```
 
-RepoForge 自己的 Preview 统一使用：
+RepoForge 自己的 Preview 统一使用一个品牌源和一个中性媒体占位图：
 
 ```text
 assets/logo.svg
-assets/screenshots/repoforge-preview.webp
-assets/screenshots/repoforge-workflow.webp
+assets/placeholders/screenshot.svg
         ↑
 tests/branding.yml
 ```
 
-README Logo 的统一显示宽度为 **160px**。Preview 中的截图统一使用你已经保存到项目素材库的 RepoForge 图；面向用户的 `README.example.md` 保持项目中立，可自行提供 Logo 与截图。
+README Logo 的统一显示宽度为 **160px**。Preview 中需要截图、方法图或 Demo 图的位置统一使用刻意留空的占位图；面向用户的 `README.example.md` 保持项目中立，可以自行提供真实 Logo、截图、方法图或 Demo 素材。
 
 重新生成 21 个 Preview：
 
@@ -263,6 +256,27 @@ RepoForge
 - **Example 与 Preview 由 Renderer 生成，使视觉和结构回归可以被测试。**
 - **配置不完整时应明确失败。**
 - **生成结果始终保持普通、可编辑的 Markdown。**
+
+## 现在能用到什么程度？
+
+RepoForge **现在已经可以用于“显式配置驱动的 README 生成”**。从源码安装后，可以选择七种项目类型中的任意一种，再选择 `minimal`、`standard` 或 `full`，提供 YAML 配置，通过严格 CLI 生成普通 Markdown README。
+
+现在已经可用：
+
+- `repoforge render`；
+- 7 类项目 × 3 套独立 Profile；
+- 严格 Jinja/YAML 配置校验；
+- 完整 Example 与 Golden Preview；
+- Renderer 压力测试以及 Python 3.11–3.13 CI。
+
+还没有实现：
+
+- 自动识别项目类型；
+- `init`、`apply`、`diff`、`check` 等仓库工作流；
+- 对已经人工修改过的 README 做受控局部更新；
+- 正式发布到 PyPI。
+
+因此当前版本已经可以作为**模板生成器与仓库文档规范参考**实际使用，但还不是最终的“零配置自动整理整个仓库”工具。
 
 ## 项目状态
 

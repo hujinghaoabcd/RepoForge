@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoBoard" width="160">
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="GeoBoard product overview" width="780">
-</p>
+<img src="../../../assets/logo.svg" alt="GeoBoard" width="160">
 
 # GeoBoard
 
@@ -12,8 +8,11 @@
 
 [![Build](https://img.shields.io/badge/build-passing-brightgreen)](#testing) [![Docker](https://img.shields.io/badge/docker-supported-blue)](#deployment) [![Security](https://img.shields.io/badge/security-policy-blue)](#security) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Demo · Architecture · Development · Deployment · Operations · Security · Docs
 
+Demo · Architecture · Development · Deployment · Operations · Security · Docs
+</div>
+
+---
 ## Product Overview
 
 GeoBoard is a complete browser application for teams that publish spatial indicators and maintain shared geospatial workspaces. It combines a React client, Django API, spatial database, background processing, object storage, and operational controls while keeping deployment contracts explicit.
@@ -21,6 +20,11 @@ GeoBoard is a complete browser application for teams that publish spatial indica
 **Demo:** https://demo.example.org
 
 ## Screenshots / Demo
+
+<p align="center">
+  <img src="../../../assets/placeholders/screenshot.svg" alt="GeoBoard screenshot" width="760">
+</p>
+
 
 The main workspace combines the map, dataset catalogue, saved dashboards, review status, and publishing controls.
 

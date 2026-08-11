@@ -1,11 +1,17 @@
+<div align="center">
+
+
 # django-audit-panel
 
 **Reusable model-change auditing with explicit Django integration and query APIs.**
 
 [![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Django](https://img.shields.io/badge/Django-5.2%2B-green)](#compatibility) [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#compatibility) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#compatibility) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)
 
-Features · Installation · Configuration · Quick Start · Docs
 
+Features · Installation · Configuration · Quick Start · Docs
+</div>
+
+---
 ## Why django-audit-panel?
 
 Audit requirements are often reimplemented with model signals, ad-hoc history tables, and project-specific admin views. django-audit-panel packages the recurring integration points into one reusable application while keeping registration, retention, and visibility decisions explicit.

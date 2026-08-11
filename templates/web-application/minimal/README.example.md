@@ -1,6 +1,5 @@
-<p align="center">
-  <img src="docs/assets/geoboard-overview.png" alt="GeoBoard screenshot" width="900">
-</p>
+<div align="center">
+
 
 # GeoBoard
 
@@ -8,7 +7,16 @@
 
 [![Build](https://img.shields.io/badge/build-passing-brightgreen)](#run-locally) [![Docker](https://img.shields.io/badge/docker-ready-blue)](#deploy) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Demo: https://demo.example.org
+
+</div>
+
+---
+## Preview
+
+<p align="center">
+  <img src="docs/assets/geoboard-overview.png" alt="GeoBoard screenshot" width="800">
+</p>
+
 
 ## Features
 
