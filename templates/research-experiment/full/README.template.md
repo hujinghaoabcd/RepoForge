@@ -121,9 +121,7 @@
 
 ## Documentation Map
 
-{% for doc in documentation %}- **{{ doc.name }}:** {{ doc.link }}{% if doc.description %} — {{ doc.description }}{% endif %}
-{% endfor %}
-
+{% for doc in documentation %}- **{{ doc.name }}:** {{ doc.link }}{% if doc.description %} — {{ doc.description }}{% endif %}{{ "\n" }}{% endfor %}
 ## Reproducibility Boundaries
 
 {% for boundary in boundaries %}- {{ boundary }}
