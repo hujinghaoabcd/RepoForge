@@ -24,29 +24,30 @@ A first-time visitor should be able to answer, within a short scan:
 7. How has the implementation been validated?
 8. How should I cite it?
 
-## Standard profile: initial section order
+## Standard profile: section order
 
 ```text
-Header / logo
+Header / optional logo
 Project name
 One-line scientific positioning
 Badges and key links
 Language switch (when maintained)
 
 Why <Project>?
-Key features
+Features
 Installation
-Quick start
-Methods / capabilities
-Representative example(s)
+Quick Start
+Methods / Capabilities          [conditional]
+Representative Example         [conditional]
+Validation                     [conditional; recommended for numerical packages]
 Documentation
-Validation / scientific reliability
-Citation
-Contributing / support
+Citation                       [recommended for research software]
+Limitations                    [conditional]
+Support / Contributing
 License
 ```
 
-The final order will be refined from reference-case analysis.
+This order is based on the curated reference analysis in [`references.md`](references.md).
 
 ## Required sections
 
@@ -90,7 +91,7 @@ The README may summarize these topics and link to the authoritative document.
 
 ### Minimal
 
-Use for small, focused scientific utilities:
+Use for small, focused scientific utilities or intentionally concise mature project portals:
 
 ```text
 Header
@@ -104,7 +105,7 @@ License
 
 ### Standard
 
-Default structure described above.
+Default structure described above. This is the first implemented template profile.
 
 ### Full
 
@@ -121,7 +122,7 @@ Detailed material still belongs in `docs/`.
 
 ## Reference-analysis dimensions
 
-Each external reference case should be evaluated by section, not copied wholesale.
+Each external reference case is evaluated by section, not copied wholesale.
 
 Compare at least:
 
@@ -140,10 +141,45 @@ Compare at least:
 - contributing/support treatment;
 - README length and what is deliberately moved elsewhere.
 
-## Initial internal reference cases
+See [`references.md`](references.md) for the current curated pool and section-by-section decisions.
 
-Existing research packages can be used as practical stress tests for the template, especially where their current README styles differ substantially. The template should improve consistency without erasing project-specific scientific identity.
+## Internal stress tests
+
+Existing research packages are used as practical regression cases, especially where their current README styles differ substantially. The template should improve consistency without erasing project-specific scientific identity.
+
+Current stress-test categories include:
+
+- broad model libraries;
+- focused scientific tools;
+- packages with many executable workflows;
+- packages whose current README contains development-stage detail;
+- theory-heavy statistical packages;
+- original research methods requiring interpretation boundaries.
+
+## Implemented artifacts
+
+```text
+templates/scientific-python/
+├── CONTRACT.md
+├── references.md
+├── README.template.md
+└── README.example.md
+```
+
+The corresponding structural previews live in:
+
+```text
+tests/previews/scientific-python.md
+```
 
 ## Status
 
-Draft contract. The next step is a structured comparison of mature scientific Python README reference cases, followed by a first `README.template.md` and `README.example.md`.
+**First standard-profile draft implemented.**
+
+Next steps:
+
+1. define a machine-readable example configuration;
+2. implement the smallest Jinja renderer;
+3. generate `minimal`, `standard`, and `full` outputs automatically;
+4. compare generated output with approved golden snapshots;
+5. stress-test the standard profile against representative real scientific packages.
