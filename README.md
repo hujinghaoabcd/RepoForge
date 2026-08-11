@@ -1,91 +1,133 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="RepoForge" width="280">
+  <img src="assets/logo.svg" alt="RepoForge" width="160">
 </p>
 
 <h1 align="center">RepoForge</h1>
 
-<p align="center"><strong>Reusable repository documentation and project standards.</strong></p>
-
 <p align="center">
-  <a href="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml"><img src="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
-  <a href="#implemented-template-families"><img src="https://img.shields.io/badge/templates-7%20families-blue" alt="7 template families"></a>
-  <a href="#tests"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-blue" alt="Python 3.11–3.13"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
+  <strong>Reusable README templates and repository documentation standards.</strong>
 </p>
 
 <p align="center">
-  <strong>English</strong> · <a href="README.zh-CN.md">简体中文</a>
+  <a href="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml/badge.svg"></a>
+  <a href="pyproject.toml"><img alt="Version" src="https://img.shields.io/badge/version-0.1.0.dev0-174D5B.svg"></a>
+  <a href="#template-matrix"><img alt="README templates" src="https://img.shields.io/badge/templates-21-139C5A.svg"></a>
+  <a href="pyproject.toml"><img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-174D5B.svg"></a>
+  <a href="#project-status"><img alt="Status" src="https://img.shields.io/badge/Status-Alpha-F4B942.svg"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-139C5A.svg"></a>
 </p>
 
-RepoForge applies consistent README and repository-documentation standards to projects that already have their code scaffold. Use Cookiecutter, Scientific Python Cookie, Django templates, Vite, or another generator for project structure; use RepoForge for the public documentation layer.
+<p align="center">
+  <strong>7 project types</strong> · <strong>3 independent profiles</strong> · YAML + Jinja2 · renderer-backed previews · stress-tested contracts
+</p>
+
+<p align="center">
+  <strong>English</strong> · <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#template-matrix">Templates</a> ·
+  <a href="#profiles">Profiles</a> ·
+  <a href="#preview-gallery">Previews</a> ·
+  <a href="docs/ARCHITECTURE.md">Architecture</a> ·
+  <a href="#tests-and-stress-suites">Tests</a>
+</p>
+
+---
+
+## What RepoForge is
+
+**RepoForge is a repository-documentation layer for projects that already have code.** It renders a project-facing `README.md` from an explicit project type, an independent documentation profile, a Jinja template, and YAML configuration.
+
+It is intentionally **not another project scaffold**. Use Cookiecutter, Scientific Python Cookie, Django templates, Vite, Astro, Electron, Qt, or another generator for source layout; use RepoForge after that to make the repository's public documentation consistent, readable, and reviewable.
+
+```text
+Project scaffold
+Cookiecutter / Scientific Python Cookie / Django / Vite / Qt / ...
+        ↓
+Existing repository
+        ↓
+RepoForge documentation layer
+        ↓
+README + documentation structure + repository standards
+```
+
+The current executable core is deliberately small: **Jinja2 + YAML + a strict renderer + a CLI**. Missing template variables fail visibly instead of silently producing incomplete documentation.
 
 ## Why RepoForge?
 
-Project scaffolds create code structure, but repositories still need a clear public-facing documentation system. RepoForge separates those concerns:
+Repositories from different ecosystems need different information, but they still benefit from a recognizable documentation system. RepoForge separates three decisions that are often mixed together:
 
-1. scaffold the project with the best tool for the technology stack;
-2. select a RepoForge project type and one independent documentation profile;
-3. render a readable Markdown README from explicit YAML configuration;
-4. keep detailed manuals in `docs/` instead of turning the README into the whole documentation site.
+- **Project structure** — owned by the project's scaffold or framework.
+- **Project type** — determines which information belongs on the landing page.
+- **Documentation depth** — controlled by an independent `minimal`, `standard`, or `full` template.
 
-The goal is a recognizable family style without forcing unrelated projects into one README structure.
+This prevents two common failure modes: one generic README forced onto every project, and a single giant conditional template that becomes difficult to understand or test.
 
-## Implemented template families
+RepoForge follows several practical rules:
 
-RepoForge now has all **seven initial executable renderer families**, each with independent `minimal`, `standard`, and `full` templates:
+- README is the **landing page**, not the entire manual.
+- Minimal, Standard, and Full are **separate template artifacts**.
+- Full means **deeper documentation**, not invented capabilities.
+- Scientific packages expose validation, reproducibility, limitations, and citation when they matter.
+- Experiment repositories expose data identity, protocol, seeds, results, and reproduction commands.
+- Web and desktop products foreground how users actually run, install, deploy, or upgrade them.
+- Generated output remains ordinary Markdown that can still be edited by humans.
+
+## Preview gallery
+
+<p align="center">
+  <img src="assets/screenshots/repoforge-preview.webp" alt="RepoForge README generation concept" width="820">
+</p>
+
+<p align="center"><em>README generation concept using the Minimal / Standard / Full profile model.</em></p>
+
+<p align="center">
+  <img src="assets/screenshots/repoforge-workflow.webp" alt="RepoForge workflow concept" width="820">
+</p>
+
+<p align="center"><em>Workflow concept from repository input to a generated README. These visuals describe the product direction; the current implementation is the CLI renderer documented below.</em></p>
+
+## Template matrix
+
+RepoForge currently implements the complete initial **7 project types × 3 profiles = 21 README templates**.
+
+| Project type | Best fit | README emphasis |
+| --- | --- | --- |
+| `scientific-python` | reusable scientific Python packages | scientific fit, install, quick example, methods, validation, docs, citation |
+| `research-algorithm` | original methods and algorithm implementations | scientific problem, method, formulation, validation, limitations, citation |
+| `research-experiment` | paper code, benchmarks, reproducibility repositories | data identity, environment, protocol, seeds, results, reproduction |
+| `django-package` | reusable Django apps and extensions | host-project integration, settings, compatibility, migrations, security |
+| `web-application` | deployable browser products and systems | product, local run, configuration, database, deployment, operations |
+| `frontend-library` | browser libraries, plugins, components, adapters | install/import, CSS, API, events, adapters, browser/SSR/types/bundle contracts |
+| `desktop-application` | installable Windows/macOS/Linux software | screenshots, downloads, platforms, user data, packaging, upgrades, troubleshooting |
+
+Every family contains three independent directories:
 
 ```text
-scientific-python
-├── minimal
-├── standard
-└── full
-
-research-algorithm
-├── minimal
-├── standard
-└── full
-
-research-experiment
-├── minimal
-├── standard
-└── full
-
-django-package
-├── minimal
-├── standard
-└── full
-
-web-application
-├── minimal
-├── standard
-└── full
-
-frontend-library
-├── minimal
-├── standard
-└── full
-
-desktop-application
-├── minimal
-├── standard
-└── full
+templates/<project-type>/
+├── minimal/
+│   ├── PROFILE.md
+│   ├── README.template.md
+│   ├── README.example.md
+│   └── config.example.yml
+├── standard/
+└── full/
 ```
 
-The profiles are **independent templates**, not conditional views inside one giant README template.
+Each family also has a `CONTRACT.md` and a `references.md` explaining the design boundary and the real projects used as references.
 
-- `scientific-python` — reusable scientific software packages;
-- `research-algorithm` — original scientific or technical methods;
-- `research-experiment` — paper code, benchmark studies, and reproducibility repositories;
-- `django-package` — reusable Django applications and extensions;
-- `web-application` — complete deployable browser products and systems;
-- `frontend-library` — reusable browser libraries, plugins, components, hooks, and adapters;
-- `desktop-application` — installable desktop products for Windows, macOS, Linux, or a deliberate subset of those platforms.
+## Profiles
 
-Each family has a contract, reference analysis, profile rules, Jinja templates, YAML example configs, rendered examples, branded previews, renderer tests, and deliberately difficult stress cases.
+| Profile | Use it when | Goal |
+| --- | --- | --- |
+| **Minimal** | a small, focused, early, internal, or single-purpose project | shortest complete landing page |
+| **Standard** | a maintained open-source project with normal user/developer needs | default balance of clarity and depth |
+| **Full** | a mature project with broader scientific, compatibility, deployment, packaging, security, or upgrade contracts | deeper landing page without turning README into the manual |
+
+A Full project does **not** have to support every platform, framework, service, adapter, plugin system, or distribution channel. Optional sections appear only when the project actually maintains those capabilities.
 
 ## Quick start
 
-Install RepoForge from a source checkout:
+Clone and install RepoForge from source:
 
 ```bash
 git clone https://github.com/hujinghaoabcd/RepoForge.git
@@ -93,7 +135,7 @@ cd RepoForge
 python -m pip install -e ".[test]"
 ```
 
-Render a template by project type and profile:
+Render a README by selecting a project type and profile:
 
 ```bash
 repoforge render scientific-python standard \
@@ -101,57 +143,79 @@ repoforge render scientific-python standard \
   --output README.generated.md
 ```
 
+Other examples:
+
 ```bash
 repoforge render research-experiment full \
   --config templates/research-experiment/full/config.example.yml \
   --output README.generated.md
-```
 
-```bash
 repoforge render web-application full \
   --config templates/web-application/full/config.example.yml \
   --output README.generated.md
-```
 
-```bash
-repoforge render frontend-library standard \
-  --config templates/frontend-library/standard/config.example.yml \
-  --output README.generated.md
-```
-
-```bash
 repoforge render desktop-application standard \
   --config templates/desktop-application/standard/config.example.yml \
   --output README.generated.md
 ```
 
-The renderer uses strict Jinja configuration validation: missing template variables fail visibly instead of silently producing incomplete documentation.
+The output is ordinary Markdown. You can review it with Git, edit project-specific prose, and move deeper material into `docs/`.
 
-## Previewing profiles
+## How rendering works
 
-Approved visual previews live under:
+```text
+config.example.yml
+        +
+README.template.md
+        +
+project type / profile
+        ↓
+ strict RepoForge renderer
+        ↓
+ generated README.md
+```
+
+The renderer uses Jinja2 `StrictUndefined`. A template that requires missing configuration fails instead of silently rendering an incomplete section.
+
+Current CLI scope is intentionally narrow: `repoforge render` is implemented. Repository detection and apply/update workflows are listed under [Project status](#project-status) as the next stage rather than being presented as finished commands.
+
+## Previews and golden outputs
+
+Approved rendered previews live under:
 
 ```text
 tests/previews/<project-type>/<profile>.md
 ```
 
-RepoForge's own previews use one repository brand source:
+RepoForge's preview suite uses one shared brand source:
 
 ```text
 assets/logo.svg
+assets/screenshots/repoforge-preview.webp
+assets/screenshots/repoforge-workflow.webp
+        ↑
+tests/branding.yml
 ```
 
-The shared preview configuration renders the RepoForge logo at **280 px**. User-facing `README.example.md` files remain brand-neutral so generated projects can supply their own logo and dimensions.
+The canonical README logo display width is **160 px**. Preview-only screenshot overrides use the uploaded RepoForge visuals above; user-facing `README.example.md` files remain project-neutral and may supply their own assets.
 
-Regenerate previews with:
+Regenerate the preview matrix with:
 
 ```bash
 python scripts/generate_previews.py
 ```
 
-## Stress tests
+## Tests and stress suites
 
-Renderer-backed stress suites now cover all seven families:
+Run the complete suite with:
+
+```bash
+python -m pytest
+```
+
+GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13** and performs CLI render smoke tests for all seven template families.
+
+Renderer-backed stress suites live under:
 
 ```text
 tests/stress/
@@ -164,93 +228,69 @@ tests/stress/
 └── desktop-application/
 ```
 
-They deliberately exercise project shapes that make generic README designs fail. Examples include Full web monoliths without queues or APIs, Full vanilla frontend libraries without framework adapters or SSR, and Full Windows desktop applications without plugins, auto-update, portable mode, or telemetry.
+They deliberately exercise shapes that break generic README designs: tiny packages, theory-heavy algorithms, multi-seed experiments, Django middleware without models, web monoliths without queues/APIs, vanilla frontend libraries without framework adapters/SSR, and Full desktop applications without plugins or auto-update.
 
-These cases protect a core RepoForge rule: **Full means deeper documentation, not fabricated capabilities or infrastructure.**
+The invariant is simple:
 
-## Project types
-
-RepoForge's initial matrix contains seven project types:
-
-- `scientific-python` — reusable scientific Python packages;
-- `research-algorithm` — original methods and algorithm implementations;
-- `research-experiment` — paper code, benchmarks, experiments, and reproducibility;
-- `django-package` — reusable Django applications and extensions;
-- `web-application` — small to large deployable web applications;
-- `frontend-library` — frontend libraries, plugins, and components;
-- `desktop-application` — installable desktop software and cross-platform applications.
-
-## Profiles
-
-Profiles control documentation depth, but each profile is a separate artifact.
-
-- **Minimal** — the shortest complete README for a small, focused project.
-- **Standard** — the default for most maintained open-source projects.
-- **Full** — a deeper landing page for mature projects with broader compatibility, integration, validation, security, deployment, packaging, or upgrade boundaries.
-
-Profile depth is independent from project breadth. A Full project does not have to support every platform, framework, service, adapter, plugin system, or distribution channel.
-
-## Desktop application header contract
-
-Desktop product READMEs make the user-facing product recognizable before build details. Their identity block keeps the following centered:
-
-```text
-Logo / application icon
-Project name
-One-line product description
-Release / platform / build / license badges
-Download / Docs / Issues navigation
-Screenshot when available
-```
-
-Desktop Full templates then add only real capabilities such as project formats, plugins, update channels, portable mode, privacy/telemetry, signing, migration, and troubleshooting.
+> **Full means deeper documentation, not fabricated capabilities or infrastructure.**
 
 ## Repository structure
 
 ```text
 RepoForge
-├── assets/                         # RepoForge brand assets
+├── assets/                         # logo and README visuals
 ├── src/repoforge/                  # renderer and CLI
-├── templates/                      # project-type/profile templates
+├── templates/                      # 7 project families × 3 profiles
 ├── profiles/                       # cross-project profile rules
 ├── partials/                       # reusable documentation components
 ├── tests/
 │   ├── previews/                   # approved rendered views
 │   └── stress/                     # difficult real-shape configurations
-├── scripts/                        # maintenance helpers
+├── scripts/                        # preview and maintenance helpers
 └── docs/                           # architecture and standards
 ```
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the design.
+Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the architecture and template-system boundaries.
 
 ## Design principles
 
 - **README is an entry point, not the entire manual.**
 - **Minimal, Standard, and Full are independent templates.**
 - **Project type and documentation depth are separate decisions.**
-- **Meaningful badges belong near the project identity rather than being scattered through the README.**
-- **Scientific software treats validation, reproducibility, limitations, and citation as first-class concerns.**
-- **Experiment repositories make data identity, protocol, seeds, result identity, and reproduction commands explicit.**
-- **Django packages make host-project integration hooks, compatibility, migrations, security, and upgrade boundaries explicit.**
-- **Web applications separate product identity, local development, configuration, persistent data, deployment, operations, and security.**
-- **Frontend libraries keep installation, CSS/peer dependencies, APIs, adapters, runtime compatibility, bundle, and accessibility contracts explicit when they apply.**
-- **Desktop applications foreground downloads, supported platforms, product visuals, user data, packaging, and release compatibility.**
-- **Full profiles must not invent capabilities that a project does not have.**
-- **Generated output remains ordinary readable Markdown.**
-- **Incomplete configuration should fail explicitly rather than create misleading documentation.**
+- **The first screen should establish identity, useful badges, and navigation before detail.**
+- **Badges should communicate maintained facts, not decorate the page.**
+- **Full profiles must not invent project capabilities.**
+- **Examples and previews are renderer-backed so design regressions are testable.**
+- **Incomplete configuration should fail explicitly.**
+- **Generated output remains readable, editable Markdown.**
 
-## Tests
+## Project status
 
-```bash
-python -m pytest
+RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
+
+The next implementation stage is the repository workflow around those templates:
+
+```text
+repoforge detect .     # planned: infer project signals
+repoforge init .       # planned: create a RepoForge config
+repoforge apply .      # planned: apply standards to an existing repository
+repoforge diff .       # planned: preview managed changes
+repoforge check .      # planned: validate repository documentation contracts
 ```
 
-GitHub Actions runs the suite on Python 3.11, 3.12, and 3.13 and performs CLI render smoke tests for all seven template families.
+These commands are roadmap targets, **not current CLI promises**. The current supported command is `repoforge render`.
 
-## Status
+## Contributing
 
-RepoForge is in early development, but the complete initial **7 project types × 3 profiles = 21 template combinations** are now represented. The next stage is to harden project detection, configuration ergonomics, apply/diff/check workflows, and cross-family visual consistency.
+RepoForge treats template changes as documentation-design changes. When changing a contract or template:
+
+1. keep Minimal / Standard / Full independent;
+2. update the matching example and golden preview;
+3. add or update a stress case when the change affects a semantic boundary;
+4. run the full test suite before merging.
+
+New project families should be added only when they have a genuinely different README contract rather than being a technology-name alias for an existing family.
 
 ## License
 
-MIT.
+RepoForge is released under the [MIT License](LICENSE).
