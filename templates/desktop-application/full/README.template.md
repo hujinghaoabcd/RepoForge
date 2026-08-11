@@ -99,7 +99,7 @@
 {{ item.command }}
 ```
 
-{% endif %}{% endfor %}## Development and Testing
+{% endif %}{% endfor %}{{ "\n" }}## Development and Testing
 
 {{ development_text }}
 
