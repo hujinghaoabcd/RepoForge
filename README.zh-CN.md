@@ -156,6 +156,18 @@ repoforge render desktop-application standard \
 
 输出结果就是普通 Markdown，可以用 Git 审查、继续人工修改，并把过深内容下沉到 `docs/`。
 
+把 README 和矩阵选中的仓库标准应用到已有项目时，可以先 Dry Run：
+
+```bash
+repoforge apply /path/to/project \
+  --type scientific-python \
+  --profile standard \
+  --config examples/apply/scientific-python-standard.yml \
+  --dry-run
+```
+
+确认计划后去掉 `--dry-run` 再执行。RepoForge 默认拒绝覆盖内容不同的已有文件，只有显式使用 `--force` 才会覆盖。完整说明见 [`docs/APPLY.md`](docs/APPLY.md)。
+
 ## Renderer 如何工作
 
 ```text
@@ -172,7 +184,7 @@ README.template.md
 
 Renderer 使用 Jinja2 `StrictUndefined`。模板需要但配置缺失的变量会直接失败，不会静默输出残缺章节。
 
-当前 CLI 范围有意保持明确：已经实现的是 `repoforge render`。仓库级标准现在已经在 `standards/` 中建模，而 apply/update 工作流仍属于后续 Roadmap，不会提前当成已经可用的命令宣传。
+当前 CLI 已经实现 `repoforge render` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。
 
 ## Preview 与 Golden Output
 
@@ -207,7 +219,7 @@ python scripts/generate_previews.py
 python -m pytest
 ```
 
-GitHub Actions 会在 Python **3.11、3.12、3.13** 上运行测试，并对全部七类模板执行 CLI Render Smoke Test。
+GitHub Actions 会在 Python **3.11、3.12、3.13** 上运行测试，对全部七类模板执行 CLI Render Smoke Test，并在临时仓库上真实执行 `repoforge apply`。
 
 Renderer-backed 压力测试位于：
 
@@ -237,7 +249,13 @@ RepoForge 现在除了 README 矩阵，还加入了第一批仓库健康标准�
 - [`SECURITY.md`](SECURITY.md) —— 私下漏洞报告与受支持版本策略；
 - [`SUPPORT.md`](SUPPORT.md) —— 使用问题、Bug、安全问题和行为问题分别应该走什么渠道。
 
-可复用 Jinja 模板位于 [`standards/community/`](standards/community/)，[`standards/matrix.yml`](standards/matrix.yml) 则为每个显式项目类型/Profile 组合标记这些文件是 `default`、`recommended` 还是 `optional`。这一层明确**不做项目类型自动判断**。
+可复用仓库标准现在分成三组：
+
+- [`standards/community/`](standards/community/) —— Code of Conduct、贡献、安全与支持；
+- [`standards/github/`](standards/github/) —— Issue Forms 与 Pull Request Template；
+- [`standards/metadata/`](standards/metadata/) —— `CITATION.cff` 与 `CHANGELOG.md`。
+
+每组都根据显式项目类型/Profile 提供策略规则。这一层明确**不做项目类型自动判断**。
 
 ## 仓库结构
 
@@ -272,38 +290,39 @@ RepoForge
 
 ## 现在能用到什么程度？
 
-RepoForge **现在已经可以用于“显式配置驱动的 README 生成”**。从源码安装后，可以选择七种项目类型中的任意一种，再选择 `minimal`、`standard` 或 `full`，提供 YAML 配置，通过严格 CLI 生成普通 Markdown README。
+RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓库标准应用”**。从源码安装后，显式选择七种项目类型之一和对应 Profile，提供一份合并 YAML 配置，就可以只渲染 README，也可以把选中的仓库标准安全应用到已有项目。
 
 现在已经可用：
 
 - `repoforge render`；
+- `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；
 - 7 类项目 × 3 套独立 Profile；
+- 社区、GitHub 协作、Citation 与 Changelog 标准；
 - 严格 Jinja/YAML 配置校验；
 - 完整 Example 与 Golden Preview；
 - Renderer 压力测试以及 Python 3.11–3.13 CI。
 
 还没有实现：
 
-- `init`、`apply`、`diff`、`check` 等仓库工作流；
-- 对已经人工修改过的 README 做受控局部更新；
+- `init`、`diff`、`check` 等仓库工作流；
+- 对已经人工修改过的 README 做受控局部更新或语义合并；
 - 正式发布到 PyPI。
 
-因此当前版本已经可以作为**模板生成器与仓库文档规范参考**实际使用，但还不是最终的“零配置自动整理整个仓库”工具。
+因此当前版本已经可以作为**README 与仓库标准应用工具**实际使用，而且会保持显式配置，而不是发展成零配置的项目类型猜测器。
 
 ## 项目状态
 
 RepoForge 当前处于 **Alpha** 阶段。模板层的第一阶段已经完成：21 种项目类型/Profile 组合全部存在，Renderer 可执行，Preview 已提交，而且七个家族都有 Contract 和 Stress Coverage。
 
-下一阶段先补齐仓库级标准，再通过显式的项目类型/Profile 选择把它们应用到仓库：
+仓库标准层和第一版 Apply 工作流已经实现。下一阶段是：
 
 ```text
-repoforge init .       # 计划：创建 RepoForge 配置
-repoforge apply .      # 计划：应用 README + 选定仓库标准
-repoforge diff .       # 计划：预览受管理的变化
+repoforge init .       # 计划：创建合并的 RepoForge 配置
+repoforge diff .       # 计划：展示 Apply 计划的文本 Diff
 repoforge check .      # 计划：检查仓库文档合同
 ```
 
-这些命令属于 Roadmap，**目前不是已经实现的 CLI 承诺**。当前支持的命令仍然是 `repoforge render`。
+当前正式支持的 CLI 命令是 `repoforge render` 和 `repoforge apply`。
 
 ## Contributing
 

@@ -23,6 +23,7 @@ contributing:
   pull_request_expectations: Keep pull requests focused, explain the motivation, and describe how the change was tested.
   branch_policy: Create a short-lived branch from the current default branch. Rebase or merge the default branch when needed before final review.
   commit_guidance: Use concise commit messages that describe the change rather than the implementation process.
+  related_policies: []
 
 security:
   supported_versions:

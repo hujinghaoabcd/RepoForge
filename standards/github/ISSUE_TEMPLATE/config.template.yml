@@ -1,8 +1,9 @@
 blank_issues_enabled: {{ 'true' if blank_issues_enabled else 'false' }}
-contact_links:
-  - name: Support guidance
+{% if support_link_enabled or security_link_enabled %}contact_links:
+{% if support_link_enabled %}  - name: Support guidance
     url: {{ repository_url }}/blob/main/SUPPORT.md
     about: Check where usage questions and support requests belong before opening an issue.
-  - name: Security policy
+{% endif %}{% if security_link_enabled %}  - name: Security policy
     url: {{ repository_url }}/blob/main/SECURITY.md
     about: Do not disclose vulnerabilities in a public issue; follow the private reporting instructions instead.
+{% endif %}{% endif %}

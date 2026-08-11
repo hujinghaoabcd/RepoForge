@@ -156,6 +156,18 @@ repoforge render desktop-application standard \
 
 The output is ordinary Markdown. You can review it with Git, edit project-specific prose, and move deeper material into `docs/`.
 
+Apply a README and the repository standards selected by the matrices to an existing repository:
+
+```bash
+repoforge apply /path/to/project \
+  --type scientific-python \
+  --profile standard \
+  --config examples/apply/scientific-python-standard.yml \
+  --dry-run
+```
+
+Review the plan, then run the same command without `--dry-run`. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/APPLY.md`](docs/APPLY.md).
+
 ## How rendering works
 
 ```text
@@ -172,7 +184,7 @@ project type / profile
 
 The renderer uses Jinja2 `StrictUndefined`. A template that requires missing configuration fails instead of silently rendering an incomplete section.
 
-Current CLI scope is intentionally narrow: `repoforge render` is implemented. Repository-level standards are now modeled under `standards/`, while apply/update workflows remain roadmap work rather than finished commands.
+The current CLI implements both `repoforge render` and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.
 
 ## Previews and golden outputs
 
@@ -207,7 +219,7 @@ Run the complete suite with:
 python -m pytest
 ```
 
-GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13** and performs CLI render smoke tests for all seven template families.
+GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13**, performs CLI render smoke tests for all seven template families, and exercises `repoforge apply` against a temporary repository.
 
 Renderer-backed stress suites live under:
 
@@ -237,7 +249,13 @@ RepoForge now includes a first repository-health pack beside the README matrix:
 - [`SECURITY.md`](SECURITY.md) — private vulnerability reporting and supported-version policy;
 - [`SUPPORT.md`](SUPPORT.md) — where usage questions, bugs, security reports, and conduct concerns belong.
 
-Reusable Jinja templates live under [`standards/community/`](standards/community/), and [`standards/matrix.yml`](standards/matrix.yml) records whether each file is `default`, `recommended`, or `optional` for every explicit project type/profile pair. The standards layer intentionally does **not** infer project type.
+Reusable repository standards now live in three packs:
+
+- [`standards/community/`](standards/community/) — Code of Conduct, contributing, security, and support;
+- [`standards/github/`](standards/github/) — Issue Forms and pull-request templates;
+- [`standards/metadata/`](standards/metadata/) — `CITATION.cff` and `CHANGELOG.md`.
+
+Each pack has explicit policy rules for project type/profile combinations. The standards layer intentionally does **not** infer project type.
 
 ## Repository structure
 
@@ -272,38 +290,39 @@ Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the architecture and tem
 
 ## Usability today
 
-RepoForge is **usable now for explicit, configuration-driven README rendering**. From a source checkout you can select any of the seven project types, choose `minimal`, `standard`, or `full`, provide YAML configuration, and render a Markdown README with the strict CLI.
+RepoForge is **usable now for explicit, configuration-driven README rendering and repository-standard application**. From a source checkout you select one of the seven project types and a profile, provide one combined YAML configuration, and either render a README alone or apply the selected repository pack to an existing repository.
 
 Available now:
 
 - `repoforge render`;
+- `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;
 - 7 project types × 3 independent profiles;
+- community, GitHub collaboration, citation, and changelog standards;
 - strict Jinja/YAML validation;
 - committed examples and golden previews;
 - renderer-backed stress tests and Python 3.11–3.13 CI.
 
 Not implemented yet:
 
-- `init`, `apply`, `diff`, and `check` repository workflows;
-- managed partial updates to an existing hand-edited README;
+- `init`, `diff`, and `check` repository workflows;
+- managed partial updates or semantic merges inside an existing hand-edited README;
 - a published PyPI release.
 
-So the current release is already useful as a **template renderer and standards reference**, but it is not yet the final zero-configuration repository automation tool.
+So the current release is already useful as a **README and repository-standards application tool**, but it intentionally remains explicit rather than becoming a zero-configuration project detector.
 
 ## Project status
 
 RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
 
-The next implementation stage is to finish repository-level standards and then apply them with an explicit type/profile selection:
+The repository standards packs and first apply workflow are now implemented. The next workflow layer is:
 
 ```text
-repoforge init .       # planned: create a RepoForge config
-repoforge apply .      # planned: apply README + selected repository standards
-repoforge diff .       # planned: preview managed changes
+repoforge init .       # planned: create a combined RepoForge config
+repoforge diff .       # planned: show textual diffs for the apply plan
 repoforge check .      # planned: validate repository documentation contracts
 ```
 
-These commands are roadmap targets, **not current CLI promises**. The current supported command is `repoforge render`.
+The currently supported CLI commands are `repoforge render` and `repoforge apply`.
 
 ## Contributing
 
