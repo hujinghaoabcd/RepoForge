@@ -9,17 +9,30 @@ This contract defines README structures for reusable scientific Python packages.
 ```text
 templates/scientific-python/
 ├── minimal/
+│   ├── PROFILE.md
 │   ├── README.template.md
 │   └── README.example.md
 ├── standard/
+│   ├── PROFILE.md
 │   ├── README.template.md
 │   └── README.example.md
 └── full/
+    ├── PROFILE.md
     ├── README.template.md
     └── README.example.md
 ```
 
-Each profile may evolve independently and must have its own rendered golden snapshot under `tests/previews/scientific-python/`.
+Each profile evolves independently and has its own rendered golden snapshot under `tests/previews/scientific-python/`.
+
+## Choosing a profile
+
+| Profile | Use when | README should answer |
+| --- | --- | --- |
+| **Minimal** | the package is small, focused, and needs little explanation beyond one workflow | What is it? How do I install it? What is the fastest useful example? |
+| **Standard** | the package is a maintained reusable scientific library with several user-visible capabilities | Why does it exist? What can it do? How is it validated? Where are the docs? |
+| **Full** | the package is broad, mature, or scientifically complex and responsible use requires scope, selection, convention, or reproducibility guidance | What is in scope? Which method should I choose? What conventions and boundaries matter? How stable and reproducible is the software? |
+
+Do not choose Full merely because a project is important. Choose it only when the additional sections materially help users use the package correctly.
 
 ## Audience
 
@@ -57,6 +70,8 @@ License
 
 Minimal deliberately omits large capability matrices, architecture, detailed validation prose, model-selection guidance, development setup, and long limitation sections.
 
+See [`minimal/PROFILE.md`](minimal/PROFILE.md) for the complete contract.
+
 ## Standard profile
 
 Default for most reusable scientific Python packages.
@@ -72,15 +87,18 @@ Why <Project>?
 Features
 Installation
 Quick Start
-Methods / capabilities
-Validation (when scientifically material)
+Methods / capabilities       [when useful]
+Validation                   [recommended for numerical/statistical software]
 Documentation
-Citation
+Citation                     [recommended for research software]
+Limitations                  [only when concise and important]
 Support / Contributing
 License
 ```
 
 Standard should be complete enough for a normal package user without becoming a manual.
+
+See [`standard/PROFILE.md`](standard/PROFILE.md) for the complete contract.
 
 ## Full profile
 
@@ -89,27 +107,28 @@ Use for mature, broad, or scientifically complex packages.
 Expected structure:
 
 ```text
-Logo / project identity
+Optional logo
+Project name
 One-line scientific positioning
 Badges / language / navigation
-What <Project> Is
-Why Use It?
-Scientific Scope
+What <Project> is
+Why use it?
+Scientific scope
 Features
 Installation
   Stable release
   Optional features
   Development install
-Five-Minute Example
-Method Catalogue
-Choosing a Method
-Data Contracts and Conventions
-Representative Workflow
-Validation and Reproducibility
+Five-minute example
+Method catalogue
+Choosing a method
+Data contracts and conventions
+Representative workflow
+Validation and reproducibility
 Examples
 Documentation
-Project Status and API Stability
-Limitations
+Project status and API stability
+Limitations and interpretation boundaries
 Citation
 Support / Contributing
 License
@@ -117,10 +136,13 @@ License
 
 Full still treats README as an entry point. Long theory, exhaustive API listings, benchmark tables, complete validation protocols, troubleshooting, and release engineering belong in `docs/`.
 
+See [`full/PROFILE.md`](full/PROFILE.md) for the complete contract.
+
 ## Shared content principles
 
 - the first useful code example must appear early;
 - installation commands must be copyable;
+- Quick Start examples must define the inputs they use;
 - scientific assumptions and limitations must not be hidden by marketing language;
 - citation metadata should use `CITATION.cff` when appropriate;
 - detailed material should link to authoritative documentation rather than being duplicated in README;
@@ -145,8 +167,8 @@ Reference cases are compared by component rather than copied wholesale:
 - contributing/support treatment;
 - README length and deliberate documentation handoff.
 
-See `references.md` for the current reference pool and design decisions.
+See [`references.md`](references.md) for the current reference pool and design decisions.
 
 ## Status
 
-The three scientific-Python profiles are now structurally separated. The next renderer must select exactly one profile directory and render exactly one README from that profile.
+The three scientific-Python profiles are independently defined and have independent templates, examples, and preview snapshots. A future renderer must select exactly one profile directory and render exactly one README from that profile.
