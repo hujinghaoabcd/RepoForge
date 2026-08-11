@@ -1,0 +1,132 @@
+version: 1
+
+states:
+  default: Generate unless explicitly disabled.
+  recommended: Recommend and let the user opt in.
+  optional: Generate only when explicitly requested.
+
+files:
+  code_of_conduct: CODE_OF_CONDUCT.md
+  contributing: CONTRIBUTING.md
+  security: SECURITY.md
+  support: SUPPORT.md
+
+matrix:
+  scientific-python:
+    minimal:
+      code_of_conduct: recommended
+      contributing: recommended
+      security: recommended
+      support: optional
+    standard:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: recommended
+    full:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: default
+
+  research-algorithm:
+    minimal:
+      code_of_conduct: recommended
+      contributing: recommended
+      security: optional
+      support: optional
+    standard:
+      code_of_conduct: default
+      contributing: default
+      security: recommended
+      support: optional
+    full:
+      code_of_conduct: default
+      contributing: default
+      security: recommended
+      support: recommended
+
+  research-experiment:
+    minimal:
+      code_of_conduct: recommended
+      contributing: recommended
+      security: optional
+      support: optional
+    standard:
+      code_of_conduct: default
+      contributing: default
+      security: recommended
+      support: optional
+    full:
+      code_of_conduct: default
+      contributing: default
+      security: recommended
+      support: recommended
+
+  django-package:
+    minimal:
+      code_of_conduct: recommended
+      contributing: recommended
+      security: recommended
+      support: optional
+    standard:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: recommended
+    full:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: default
+
+  web-application:
+    minimal:
+      code_of_conduct: recommended
+      contributing: recommended
+      security: default
+      support: recommended
+    standard:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: default
+    full:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: default
+
+  frontend-library:
+    minimal:
+      code_of_conduct: recommended
+      contributing: recommended
+      security: recommended
+      support: optional
+    standard:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: recommended
+    full:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: default
+
+  desktop-application:
+    minimal:
+      code_of_conduct: recommended
+      contributing: recommended
+      security: default
+      support: recommended
+    standard:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: default
+    full:
+      code_of_conduct: default
+      contributing: default
+      security: default
+      support: default
