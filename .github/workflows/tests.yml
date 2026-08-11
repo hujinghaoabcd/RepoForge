@@ -58,7 +58,7 @@ jobs:
           test -s /tmp/README.frontend-library.md
           test -s /tmp/README.desktop-application.md
 
-      - name: Init and apply smoke
+      - name: Init, diff, and apply smoke
         run: |
           rm -rf /tmp/repoforge-init
           mkdir -p /tmp/repoforge-init
@@ -70,6 +70,14 @@ jobs:
             --repository-url https://github.com/example/smoke-project
 
           test -s /tmp/repoforge-init/repoforge.yml
+
+          repoforge diff /tmp/repoforge-init \
+            --config /tmp/repoforge-init/repoforge.yml \
+            > /tmp/repoforge-before.diff
+
+          grep -q "\[create\] README.md" /tmp/repoforge-before.diff
+          grep -q "+++ b/README.md" /tmp/repoforge-before.diff
+          test ! -e /tmp/repoforge-init/README.md
 
           repoforge apply /tmp/repoforge-init \
             --config /tmp/repoforge-init/repoforge.yml \
@@ -88,3 +96,9 @@ jobs:
           test -s /tmp/repoforge-init/CHANGELOG.md
           test -s /tmp/repoforge-init/.github/ISSUE_TEMPLATE/01-bug-report.yml
           test -s /tmp/repoforge-init/.github/pull_request_template.md
+
+          repoforge diff /tmp/repoforge-init \
+            --config /tmp/repoforge-init/repoforge.yml \
+            > /tmp/repoforge-after.diff
+
+          grep -qx "No changes." /tmp/repoforge-after.diff
