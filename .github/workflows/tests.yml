@@ -43,9 +43,13 @@ jobs:
           repoforge render web-application minimal \
             --config templates/web-application/minimal/config.example.yml \
             --output /tmp/README.web-application.md
+          repoforge render frontend-library minimal \
+            --config templates/frontend-library/minimal/config.example.yml \
+            --output /tmp/README.frontend-library.md
 
           test -s /tmp/README.scientific-python.md
           test -s /tmp/README.research-algorithm.md
           test -s /tmp/README.research-experiment.md
           test -s /tmp/README.django-package.md
           test -s /tmp/README.web-application.md
+          test -s /tmp/README.frontend-library.md
