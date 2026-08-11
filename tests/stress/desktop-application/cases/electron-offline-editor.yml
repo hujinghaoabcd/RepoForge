@@ -1,0 +1,77 @@
+project_name: LocalDraft
+tagline: An offline-first Electron editor for plain-text project folders.
+screenshot_path: null
+badges:
+  - alt: Latest release
+    image: https://img.shields.io/badge/release-v2.3-blue
+    link: '#download-and-install'
+  - alt: Platforms
+    image: https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey
+    link: '#platform-compatibility'
+  - alt: Tests
+    image: https://img.shields.io/badge/tests-passing-brightgreen
+    link: '#development-and-testing'
+  - alt: Docs
+    image: https://img.shields.io/badge/docs-online-blue
+    link: docs/
+  - alt: License
+    image: https://img.shields.io/badge/license-MIT-green
+    link: '#license'
+navigation:
+  - label: Download
+    link: '#download-and-install'
+  - label: Docs
+    link: docs/
+overview_text: LocalDraft edits ordinary project folders locally and keeps its application settings separate from user documents.
+features:
+  - name: Folder-based projects
+    description: documents remain ordinary files on disk.
+  - name: Offline editing
+    description: editing does not require an account or network service.
+  - name: Cross-platform shortcuts
+    description: desktop key bindings adapt to the host operating system.
+download_options:
+  - platform: Windows
+    package: `.exe` installer
+    notes: maintained stable build
+    link: Releases
+  - platform: macOS
+    package: `.dmg`
+    notes: notarized stable build
+    link: Releases
+  - platform: Linux
+    package: AppImage
+    notes: maintained stable build
+    link: Releases
+first_launch: Choose a local project folder. LocalDraft does not create a cloud workspace or copy project content elsewhere.
+compatibility:
+  - target: Windows
+    range: Windows 11
+    notes: maintained
+  - target: macOS
+    range: macOS 13+
+    notes: maintained
+  - target: Linux
+    range: recent x86_64 desktop distributions
+    notes: AppImage maintained
+data_locations:
+  - name: Settings
+    location: Electron user-data directory
+    purpose: preferences and window state
+  - name: Documents
+    location: user-selected folders
+    purpose: authoritative user content
+build_text: Build the application with the pinned Node.js and pnpm versions declared by the repository.
+build_command: |-
+  pnpm install
+  pnpm dev
+development_command: pnpm dev
+test_command: |-
+  pnpm test
+  pnpm test:e2e
+documentation:
+  - name: User Guide
+    link: docs/user-guide.md
+    description: folders, editing, and shortcuts
+contributing_text: UI, filesystem, and packaging changes require tests on the affected desktop behavior.
+license_text: LocalDraft is released under the MIT License.

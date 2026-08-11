@@ -1,0 +1,5 @@
+project_name: GeoWorkbench
+display_name: GeoWorkbench
+tagline: A mature cross-platform desktop geospatial workstation with a versioned project and plugin ecosystem.
+screenshot_path: null
+why_text: GeoWorkbench combines native geospatial dependencies, long-lived project files, user plugins, and cross-platform packaging, so those compatibility boundaries are documented explicitly.

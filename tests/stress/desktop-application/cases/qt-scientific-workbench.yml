@@ -1,0 +1,68 @@
+project_name: SpectrumLab
+tagline: A Qt desktop workbench for local spectroscopy files on Windows and Linux.
+screenshot_path: null
+badges:
+  - alt: Latest release
+    image: https://img.shields.io/badge/release-v0.9-blue
+    link: '#download-and-install'
+  - alt: Platforms
+    image: https://img.shields.io/badge/platform-Windows%20%7C%20Linux-lightgrey
+    link: '#platform-compatibility'
+  - alt: Tests
+    image: https://img.shields.io/badge/tests-passing-brightgreen
+    link: '#development-and-testing'
+  - alt: Docs
+    image: https://img.shields.io/badge/docs-online-blue
+    link: docs/
+  - alt: License
+    image: https://img.shields.io/badge/license-BSD--3--Clause-green
+    link: '#license'
+navigation:
+  - label: Download
+    link: '#download-and-install'
+  - label: Docs
+    link: docs/
+overview_text: SpectrumLab is a local scientific desktop application for inspecting, annotating, and comparing spectroscopy measurements.
+features:
+  - name: Local datasets
+    description: open instrument exports without uploading measurements.
+  - name: Interactive plots
+    description: inspect spectra and synchronized metadata in a Qt workspace.
+  - name: Session files
+    description: save analysis state separately from source measurements.
+download_options:
+  - platform: Windows 11
+    package: x64 installer
+    notes: maintained binary
+    link: Releases
+  - platform: Linux
+    package: AppImage
+    notes: maintained binary
+    link: Releases
+first_launch: Open a measurement file or create an empty analysis session. No account is required.
+compatibility:
+  - target: Windows
+    range: Windows 11 x64
+    notes: maintained
+  - target: Linux
+    range: recent x86_64 glibc desktops
+    notes: AppImage maintained
+data_locations:
+  - name: Preferences
+    location: platform config directory / `SpectrumLab`
+    purpose: UI settings
+  - name: Sessions
+    location: user-selected `.spectrumlab` files
+    purpose: analysis state
+build_text: Source builds require Python 3.12+, PySide6, NumPy, SciPy, and the repository development extras.
+build_command: |-
+  python -m pip install -e '.[dev]'
+  python -m spectrumlab
+development_command: python -m spectrumlab --debug
+test_command: python -m pytest
+documentation:
+  - name: User Guide
+    link: docs/user-guide.md
+    description: measurements and sessions
+contributing_text: Changes to file parsing or session schema require regression fixtures and documentation.
+license_text: SpectrumLab is released under the BSD 3-Clause License.
