@@ -205,7 +205,7 @@ README.template.md
 
 Renderer 使用 Jinja2 `StrictUndefined`。模板需要但配置缺失的变量会直接失败，不会静默输出残缺章节。
 
-当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init`、用于精确审查的 `repoforge diff` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。
+当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init`、用于精确审查的 `repoforge diff`、安全优先的 `repoforge apply`，以及面向 CI 的 `repoforge check`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。
 
 ## Preview 与 Golden Output
 

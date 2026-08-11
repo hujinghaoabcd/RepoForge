@@ -193,7 +193,7 @@ project type / profile
 
 The renderer uses Jinja2 `StrictUndefined`. A template that requires missing configuration fails instead of silently rendering an incomplete section.
 
-The current CLI implements `repoforge render`, explicit `repoforge init`, review-first `repoforge diff`, and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.
+The current CLI implements `repoforge render`, explicit `repoforge init`, review-first `repoforge diff`, safety-first `repoforge apply`, and CI-facing `repoforge check`. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.
 
 ## Previews and golden outputs
 
