@@ -1,0 +1,52 @@
+name: cleanup-preview-assets
+
+on:
+  push:
+    branches:
+      - refine/unified-readme-layout-v2
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refine/unified-readme-layout-v2
+          fetch-depth: 0
+      - name: Replace obsolete screenshot documentation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              "README.md": (
+                  '''RepoForge's preview suite uses one shared brand source:\n\n```text\nassets/logo.svg\nassets/screenshots/repoforge-preview.webp\nassets/screenshots/repoforge-workflow.webp\n        ↑\ntests/branding.yml\n```\n\nThe canonical README logo display width is **160 px**. Preview-only screenshot overrides use the uploaded RepoForge visuals above; user-facing `README.example.md` files remain project-neutral and may supply their own assets.''',
+                  '''RepoForge's preview suite uses one shared brand source and one neutral media placeholder:\n\n```text\nassets/logo.svg\nassets/placeholders/screenshot.svg\n        ↑\ntests/branding.yml\n```\n\nThe canonical README logo display width is **160 px**. Preview-only media uses the deliberately empty placeholder above; user-facing `README.example.md` files remain project-neutral and may supply their own real logo, screenshots, diagrams, or demo media.''',
+              ),
+              "README.zh-CN.md": (
+                  '''RepoForge 自己的 Preview 统一使用：\n\n```text\nassets/logo.svg\nassets/screenshots/repoforge-preview.webp\nassets/screenshots/repoforge-workflow.webp\n        ↑\ntests/branding.yml\n```\n\nREADME Logo 的统一显示宽度为 **160px**。Preview 中的截图统一使用你已经保存到项目素材库的 RepoForge 图；面向用户的 `README.example.md` 保持项目中立，可自行提供 Logo 与截图。''',
+                  '''RepoForge 自己的 Preview 统一使用一个品牌源和一个中性媒体占位图：\n\n```text\nassets/logo.svg\nassets/placeholders/screenshot.svg\n        ↑\ntests/branding.yml\n```\n\nREADME Logo 的统一显示宽度为 **160px**。Preview 中需要截图、方法图或 Demo 图的位置统一使用刻意留空的占位图；面向用户的 `README.example.md` 保持项目中立，可以自行提供真实 Logo、截图、方法图或 Demo 素材。''',
+              ),
+          }
+
+          for filename, (old, new) in replacements.items():
+              path = Path(filename)
+              text = path.read_text(encoding="utf-8")
+              if old not in text:
+                  raise SystemExit(f"expected block not found in {filename}")
+              path.write_text(text.replace(old, new, 1), encoding="utf-8")
+          PY
+      - name: Remove obsolete screenshot assets and this one-shot workflow
+        run: |
+          git rm -f assets/screenshots/repoforge-preview.webp assets/screenshots/repoforge-workflow.webp
+          git rm -f .github/workflows/cleanup-preview-assets.yml
+      - name: Commit cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md README.zh-CN.md
+          git commit -m "chore: remove obsolete preview screenshots"
+          git push origin HEAD:refine/unified-readme-layout-v2
