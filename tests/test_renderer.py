@@ -44,7 +44,11 @@ def test_scientific_python_profiles_render_independently(profile, required, forb
         template_root=TEMPLATES,
     )
 
-    assert rendered.startswith("# SpatialTools")
+    header = rendered.split("\n## ", 1)[0]
+    assert rendered.startswith('<div align="center">')
+    assert "# SpatialTools" in header
+    assert "img.shields.io" in header
+    assert "</div>" in header
     assert rendered.endswith("\n")
     for heading in required:
         assert heading in rendered
