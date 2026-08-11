@@ -22,7 +22,14 @@ Review and edit:
 /path/to/project/repoforge.yml
 ```
 
-Then preview the apply plan:
+Inspect the exact text changes first:
+
+```bash
+repoforge diff /path/to/project \
+  --config /path/to/project/repoforge.yml
+```
+
+Then preview the apply status without writing:
 
 ```bash
 repoforge apply /path/to/project \
@@ -30,14 +37,14 @@ repoforge apply /path/to/project \
   --dry-run
 ```
 
-If the plan is correct:
+If the diff and plan are correct:
 
 ```bash
 repoforge apply /path/to/project \
   --config /path/to/project/repoforge.yml
 ```
 
-Because `init` stores the explicit project type/profile, normal apply does not need to repeat them.
+Because `init` stores the explicit project type/profile, normal `diff` and `apply` do not need to repeat them.
 
 A manually assembled runnable example also remains available at:
 
@@ -85,6 +92,8 @@ to apply only the README, or:
 
 to include both `default` and `recommended` standards.
 
+The same standards policy and explicit include/exclude flags are understood by `repoforge diff`, so a reviewed diff can represent the same plan that apply will use.
+
 ## Explicit overrides
 
 An optional or recommended standard can be added explicitly:
@@ -128,13 +137,15 @@ overwrite
 
 If any selected destination already exists with different content, normal apply fails **before writing any selected file**.
 
+Use `repoforge diff` to inspect the exact unified text changes before apply.
+
 Use:
 
 ```bash
 --dry-run
 ```
 
-to inspect conflicts without modifying the repository.
+to inspect create/overwrite/unchanged statuses without modifying the repository.
 
 Use:
 
@@ -176,12 +187,12 @@ Extra keys are harmless to a README template. This keeps one project-owned `repo
 
 Some standards intentionally require explicit project-owned information. In particular, Code of Conduct and Security templates require a private reporting contact/channel. RepoForge does not infer or invent those values. The `init` output is a maintained starter configuration and must be reviewed before apply.
 
-See [`INIT.md`](INIT.md) for initialization details.
+See [`INIT.md`](INIT.md) for initialization details and [`DIFF.md`](DIFF.md) for exact change review.
 
 ## Current boundary
 
 `apply` manages only the files selected by the current plan. It does not yet perform managed-section updates inside an existing hand-written README, semantic merges, or automatic repository backups.
 
-For an existing repository with valuable hand-written standard files, use `--dry-run`, review the reported `overwrite` paths, and do not use `--force` until the generated output has been compared with the existing content.
+For an existing repository with valuable hand-written standard files, run `repoforge diff`, review all `[overwrite]` sections, then use `--dry-run` to confirm the selected paths. Do not use `--force` until the generated output has been compared with the existing content.
 
-A dedicated `repoforge diff` command can later present textual diffs on top of the same plan without changing this safety model.
+`repoforge diff` uses the same rendered plan and does not change this safety model; it only makes the planned text replacement visible before writing.
