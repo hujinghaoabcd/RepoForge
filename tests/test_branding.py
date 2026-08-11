@@ -16,11 +16,18 @@ def test_canonical_repoforge_logo_exists():
     assert not (ROOT / "assets" / "repoforge-logo.png").exists()
 
 
-def test_repository_readmes_use_canonical_svg_logo():
+def test_repository_readmes_use_centered_canonical_branding():
     for path in (ROOT / "README.md", ROOT / "README.zh-CN.md"):
         text = path.read_text(encoding="utf-8")
-        assert 'src="assets/logo.svg"' in text
-        assert 'width="280"' in text
+        header = text.split("\n## ", 1)[0]
+        assert 'src="assets/logo.svg"' in header
+        assert 'width="280"' in header
+        assert '<h1 align="center">RepoForge</h1>' in header
+        assert '<p align="center"><strong>' in header
+        assert header.count('<p align="center">') >= 4
+        assert 'alt="Tests"' in header
+        assert 'alt="7 template families"' in header
+        assert 'alt="MIT License"' in header
         assert "repoforge-logo.png" not in text
 
 

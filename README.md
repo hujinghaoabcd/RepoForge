@@ -2,13 +2,22 @@
   <img src="assets/logo.svg" alt="RepoForge" width="280">
 </p>
 
-# RepoForge
+<h1 align="center">RepoForge</h1>
 
-**Reusable repository documentation and project standards.**
+<p align="center"><strong>Reusable repository documentation and project standards.</strong></p>
+
+<p align="center">
+  <a href="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml"><img src="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
+  <a href="#implemented-template-families"><img src="https://img.shields.io/badge/templates-7%20families-blue" alt="7 template families"></a>
+  <a href="#tests"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-blue" alt="Python 3.11–3.13"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
+</p>
+
+<p align="center">
+  <strong>English</strong> · <a href="README.zh-CN.md">简体中文</a>
+</p>
 
 RepoForge applies consistent README and repository-documentation standards to projects that already have their code scaffold. Use Cookiecutter, Scientific Python Cookie, Django templates, Vite, or another generator for project structure; use RepoForge for the public documentation layer.
-
-**English** · [简体中文](README.zh-CN.md)
 
 ## Why RepoForge?
 
@@ -23,7 +32,7 @@ The goal is a recognizable family style without forcing unrelated projects into 
 
 ## Implemented template families
 
-RepoForge currently has six executable renderer families:
+RepoForge now has all **seven initial executable renderer families**, each with independent `minimal`, `standard`, and `full` templates:
 
 ```text
 scientific-python
@@ -55,18 +64,24 @@ frontend-library
 ├── minimal
 ├── standard
 └── full
+
+desktop-application
+├── minimal
+├── standard
+└── full
 ```
 
-The three profiles are **independent templates**, not conditional views inside one giant README template.
+The profiles are **independent templates**, not conditional views inside one giant README template.
 
 - `scientific-python` — reusable scientific software packages;
 - `research-algorithm` — original scientific or technical methods;
 - `research-experiment` — paper code, benchmark studies, and reproducibility repositories;
-- `django-package` — reusable Django applications, extensions, middleware, backends, and admin integrations;
-- `web-application` — complete browser products and deployable web systems, from small monoliths to multi-service self-hosted applications;
-- `frontend-library` — reusable browser libraries, plugins, components, hooks, and framework/map-engine adapters.
+- `django-package` — reusable Django applications and extensions;
+- `web-application` — complete deployable browser products and systems;
+- `frontend-library` — reusable browser libraries, plugins, components, hooks, and adapters;
+- `desktop-application` — installable desktop products for Windows, macOS, Linux, or a deliberate subset of those platforms.
 
-Each implemented family has a contract, reference analysis, independent profile rules, Jinja templates, YAML example configs, rendered examples, branded previews, renderer tests, and deliberately difficult stress cases.
+Each family has a contract, reference analysis, profile rules, Jinja templates, YAML example configs, rendered examples, branded previews, renderer tests, and deliberately difficult stress cases.
 
 ## Quick start
 
@@ -78,7 +93,7 @@ cd RepoForge
 python -m pip install -e ".[test]"
 ```
 
-Render a Scientific Python README:
+Render a template by project type and profile:
 
 ```bash
 repoforge render scientific-python standard \
@@ -86,31 +101,11 @@ repoforge render scientific-python standard \
   --output README.generated.md
 ```
 
-Render an original research-method README:
-
-```bash
-repoforge render research-algorithm standard \
-  --config templates/research-algorithm/standard/config.example.yml \
-  --output README.generated.md
-```
-
-Render a reproducible paper-experiment README:
-
 ```bash
 repoforge render research-experiment full \
   --config templates/research-experiment/full/config.example.yml \
   --output README.generated.md
 ```
-
-Render a reusable Django package README:
-
-```bash
-repoforge render django-package standard \
-  --config templates/django-package/standard/config.example.yml \
-  --output README.generated.md
-```
-
-Render a full web-application README:
 
 ```bash
 repoforge render web-application full \
@@ -118,11 +113,15 @@ repoforge render web-application full \
   --output README.generated.md
 ```
 
-Render a frontend library README:
-
 ```bash
 repoforge render frontend-library standard \
   --config templates/frontend-library/standard/config.example.yml \
+  --output README.generated.md
+```
+
+```bash
+repoforge render desktop-application standard \
+  --config templates/desktop-application/standard/config.example.yml \
   --output README.generated.md
 ```
 
@@ -142,9 +141,9 @@ RepoForge's own previews use one repository brand source:
 assets/logo.svg
 ```
 
-The shared preview configuration currently renders the RepoForge logo at **280 px**. User-facing `README.example.md` files remain brand-neutral so generated projects can supply their own `logo_path` and size.
+The shared preview configuration renders the RepoForge logo at **280 px**. User-facing `README.example.md` files remain brand-neutral so generated projects can supply their own logo and dimensions.
 
-Regenerate previews for implemented template families with:
+Regenerate previews with:
 
 ```bash
 python scripts/generate_previews.py
@@ -152,7 +151,7 @@ python scripts/generate_previews.py
 
 ## Stress tests
 
-Renderer-backed stress suites live under:
+Renderer-backed stress suites now cover all seven families:
 
 ```text
 tests/stress/
@@ -161,16 +160,17 @@ tests/stress/
 ├── research-experiment/
 ├── django-package/
 ├── web-application/
-└── frontend-library/
+├── frontend-library/
+└── desktop-application/
 ```
 
-They deliberately exercise project shapes that make a generic README design fail. The frontend-library suite includes a tiny DOM utility, a CSS-heavy widget, a framework adapter, a multi-package UI toolkit, and a Full vanilla library with **no React/Vue adapters and no SSR guarantee**.
+They deliberately exercise project shapes that make generic README designs fail. Examples include Full web monoliths without queues or APIs, Full vanilla frontend libraries without framework adapters or SSR, and Full Windows desktop applications without plugins, auto-update, portable mode, or telemetry.
 
-That last case protects a core RepoForge rule: **Full means deeper documentation, not fabricated capabilities or infrastructure.**
+These cases protect a core RepoForge rule: **Full means deeper documentation, not fabricated capabilities or infrastructure.**
 
 ## Project types
 
-RepoForge's target template system is organized around seven project types:
+RepoForge's initial matrix contains seven project types:
 
 - `scientific-python` — reusable scientific Python packages;
 - `research-algorithm` — original methods and algorithm implementations;
@@ -178,9 +178,7 @@ RepoForge's target template system is organized around seven project types:
 - `django-package` — reusable Django applications and extensions;
 - `web-application` — small to large deployable web applications;
 - `frontend-library` — frontend libraries, plugins, and components;
-- `desktop-application` — desktop software and cross-platform applications.
-
-The remaining family, `desktop-application`, will be implemented using the same contracts and tests.
+- `desktop-application` — installable desktop software and cross-platform applications.
 
 ## Profiles
 
@@ -188,9 +186,24 @@ Profiles control documentation depth, but each profile is a separate artifact.
 
 - **Minimal** — the shortest complete README for a small, focused project.
 - **Standard** — the default for most maintained open-source projects.
-- **Full** — a deeper landing page for mature projects with broader integration, compatibility, validation, reproducibility, security, deployment, or upgrade boundaries.
+- **Full** — a deeper landing page for mature projects with broader compatibility, integration, validation, security, deployment, packaging, or upgrade boundaries.
 
-For frontend libraries specifically, profile depth is independent from ecosystem breadth: a Full vanilla TypeScript library does not need React/Vue adapters, SSR support, or multiple packages unless those capabilities are actually maintained.
+Profile depth is independent from project breadth. A Full project does not have to support every platform, framework, service, adapter, plugin system, or distribution channel.
+
+## Desktop application header contract
+
+Desktop product READMEs make the user-facing product recognizable before build details. Their identity block keeps the following centered:
+
+```text
+Logo / application icon
+Project name
+One-line product description
+Release / platform / build / license badges
+Download / Docs / Issues navigation
+Screenshot when available
+```
+
+Desktop Full templates then add only real capabilities such as project formats, plugins, update channels, portable mode, privacy/telemetry, signing, migration, and troubleshooting.
 
 ## Repository structure
 
@@ -215,11 +228,13 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the design.
 - **README is an entry point, not the entire manual.**
 - **Minimal, Standard, and Full are independent templates.**
 - **Project type and documentation depth are separate decisions.**
+- **Meaningful badges belong near the project identity rather than being scattered through the README.**
 - **Scientific software treats validation, reproducibility, limitations, and citation as first-class concerns.**
 - **Experiment repositories make data identity, protocol, seeds, result identity, and reproduction commands explicit.**
 - **Django packages make host-project integration hooks, compatibility, migrations, security, and upgrade boundaries explicit.**
 - **Web applications separate product identity, local development, configuration, persistent data, deployment, operations, and security.**
-- **Frontend libraries keep install/import/CSS/peer-dependency, API/event, adapter, browser, TypeScript, SSR, bundle, accessibility, and versioning contracts explicit when they actually apply.**
+- **Frontend libraries keep installation, CSS/peer dependencies, APIs, adapters, runtime compatibility, bundle, and accessibility contracts explicit when they apply.**
+- **Desktop applications foreground downloads, supported platforms, product visuals, user data, packaging, and release compatibility.**
 - **Full profiles must not invent capabilities that a project does not have.**
 - **Generated output remains ordinary readable Markdown.**
 - **Incomplete configuration should fail explicitly rather than create misleading documentation.**
@@ -230,11 +245,11 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the design.
 python -m pytest
 ```
 
-GitHub Actions runs the suite on Python 3.11, 3.12, and 3.13 and performs CLI render smoke tests for every implemented family.
+GitHub Actions runs the suite on Python 3.11, 3.12, and 3.13 and performs CLI render smoke tests for all seven template families.
 
 ## Status
 
-RepoForge is in early development. Six template families are executable: `scientific-python`, `research-algorithm`, `research-experiment`, `django-package`, `web-application`, and `frontend-library`. The final planned family is `desktop-application`.
+RepoForge is in early development, but the complete initial **7 project types × 3 profiles = 21 template combinations** are now represented. The next stage is to harden project detection, configuration ergonomics, apply/diff/check workflows, and cross-family visual consistency.
 
 ## License
 
