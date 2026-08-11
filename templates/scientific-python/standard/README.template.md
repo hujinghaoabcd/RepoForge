@@ -1,18 +1,18 @@
 {% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(420) }}">
+  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(360) }}">
 </p>
-{% endif %}
 
-# {{ project_name }}
+{% endif %}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
-{% endif %}
-{% if navigation %}{{ navigation }}
-{% endif %}
 
-## Why {{ project_name }}?
+{% endif %}{% if navigation %}{{ navigation }}
+
+{% endif %}{% if language_switch %}{{ language_switch }}
+
+{% endif %}## Why {{ project_name }}?
 
 {{ why_text }}
 
@@ -23,7 +23,9 @@
 
 ## Installation
 
-```bash
+{% if install_note %}{{ install_note }}
+
+{% endif %}```bash
 {{ install_command }}
 ```
 
@@ -32,13 +34,18 @@
 ```bash
 {{ verify_command }}
 ```
-{% endif %}
 
-## Quick Start
+{% endif %}{% if optional_install_commands %}### Optional features
 
-{{ quickstart_intro }}
+{% for item in optional_install_commands %}```bash
+{{ item.command }}  # {{ item.description }}
+```
 
-```python
+{% endfor %}{% endif %}## Quick Start
+
+{% if quickstart_intro %}{{ quickstart_intro }}
+
+{% endif %}```python
 {{ quickstart_code }}
 ```
 
@@ -49,13 +56,15 @@
 {% for method in methods %}| `{{ method.name }}` | {{ method.purpose }} | {{ method.notes }} |
 {% endfor %}
 
-{% endif %}
-{% if validation %}## Validation
+{% endif %}{% if validation %}## Validation
 
 {{ validation.summary }}
 
-{% for item in validation.items %}- {{ item }}
+{% if validation.items %}{% for item in validation.items %}- {{ item }}
 {% endfor %}
+{% endif %}{% if validation.link %}
+See {{ validation.link }} for reference cases, tolerances, and claim boundaries.
+{% endif %}
 
 {% endif %}## Documentation
 
@@ -67,7 +76,14 @@
 {{ citation.intro }}
 
 {% if citation.cff %}Citation metadata is available in [`CITATION.cff`]({{ citation.cff }}).
+{% endif %}{% if citation.doi %}DOI: {{ citation.doi }}
 {% endif %}
+
+{% endif %}{% if limitations %}## Limitations
+
+{% for limitation in limitations %}- {{ limitation }}
+{% endfor %}
+
 {% endif %}## Support and Contributing
 
 {{ support_text }}
