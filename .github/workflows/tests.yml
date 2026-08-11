@@ -113,6 +113,9 @@ jobs:
             --config /tmp/repoforge-init/repoforge.yml
 
           test -s /tmp/repoforge-init/README.md
+          grep -q "repoforge:start identity" /tmp/repoforge-init/README.md
+          grep -q "repoforge:start badges" /tmp/repoforge-init/README.md
+          grep -q "repoforge:start navigation" /tmp/repoforge-init/README.md
           test -s /tmp/repoforge-init/CODE_OF_CONDUCT.md
           test -s /tmp/repoforge-init/CONTRIBUTING.md
           test -s /tmp/repoforge-init/SECURITY.md
@@ -131,9 +134,21 @@ jobs:
           grep -q "PASS  README.md" /tmp/repoforge-check.txt
           grep -q "0 warnings, 0 failed" /tmp/repoforge-check.txt
 
-          printf '\nmanual drift\n' >> /tmp/repoforge-init/README.md
+          printf '\n## Maintainer Notes\n\nUser-owned body text.\n' >> /tmp/repoforge-init/README.md
+          repoforge check /tmp/repoforge-init > /tmp/repoforge-body-check.txt
+          grep -q "PASS  README.md" /tmp/repoforge-body-check.txt
+
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("/tmp/repoforge-init/README.md")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace("# SmokeProject", "# HandEditedManagedTitle", 1)
+          path.write_text(text, encoding="utf-8")
+          PY
+
           if repoforge check /tmp/repoforge-init > /tmp/repoforge-drift-check.txt; then
-            echo "repoforge check unexpectedly accepted a drifted README"
+            echo "repoforge check unexpectedly accepted drift inside a managed section"
             exit 1
           fi
           grep -q "FAIL  README.md" /tmp/repoforge-drift-check.txt
