@@ -156,17 +156,24 @@ repoforge render desktop-application standard \
 
 The output is ordinary Markdown. You can review it with Git, edit project-specific prose, and move deeper material into `docs/`.
 
-Apply a README and the repository standards selected by the matrices to an existing repository:
+Initialize one combined project config with an explicit type/profile:
 
 ```bash
-repoforge apply /path/to/project \
+repoforge init /path/to/project \
   --type scientific-python \
   --profile standard \
-  --config examples/apply/scientific-python-standard.yml \
-  --dry-run
+  --name MyPackage \
+  --repository-url https://github.com/example/my-package
 ```
 
-Review the plan, then run the same command without `--dry-run`. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/APPLY.md`](docs/APPLY.md).
+Review `repoforge.yml`, then preview and apply it:
+
+```bash
+repoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run
+repoforge apply /path/to/project --config /path/to/project/repoforge.yml
+```
+
+`init` records the explicit project type/profile in the config, so normal `apply` does not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md) and [`docs/APPLY.md`](docs/APPLY.md).
 
 ## How rendering works
 
@@ -184,7 +191,7 @@ project type / profile
 
 The renderer uses Jinja2 `StrictUndefined`. A template that requires missing configuration fails instead of silently rendering an incomplete section.
 
-The current CLI implements both `repoforge render` and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.
+The current CLI implements `repoforge render`, explicit `repoforge init`, and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.
 
 ## Previews and golden outputs
 
@@ -295,6 +302,7 @@ RepoForge is **usable now for explicit, configuration-driven README rendering an
 Available now:
 
 - `repoforge render`;
+- `repoforge init` for one combined, explicitly typed `repoforge.yml`;
 - `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;
 - 7 project types × 3 independent profiles;
 - community, GitHub collaboration, citation, and changelog standards;
@@ -304,7 +312,7 @@ Available now:
 
 Not implemented yet:
 
-- `init`, `diff`, and `check` repository workflows;
+- `diff` and `check` repository workflows;
 - managed partial updates or semantic merges inside an existing hand-edited README;
 - a published PyPI release.
 
@@ -314,15 +322,14 @@ So the current release is already useful as a **README and repository-standards 
 
 RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
 
-The repository standards packs and first apply workflow are now implemented. The next workflow layer is:
+The repository standards packs, `init`, and the first safe `apply` workflow are now implemented. The next workflow layer is:
 
 ```text
-repoforge init .       # planned: create a combined RepoForge config
 repoforge diff .       # planned: show textual diffs for the apply plan
 repoforge check .      # planned: validate repository documentation contracts
 ```
 
-The currently supported CLI commands are `repoforge render` and `repoforge apply`.
+The currently supported CLI commands are `repoforge render`, `repoforge init`, and `repoforge apply`.
 
 ## Contributing
 

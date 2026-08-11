@@ -130,6 +130,25 @@ cd RepoForge
 python -m pip install -e ".[test]"
 ```
 
+先为已有项目生成统一配置：
+
+```bash
+repoforge init /path/to/project \
+  --type scientific-python \
+  --profile standard \
+  --name MyPackage \
+  --repository-url https://github.com/example/my-package
+```
+
+编辑生成的 `repoforge.yml` 后，可以直接预览并应用：
+
+```bash
+repoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run
+repoforge apply /path/to/project --config /path/to/project/repoforge.yml
+```
+
+`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)。
+
 选择项目类型和 Profile 渲染 README：
 
 ```bash
@@ -184,7 +203,7 @@ README.template.md
 
 Renderer 使用 Jinja2 `StrictUndefined`。模板需要但配置缺失的变量会直接失败，不会静默输出残缺章节。
 
-当前 CLI 已经实现 `repoforge render` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。
+当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。
 
 ## Preview 与 Golden Output
 
@@ -295,6 +314,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 现在已经可用：
 
 - `repoforge render`；
+- `repoforge init`，生成包含显式项目类型/Profile 的统一 `repoforge.yml`；
 - `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；
 - 7 类项目 × 3 套独立 Profile；
 - 社区、GitHub 协作、Citation 与 Changelog 标准；
@@ -304,7 +324,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 还没有实现：
 
-- `init`、`diff`、`check` 等仓库工作流；
+- `diff`、`check` 等仓库工作流；
 - 对已经人工修改过的 README 做受控局部更新或语义合并；
 - 正式发布到 PyPI。
 
@@ -314,15 +334,14 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 RepoForge 当前处于 **Alpha** 阶段。模板层的第一阶段已经完成：21 种项目类型/Profile 组合全部存在，Renderer 可执行，Preview 已提交，而且七个家族都有 Contract 和 Stress Coverage。
 
-仓库标准层和第一版 Apply 工作流已经实现。下一阶段是：
+仓库标准层、`init` 和第一版安全 Apply 工作流已经实现。下一阶段是：
 
 ```text
-repoforge init .       # 计划：创建合并的 RepoForge 配置
 repoforge diff .       # 计划：展示 Apply 计划的文本 Diff
 repoforge check .      # 计划：检查仓库文档合同
 ```
 
-当前正式支持的 CLI 命令是 `repoforge render` 和 `repoforge apply`。
+当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init` 和 `repoforge apply`。
 
 ## Contributing
 
