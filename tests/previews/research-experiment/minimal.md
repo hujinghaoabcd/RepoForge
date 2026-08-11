@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/hujinghaoabcd/RepoForge/main/assets/repoforge-logo.png" alt="ForecastBench" width="420">
+</p>
+
 # ForecastBench
 
 **Minimal reproducible code for a short-horizon traffic forecasting study.**
