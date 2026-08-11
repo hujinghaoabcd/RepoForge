@@ -1,0 +1,14 @@
+project_name: ReplicateOne
+tagline: One-command reproduction of a focused numerical experiment.
+paper_link: docs/study.md
+data_text: Download the prepared fixture and place it at the documented path without applying additional preprocessing.
+data_path: data/reference_case.npz
+run_text: Execute the single canonical reproduction command.
+run_command: python reproduce.py --config configs/reference.yml
+output_text: The run writes one metric record and one resolved configuration under `results/reference/`.
+expected_result: '`results/reference/metrics.json` records the documented metric and run identity.'
+citation:
+  intro: Cite the study when using the reported result and the archived software release when reusing the implementation.
+  paper: docs/study.md
+  cff: CITATION.cff
+license_text: ReplicateOne is released under the MIT License.
