@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/hujinghaoabcd/RepoForge/main/assets/repoforge-logo.png" alt="SpatialTools" width="420">
+  <img src="../../../assets/logo.svg" alt="SpatialTools" width="420">
 </p>
 
 # SpatialTools
