@@ -36,6 +36,10 @@ def find_standards_root(explicit: str | Path | None = None) -> Path:
             raise FileNotFoundError(f"Standards root does not exist: {root}")
         return root
 
+    packaged_root = Path(__file__).resolve().parent / "_data" / "standards"
+    if packaged_root.is_dir():
+        return packaged_root
+
     candidates = [Path.cwd(), *Path(__file__).resolve().parents]
     for candidate in candidates:
         root = candidate / "standards"
@@ -43,7 +47,7 @@ def find_standards_root(explicit: str | Path | None = None) -> Path:
             return root
 
     raise FileNotFoundError(
-        "Could not locate RepoForge standards. Run from a RepoForge checkout "
+        "Could not locate RepoForge standards. Reinstall repoforge-standards "
         "or pass --standards-root."
     )
 
