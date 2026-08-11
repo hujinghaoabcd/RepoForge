@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="LatentMap" width="280">
+  <img src="../../../assets/logo.svg" alt="LatentMap" width="160">
 </p>
 
 # LatentMap
@@ -30,21 +30,19 @@ X = np.array([[0.0, 1.0], [1.0, 1.2], [2.0, 2.1], [3.0, 2.8]])
 y = np.array([0.0, 0.2, 0.9, 1.1])
 result = LatentMap(n_components=2, random_state=42).fit(X, y)
 print(result.embedding_)
+
 ```
 
 ## Validation
 
 The implementation is checked on deterministic synthetic recovery cases and fixed numerical fixtures.
-
 - documented seeds reproduce the reference embedding within tolerance
 - degenerate inputs fail explicitly instead of producing silent coordinates
 
 ## Citation
 
 Cite the method paper when using LatentMap in research and cite the software release when the implementation matters.
-
 Method paper: docs/paper.md
-
 Software citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## License

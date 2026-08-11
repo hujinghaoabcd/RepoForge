@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="LatentMap" width="280">
+  <img src="../../../assets/logo.svg" alt="LatentMap" width="160">
+</p>
+
+<p align="center">
+  <img src="../../../assets/screenshots/repoforge-workflow.webp" alt="LatentMap method overview" width="780">
 </p>
 
 # LatentMap
@@ -49,12 +53,12 @@ y = np.array([0.0, 0.2, 0.9, 1.1, 1.8])
 model = LatentMap(n_components=2, random_state=42)
 result = model.fit(X, y)
 print(result.embedding_)
+
 ```
 
 ## Validation
 
 LatentMap separates implementation validation from downstream predictive performance claims.
-
 - deterministic fixtures check the optimization and distance contracts
 - synthetic recovery cases verify expected neighborhood ordering under documented settings
 - degenerate inputs and unsupported objectives fail explicitly
@@ -69,17 +73,12 @@ See docs/validation.md for complete validation scope and tolerances.
 
 ## Documentation
 
-- **Method Guide:** docs/method.md — scientific formulation and assumptions
-- **Examples:** examples/ — complete runnable workflows
-- **Validation Guide:** docs/validation.md — recovery cases, tolerances, and claim boundaries
-- **API Reference:** docs/api.md — public implementation surface
-
+- **Method Guide:** docs/method.md — scientific formulation and assumptions- **Examples:** examples/ — complete runnable workflows- **Validation Guide:** docs/validation.md — recovery cases, tolerances, and claim boundaries- **API Reference:** docs/api.md — public implementation surface
 ## Citation
 
 Cite the LatentMap method paper for the scientific method and the software release when the implementation contributes materially to the work.
 
 Method paper: docs/paper.md
-
 Software citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## Support and Contributing

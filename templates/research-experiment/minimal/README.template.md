@@ -1,5 +1,5 @@
 {% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(360) }}">
+  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(160) }}">
 </p>
 
 {% endif %}# {{ project_name }}

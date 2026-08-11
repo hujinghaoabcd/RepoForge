@@ -1,6 +1,12 @@
 logo_path: ../../../assets/logo.svg
-logo_width: 280
+logo_width: 160
 
-# RepoForge's own preview and stress outputs use this single repository SVG.
-# This path is resolved by Markdown previews under tests/previews/<type>/<profile>.md.
-# User-generated project READMEs remain free to provide their own logo_path.
+# RepoForge's committed preview matrix uses the same real project visuals.
+# These are preview-only overrides; user-facing README.example.md files stay neutral.
+method_figure: ../../../assets/screenshots/repoforge-workflow.webp
+figure_path: ../../../assets/screenshots/repoforge-workflow.webp
+screenshot_path: ../../../assets/screenshots/repoforge-preview.webp
+demo_image: ../../../assets/screenshots/repoforge-preview.webp
+figure_width: 780
+screenshot_width: 780
+demo_width: 780

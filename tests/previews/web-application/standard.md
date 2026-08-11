@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoBoard" width="280">
+  <img src="../../../assets/logo.svg" alt="GeoBoard" width="160">
 </p>
 
 <p align="center">
-  <img src="docs/assets/geoboard-overview.png" alt="GeoBoard screenshot" width="920">
+  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="GeoBoard screenshot" width="780">
 </p>
 
 # GeoBoard

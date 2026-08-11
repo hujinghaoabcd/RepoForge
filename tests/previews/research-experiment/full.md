@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="ForecastBench" width="280">
+  <img src="../../../assets/logo.svg" alt="ForecastBench" width="160">
+</p>
+
+<p align="center">
+  <img src="../../../assets/screenshots/repoforge-workflow.webp" alt="ForecastBench overview" width="780">
 </p>
 
 # ForecastBench

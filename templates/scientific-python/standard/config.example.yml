@@ -1,5 +1,5 @@
 logo_path: null
-logo_width: 360
+logo_width: 160
 project_name: SpatialTools
 tagline: Reproducible spatial statistics and neighborhood-based modelling in Python.
 badges: >-

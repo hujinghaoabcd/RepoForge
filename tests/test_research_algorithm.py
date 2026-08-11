@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from repoforge.renderer import load_config, render_from_config
+from repoforge.renderer import load_config, render_from_config, render_readme
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,17 +83,24 @@ def test_research_algorithm_profiles_have_distinct_depth():
 
 
 def test_research_algorithm_previews_use_repoforge_branding():
-    logo_url = load_config(BRANDING)["logo_path"]
+    branding = load_config(BRANDING)
 
     for profile in ("minimal", "standard", "full"):
-        example = (
-            TEMPLATES / "research-algorithm" / profile / "README.example.md"
-        ).read_text(encoding="utf-8").strip()
+        profile_dir = TEMPLATES / "research-algorithm" / profile
+        config = load_config(profile_dir / "config.example.yml")
+        config.update(branding)
+        expected = render_readme(
+            "research-algorithm",
+            profile,
+            config,
+            template_root=TEMPLATES,
+        )
         preview = (PREVIEWS / "research-algorithm" / f"{profile}.md").read_text(
             encoding="utf-8"
         )
 
-        assert logo_url in preview
-        assert preview.rstrip().endswith(example)
+        assert preview == expected
+        assert branding["logo_path"] in preview
+        assert f'width="{branding["logo_width"]}"' in preview
         assert "# LatentMap" in preview
         assert "MethodX" not in preview

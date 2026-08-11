@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="LatentMap" width="280">
+  <img src="../../../assets/logo.svg" alt="LatentMap" width="160">
+</p>
+
+<p align="center">
+  <img src="../../../assets/screenshots/repoforge-workflow.webp" alt="LatentMap method overview" width="780">
 </p>
 
 # LatentMap
@@ -80,6 +84,7 @@ result = model.fit(X, y)
 
 print(result.embedding_.shape)
 print(result.pairwise_distances()[:3, :3])
+
 ```
 
 ## Inputs, Outputs, and Interpretation
@@ -132,18 +137,12 @@ The dominant cost is representation optimization plus pairwise or neighborhood d
 
 ## Documentation
 
-- **Method Guide:** docs/method/index.md — formulation, assumptions, and interpretation
-- **Validation Guide:** docs/validation/index.md — recovery, sensitivity, references, and claim boundaries
-- **Examples:** examples/ — complete runnable workflows
-- **API Reference:** docs/api.md — fitted objects and public operations
-- **Reproducibility Guide:** docs/reproducibility.md — commands, seeds, configs, and archived evidence
-
+- **Method Guide:** docs/method/index.md — formulation, assumptions, and interpretation- **Validation Guide:** docs/validation/index.md — recovery, sensitivity, references, and claim boundaries- **Examples:** examples/ — complete runnable workflows- **API Reference:** docs/api.md — fitted objects and public operations- **Reproducibility Guide:** docs/reproducibility.md — commands, seeds, configs, and archived evidence
 ## Citation
 
 Cite the LatentMap method paper for the scientific contribution and the software release when this implementation contributes materially to the analysis.
 
 Method paper: docs/paper.md
-
 Software citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## Support and Contributing

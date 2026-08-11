@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoDesk" width="280">
+  <img src="../../../assets/logo.svg" alt="GeoDesk" width="160">
 </p>
 <h1 align="center">GeoDesk</h1>
 <p align="center"><strong>A cross-platform GIS desktop application for browsing, styling, and organizing local spatial data.</strong></p>
@@ -13,7 +13,7 @@
 <p align="center">
   <a href="#download-and-install">Download</a> ·  <a href="docs/">Documentation</a> ·  <a href="CHANGELOG.md">Changelog</a> ·  <a href="https://github.com/example/geodesk/issues">Issues</a></p>
 <p align="center">
-  <img src="docs/images/geodesk-main.png" alt="GeoDesk screenshot" width="900">
+  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="GeoDesk screenshot" width="780">
 </p>
 
 ## Overview

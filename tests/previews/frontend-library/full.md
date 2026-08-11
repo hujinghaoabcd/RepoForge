@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="MapWidget" width="280">
+  <img src="../../../assets/logo.svg" alt="MapWidget" width="160">
+</p>
+
+<p align="center">
+  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="MapWidget demo" width="780">
 </p>
 
 # MapWidget
