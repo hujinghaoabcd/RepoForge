@@ -2,7 +2,7 @@
 
 RepoForge treats repository standards as a layer beside the README template system.
 
-README profiles answer **how much project-facing documentation belongs on the landing page**. Repository standards answer **which community, contribution, support, security, issue, and review contracts should exist around the repository**.
+README profiles answer **how much project-facing documentation belongs on the landing page**. Repository standards answer **which community, contribution, support, security, collaboration, citation, and release-history contracts should exist around the repository**.
 
 These are deliberately separate concerns:
 
@@ -10,7 +10,8 @@ These are deliberately separate concerns:
 - community-health files are shared repository-level contracts rather than 21 duplicated copies;
 - `standards/matrix.yml` decides whether each community-health file is `default`, `recommended`, or `optional` for a project type/profile combination;
 - GitHub issue and pull-request forms live in their own `standards/github/` pack;
-- project-specific values such as contribution commands, support channels, reporting contacts, repository URLs, and form behavior come from configuration;
+- citation and changelog policy live in a separate `standards/metadata/` pack and matrix;
+- project-specific values such as contribution commands, support channels, reporting contacts, repository URLs, citation authors, and release-history behavior come from configuration;
 - project type is always selected explicitly rather than inferred.
 
 ## Community standards pack
@@ -60,15 +61,40 @@ The intended generated paths are:
 
 Bug and feature reports use GitHub Issue Forms so required information is structured at submission time. Pull requests use a Markdown template with summary, motivation, validation, compatibility/risk, and repository-standard checks.
 
+## Metadata pack
+
+```text
+standards/metadata/
+├── matrix.yml
+├── config.example.yml
+├── CITATION.template.cff
+└── CHANGELOG.template.md
+```
+
+The intended generated files are:
+
+```text
+CITATION.cff
+CHANGELOG.md
+```
+
+Citation and changelog defaults are deliberately different:
+
+- research software, original algorithms, and reproducibility repositories prioritize `CITATION.cff`;
+- reusable packages, frontend libraries, web applications, and desktop applications prioritize `CHANGELOG.md`;
+- projects can explicitly opt in or out regardless of the matrix recommendation.
+
+The citation template follows Citation File Format `1.2.0` conventions. The changelog template follows Keep a Changelog `2.0.0`, keeps an `Unreleased` section, and emits only non-empty change categories rather than filling the file with empty headings.
+
 ## Matrix states
 
 | State | Meaning |
 | --- | --- |
 | `default` | A future `repoforge apply` should generate the file unless explicitly disabled. |
 | `recommended` | RepoForge should recommend the file, but the user decides whether to generate it. |
-| `optional` | Useful only when the repository has the corresponding collaboration/support need. |
+| `optional` | Useful only when the repository has the corresponding collaboration, citation, support, or release-management need. |
 
-The matrix is a default policy, not a claim about what every repository must contain. Public contribution mode, organizational policy, private repositories, regulated environments, and project-specific support processes may override it.
+The matrices are default policies, not claims about what every repository must contain. Public contribution mode, organizational policy, private repositories, regulated environments, archival repositories, and project-specific release/support processes may override them.
 
 ## Design rules
 
@@ -80,13 +106,19 @@ A `minimal` README can still belong to a serious public project that needs a sec
 
 RepoForge therefore keeps default labels and assignees out of the generic forms. Repositories can add those after generation if they actually maintain them.
 
-## Next standards pack
+> Citation and release history are project metadata, not decorative README sections.
 
-The next repository metadata layer is expected to cover:
+A research repository can need citation metadata even when it has little release history; a product or package can need a carefully maintained changelog without being an academic citation target.
+
+## Next implementation stage
+
+The standard-file contracts now cover the first three packs:
 
 ```text
-CITATION.cff
-CHANGELOG.md
+README templates
+Community health
+GitHub collaboration
+Repository metadata
 ```
 
-After the standard-file contracts stabilize, `repoforge apply` can write selected README, community-health, GitHub collaboration, and metadata files into another repository.
+The next implementation stage is `repoforge apply`, using explicit `--type` and `--profile` selection to write the selected README and standards into another repository. A `diff`/dry-run layer should be built into that workflow before overwriting existing files.

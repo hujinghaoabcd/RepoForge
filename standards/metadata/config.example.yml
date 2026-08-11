@@ -1,0 +1,31 @@
+project_name: ExampleProject
+repository_url: https://github.com/example/example-project
+
+citation:
+  message: If you use this software in your work, please cite it using the metadata below.
+  version: 1.2.0
+  license: MIT
+  repository_code: https://github.com/example/example-project
+  url: https://example.org/example-project
+  doi: null
+  abstract: A concise example project used to demonstrate RepoForge citation metadata.
+  keywords:
+    - reproducibility
+    - open-source
+  authors:
+    - family_names: Doe
+      given_names: Jane
+      orcid: https://orcid.org/0000-0000-0000-0000
+      affiliation: Example University
+
+changelog:
+  versioning_statement: This project follows Semantic Versioning.
+  unreleased:
+    Added:
+      - Initial public changelog structure.
+    Changed: []
+    Deprecated: []
+    Removed: []
+    Fixed: []
+    Security: []
+  latest_version: null

@@ -1,0 +1,88 @@
+version: 1
+
+states:
+  default: Generate unless explicitly disabled.
+  recommended: Recommend and let the user opt in.
+  optional: Generate only when explicitly requested.
+
+files:
+  citation: CITATION.cff
+  changelog: CHANGELOG.md
+
+matrix:
+  scientific-python:
+    minimal:
+      citation: recommended
+      changelog: recommended
+    standard:
+      citation: default
+      changelog: default
+    full:
+      citation: default
+      changelog: default
+
+  research-algorithm:
+    minimal:
+      citation: recommended
+      changelog: optional
+    standard:
+      citation: default
+      changelog: recommended
+    full:
+      citation: default
+      changelog: recommended
+
+  research-experiment:
+    minimal:
+      citation: recommended
+      changelog: optional
+    standard:
+      citation: default
+      changelog: optional
+    full:
+      citation: default
+      changelog: recommended
+
+  django-package:
+    minimal:
+      citation: optional
+      changelog: recommended
+    standard:
+      citation: optional
+      changelog: default
+    full:
+      citation: optional
+      changelog: default
+
+  web-application:
+    minimal:
+      citation: optional
+      changelog: recommended
+    standard:
+      citation: optional
+      changelog: default
+    full:
+      citation: optional
+      changelog: default
+
+  frontend-library:
+    minimal:
+      citation: optional
+      changelog: recommended
+    standard:
+      citation: optional
+      changelog: default
+    full:
+      citation: optional
+      changelog: default
+
+  desktop-application:
+    minimal:
+      citation: optional
+      changelog: recommended
+    standard:
+      citation: optional
+      changelog: default
+    full:
+      citation: optional
+      changelog: default

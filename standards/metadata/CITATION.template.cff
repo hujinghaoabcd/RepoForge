@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: {{ message | tojson }}
+type: software
+title: {{ project_name | tojson }}
+version: {{ version | tojson }}
+authors:
+{% for author in authors %}  - family-names: {{ author.family_names | tojson }}
+    given-names: {{ author.given_names | tojson }}
+{% if author.orcid %}    orcid: {{ author.orcid | tojson }}
+{% endif %}{% if author.affiliation %}    affiliation: {{ author.affiliation | tojson }}
+{% endif %}{% endfor %}{% if abstract %}abstract: {{ abstract | tojson }}
+{% endif %}{% if keywords %}keywords:
+{% for keyword in keywords %}  - {{ keyword | tojson }}
+{% endfor %}{% endif %}{% if license %}license: {{ license | tojson }}
+{% endif %}{% if repository_code %}repository-code: {{ repository_code | tojson }}
+{% endif %}{% if url %}url: {{ url | tojson }}
+{% endif %}{% if doi %}doi: {{ doi | tojson }}
+{% endif %}
