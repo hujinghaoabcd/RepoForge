@@ -93,7 +93,6 @@ docs/          protocol and reproducibility notes
 Cite the study paper for the experimental results and the software release when this implementation is used directly.
 
 Paper: docs/paper.md
-
 Software citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## License
