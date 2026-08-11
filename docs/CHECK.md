@@ -60,7 +60,7 @@ FAIL  README.md  content differs from the current RepoForge plan; run repoforge 
 FAIL  SECURITY.md  missing selected RepoForge file
 WARN  repoforge.yml  Citation metadata still contains the example author/ORCID
 
-Summary: 7 passed, 1 warnings, 2 failed.
+Summary: 7 passed, 1 warning, 2 failed.
 ```
 
 ## Exit codes
