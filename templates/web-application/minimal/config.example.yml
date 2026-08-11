@@ -1,0 +1,28 @@
+logo_path: null
+screenshot_path: docs/assets/geoboard-overview.png
+project_name: GeoBoard
+tagline: A lightweight browser dashboard for exploring and sharing geospatial indicators.
+badges: '[![Build](https://img.shields.io/badge/build-passing-brightgreen)](#run-locally) [![Docker](https://img.shields.io/badge/docker-ready-blue)](#deploy) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+demo_link: https://demo.example.org
+features:
+- Explore map-based indicators with filters and time controls.
+- Share stable dashboard URLs with selected layers and views.
+- Import GeoJSON datasets for lightweight team analysis.
+- Run locally or deploy as a single container.
+local_intro: Copy the example environment file, install dependencies, and start the development server.
+local_command: |-
+  cp .env.example .env
+  npm install
+  npm run dev
+local_result: Open `http://localhost:3000` after the development server starts.
+environment:
+- name: DATABASE_URL
+  required: 'Yes'
+  purpose: PostgreSQL connection used by the application.
+- name: APP_BASE_URL
+  required: 'Yes'
+  purpose: Public base URL used when generating shared links.
+deploy_text: The primary production path is the repository Docker image.
+deploy_command: docker compose up -d
+deploy_note: Persist the database volume and back it up before upgrades.
+license_text: MIT.

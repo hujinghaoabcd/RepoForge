@@ -1,0 +1,88 @@
+logo_path: null
+screenshot_path: docs/assets/geoboard-overview.png
+project_name: GeoBoard
+tagline: A deployable geospatial dashboard for teams that publish, compare, and monitor spatial indicators.
+badges: '[![Build](https://img.shields.io/badge/build-passing-brightgreen)](#testing) [![Docker](https://img.shields.io/badge/docker-ready-blue)](#deployment) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Demo · Features · Local Development · Deployment · Documentation
+overview_text: GeoBoard combines a browser map, a small application API, and PostgreSQL/PostGIS persistence so teams can publish repeatable spatial dashboards without maintaining a separate GIS desktop workflow for every viewer.
+demo_link: https://demo.example.org
+screenshot_text: The overview page combines the map, indicator filters, saved views, and dataset status in one workspace.
+features:
+- name: Map-first exploration
+  description: browse spatial indicators, categories, and time slices.
+- name: Saved dashboards
+  description: store shareable combinations of layers, filters, and map position.
+- name: Dataset imports
+  description: load validated GeoJSON datasets into project workspaces.
+- name: Role-aware editing
+  description: separate viewers from users allowed to publish or replace datasets.
+- name: Container deployment
+  description: run the application and database with a supported Compose setup.
+stack:
+- layer: Frontend
+  technology: React + TypeScript
+  role: interactive dashboard and map UI
+- layer: Backend
+  technology: Django + Django REST Framework
+  role: application API and access control
+- layer: Database
+  technology: PostgreSQL + PostGIS
+  role: users, dashboards, datasets, and spatial queries
+- layer: Runtime
+  technology: Docker Compose
+  role: repeatable local/self-host deployment
+requirements:
+- Node.js 22+
+- Python 3.12+
+- PostgreSQL/PostGIS, or Docker for the development stack
+local_command: |-
+  cp .env.example .env
+  docker compose up -d db
+  python -m pip install -r requirements/dev.txt
+  npm install
+  npm run dev
+local_result: The frontend is available at `http://localhost:3000`; the API runs at `http://localhost:8000`.
+environment_intro: Keep secrets out of version control. The README lists only variables needed to understand the development contract; see `.env.example` for the complete set.
+environment:
+- name: DATABASE_URL
+  required: 'Yes'
+  purpose: PostgreSQL/PostGIS connection.
+- name: SECRET_KEY
+  required: 'Yes'
+  purpose: server-side signing secret; use a unique production value.
+- name: APP_BASE_URL
+  required: 'Yes'
+  purpose: public application URL.
+- name: CORS_ALLOWED_ORIGINS
+  required: Development-dependent
+  purpose: allowed browser origins when frontend/API run separately.
+database_text: Database migrations are versioned with the application. Apply them after pulling a release that changes schema.
+migration_command: python manage.py migrate
+seed_command: python manage.py seed_demo
+deployment_text: The supported self-host path uses the production Docker Compose definition.
+deployment_command: docker compose -f compose.production.yml up -d
+deployment_note: Back up PostgreSQL and uploaded datasets before production upgrades. TLS termination belongs at the reverse proxy or ingress layer.
+project_tree: |-
+  frontend/       # React application
+  backend/        # Django project and API
+  docs/           # deployment and operator guides
+  compose.yml     # development services
+  compose.production.yml
+test_command: |-
+  python -m pytest
+  npm test
+testing_text: Run backend and frontend tests before opening a pull request. End-to-end browser tests are documented separately.
+documentation:
+- name: Development
+  link: docs/development.md
+  description: local setup and debugging
+- name: Configuration
+  link: docs/configuration.md
+  description: complete environment-variable reference
+- name: Deployment
+  link: docs/deployment.md
+  description: production Compose and reverse-proxy setup
+- name: Operations
+  link: docs/operations.md
+  description: backup, restore, and upgrade procedures
+license_text: MIT.

@@ -1,0 +1,23 @@
+project_name: TeamStatus
+tagline: A small internal web dashboard for service status and weekly operational notes.
+screenshot_path: null
+demo_link: null
+features:
+- Show current service health from a small JSON endpoint.
+- Publish weekly operational notes.
+- Run as one application process behind the team reverse proxy.
+local_intro: Install dependencies and start the application.
+local_command: |-
+  python -m pip install -r requirements.txt
+  python app.py
+local_result: Open `http://localhost:5000`.
+environment:
+- name: STATUS_SOURCE_URL
+  required: 'Yes'
+  purpose: JSON endpoint used to load service state.
+deploy_text: Build and run the single application image behind the existing internal proxy.
+deploy_command: |-
+  docker build -t team-status .
+  docker run -d --env-file .env -p 5000:5000 team-status
+deploy_note: No database or persistent application state is required.
+license_text: MIT.

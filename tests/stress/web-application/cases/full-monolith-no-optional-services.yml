@@ -1,0 +1,78 @@
+project_name: PermitDesk
+tagline: A production-oriented server-rendered permit workflow application with a single database and no auxiliary service layer.
+screenshot_path: docs/assets/permitdesk.png
+overview_text: 'PermitDesk is deliberately a monolith: one Django application handles browser UI, business logic, authentication, and persistence. Full documentation is justified by operational responsibility, not service count.'
+features:
+- name: Applications
+  description: submit and review permit requests.
+- name: Workflow
+  description: assign review steps and decisions.
+- name: Audit trail
+  description: record state changes and staff actions.
+- name: Role-based access
+  description: separate applicants, reviewers, and administrators.
+architecture:
+- component: Application
+  technology: Django
+  responsibility: server-rendered UI, domain logic, auth, and administration
+- component: Database
+  technology: PostgreSQL
+  responsibility: all persistent application state
+- component: Edge
+  technology: Nginx
+  responsibility: TLS, static files, and request routing
+stack:
+- name: Django
+  description: application framework.
+- name: PostgreSQL
+  description: primary and only persistent service.
+- name: Nginx
+  description: production TLS and reverse proxy.
+requirements:
+- Python 3.12+
+- PostgreSQL 16+
+- Docker with Compose for supported deployment
+local_command: |-
+  cp .env.example .env
+  python -m pip install -r requirements/dev.txt
+  python manage.py migrate
+  python manage.py runserver
+local_result: Open `http://localhost:8000`.
+environment:
+- group: Core
+  name: SECRET_KEY
+  required: 'Yes'
+  purpose: application signing secret.
+- group: Database
+  name: DATABASE_URL
+  required: 'Yes'
+  purpose: PostgreSQL connection.
+database_text: All persistent state is in PostgreSQL and schema changes are applied by Django migrations.
+migration_command: python manage.py migrate
+backup_text: A consistent PostgreSQL backup is sufficient because the application does not use user-upload object storage.
+api_text: null
+api_links: []
+auth_text: Authentication uses Django sessions. Application roles remain separate from staff/admin flags and are enforced in domain views.
+jobs_text: null
+jobs_command: null
+storage_text: null
+search_text: null
+email_text: null
+deployments:
+- name: Docker Compose
+  description: Run the application and PostgreSQL with persistent database storage.
+  command: |-
+    docker compose -f compose.production.yml up -d
+    python manage.py migrate
+operations:
+- name: Health
+  description: monitor application and database readiness.
+- name: Logs
+  description: collect structured request/application logs.
+- name: Backups
+  description: monitor PostgreSQL backup freshness and restore tests.
+security_notes:
+- Keep production secrets outside repository files.
+- Terminate TLS at the trusted reverse proxy.
+- Review proxy headers, CSRF trusted origins, and secure-cookie settings together.
+- Report vulnerabilities privately.
