@@ -1,5 +1,5 @@
-logo_path: https://raw.githubusercontent.com/hujinghaoabcd/RepoForge/main/assets/repoforge-logo.png
+logo_path: https://raw.githubusercontent.com/hujinghaoabcd/RepoForge/feature/research-experiment-v1/assets/logo.svg
 logo_width: 420
 
-# RepoForge's own preview and stress outputs use this brand asset.
+# RepoForge's own preview and stress outputs use this single repository SVG.
 # User-generated project READMEs remain free to provide their own logo_path.
