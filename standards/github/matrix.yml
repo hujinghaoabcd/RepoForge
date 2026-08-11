@@ -1,0 +1,88 @@
+version: 1
+
+states:
+  default: Generate unless explicitly disabled.
+  recommended: Recommend and let the user opt in.
+  optional: Generate only when explicitly requested.
+
+files:
+  issue_forms: .github/ISSUE_TEMPLATE/
+  pull_request_template: .github/pull_request_template.md
+
+matrix:
+  scientific-python:
+    minimal:
+      issue_forms: recommended
+      pull_request_template: recommended
+    standard:
+      issue_forms: default
+      pull_request_template: default
+    full:
+      issue_forms: default
+      pull_request_template: default
+
+  research-algorithm:
+    minimal:
+      issue_forms: optional
+      pull_request_template: recommended
+    standard:
+      issue_forms: recommended
+      pull_request_template: default
+    full:
+      issue_forms: default
+      pull_request_template: default
+
+  research-experiment:
+    minimal:
+      issue_forms: optional
+      pull_request_template: recommended
+    standard:
+      issue_forms: recommended
+      pull_request_template: default
+    full:
+      issue_forms: default
+      pull_request_template: default
+
+  django-package:
+    minimal:
+      issue_forms: recommended
+      pull_request_template: recommended
+    standard:
+      issue_forms: default
+      pull_request_template: default
+    full:
+      issue_forms: default
+      pull_request_template: default
+
+  web-application:
+    minimal:
+      issue_forms: recommended
+      pull_request_template: recommended
+    standard:
+      issue_forms: default
+      pull_request_template: default
+    full:
+      issue_forms: default
+      pull_request_template: default
+
+  frontend-library:
+    minimal:
+      issue_forms: recommended
+      pull_request_template: recommended
+    standard:
+      issue_forms: default
+      pull_request_template: default
+    full:
+      issue_forms: default
+      pull_request_template: default
+
+  desktop-application:
+    minimal:
+      issue_forms: recommended
+      pull_request_template: recommended
+    standard:
+      issue_forms: default
+      pull_request_template: default
+    full:
+      issue_forms: default
+      pull_request_template: default
