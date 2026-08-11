@@ -118,6 +118,21 @@ def _has_marker_syntax(text: str) -> bool:
     return "<!-- repoforge:start " in text or "<!-- repoforge:end " in text
 
 
+def has_complete_managed_sections(text: str) -> bool:
+    sections = _sections(text)
+    if not sections:
+        if _has_marker_syntax(text):
+            raise ValueError("Malformed RepoForge managed section markers in README.md")
+        return False
+    expected = set(MANAGED_SECTION_NAMES)
+    if set(sections) != expected:
+        raise ValueError(
+            "README.md has an incomplete RepoForge managed section set. "
+            "Expected: " + ", ".join(MANAGED_SECTION_NAMES)
+        )
+    return True
+
+
 def merge_managed_sections(existing: str, desired: str) -> str:
     """Replace desired managed regions while preserving all unmanaged text.
 
@@ -133,18 +148,10 @@ def merge_managed_sections(existing: str, desired: str) -> str:
             + ", ".join(MANAGED_SECTION_NAMES)
         )
 
-    existing_sections = _sections(existing)
-    if not existing_sections:
-        if _has_marker_syntax(existing):
-            raise ValueError("Malformed RepoForge managed section markers in README.md")
+    if not has_complete_managed_sections(existing):
         return desired
 
-    if set(existing_sections) != expected:
-        raise ValueError(
-            "README.md has an incomplete RepoForge managed section set. "
-            "Expected: " + ", ".join(MANAGED_SECTION_NAMES)
-        )
-
+    existing_sections = _sections(existing)
     merged = existing
     for name in MANAGED_SECTION_NAMES:
         merged = merged.replace(existing_sections[name], desired_sections[name], 1)
