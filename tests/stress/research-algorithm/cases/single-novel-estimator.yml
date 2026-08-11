@@ -1,0 +1,28 @@
+logo_path: null
+project_name: RobustSlope
+tagline: A focused estimator for locally robust slope recovery under sparse contamination.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)'
+paper_link: docs/method-note.md
+method_statement: RobustSlope estimates one local slope parameter using a bounded residual weighting rule designed for small contaminated samples; the method is intentionally narrow and does not require a large catalogue README.
+install_command: python -m pip install robustslope
+quickstart_intro: Fit the estimator on a tiny contaminated sample.
+quickstart_code: |
+  import numpy as np
+  from robustslope import RobustSlope
+
+  x = np.arange(8, dtype=float)
+  y = 1.5 * x + 2.0
+  y[-1] += 12.0
+
+  result = RobustSlope(c=1.5).fit(x, y)
+  print(result.slope_)
+validation:
+  summary: Deterministic textbook and contamination fixtures check recovery and failure behavior.
+  checks:
+    - exact linear data recover the documented slope within numerical tolerance
+    - one-point contamination fixtures verify bounded influence behavior
+citation:
+  intro: Cite the method note when the estimator is used as a research method.
+  paper: docs/method-note.md
+  cff: CITATION.cff
+license_text: RobustSlope is released under the BSD 3-Clause License.

@@ -1,0 +1,63 @@
+logo_path: null
+method_figure: null
+project_name: SpatialConditionSHAP
+tagline: Spatially conditioned feature attributions with an explicit local reference distribution.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Paper · Estimand · Examples · Validation · Citation
+problem_text: Standard feature-attribution workflows often use one global reference distribution even when the scientific question is explicitly location conditioned. That can mix feature contribution with changes in the local background distribution and make maps of attribution values difficult to interpret.
+method_overview:
+  text: SpatialConditionSHAP defines the explanation target relative to a location-conditioned reference distribution. The estimand is the change in expected model output under feature coalitions while the background distribution is conditioned on the location of interest; it is not a generic decomposition of geographic effect.
+  equation: >-
+    $$\phi_j(s)=\sum_{S\subseteq F\setminus\{j\}} w(S)\left[v_s(S\cup\{j\})-v_s(S)\right],\quad
+    v_s(S)=\mathbb{E}[f(X)\mid X_S=x_S,\,S_{loc}=s].$$
+contributions:
+  - defines a location-conditioned attribution estimand instead of applying a global background implicitly
+  - separates feature attribution from any separate geographic or residual decomposition
+  - makes the reference-distribution contract inspectable and configurable
+  - exposes diagnostics for background sparsity and bandwidth sensitivity
+install_note: Install the reference implementation from PyPI.
+install_command: python -m pip install spatialconditionshap
+quickstart_intro: Explain one prediction using a local background neighborhood.
+quickstart_code: |
+  import numpy as np
+  from spatialconditionshap import SpatialConditionExplainer
+
+  X = np.array([[0.0, 1.0], [0.2, 1.2], [1.0, 2.0], [1.2, 2.1]])
+  coords = np.array([[0.0, 0.0], [0.1, 0.0], [2.0, 2.0], [2.1, 2.0]])
+  predict = lambda z: 2.0 * z[:, 0] + z[:, 1]
+
+  explainer = SpatialConditionExplainer(predict, X, coords, bandwidth=0.5)
+  values = explainer.explain(X[0], coords[0])
+  print(values)
+validation:
+  summary: Validation distinguishes Shapley accounting identities, conditional-reference construction, and empirical explanation usefulness.
+  checks:
+    - additive synthetic models recover known conditioned contributions
+    - repeated observations reproduce the same attribution under fixed reference weights
+    - bandwidth sensitivity is reported separately from implementation correctness
+  link: docs/validation.md
+limitations:
+  - the result depends on the chosen spatial conditioning rule and bandwidth
+  - local attributions are not causal effects and do not identify a standalone geographic effect
+  - sparse local reference support can make the estimand unstable even when code executes correctly
+documentation:
+  - name: Estimand Guide
+    link: docs/estimand.md
+    description: formal explanation target and reference distribution
+  - name: Examples
+    link: examples/
+    description: synthetic recovery and mapped workflows
+  - name: Validation Guide
+    link: docs/validation.md
+    description: accounting checks, sensitivity, and claim boundaries
+  - name: API Reference
+    link: docs/api.md
+    description: explainer and result contracts
+citation:
+  intro: Cite the method paper for the spatially conditioned estimand and the software release when this implementation is material to the analysis.
+  paper: docs/paper.md
+  bibtex: null
+  cff: CITATION.cff
+support_text: Use the estimand and validation guides for interpretation questions and the issue tracker for reproducible implementation defects.
+contributing_link: CONTRIBUTING.md
+license_text: SpatialConditionSHAP is released under the MIT License.

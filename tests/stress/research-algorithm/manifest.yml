@@ -1,0 +1,57 @@
+cases:
+  - name: single-novel-estimator
+    profile: minimal
+    config: cases/single-novel-estimator.yml
+    required_sections:
+      - "## Installation"
+      - "## Quick Start"
+      - "## Validation"
+      - "## Citation"
+      - "## License"
+    forbidden_sections:
+      - "## Scientific Problem"
+      - "## Key Contributions"
+      - "## Computational Characteristics"
+    max_lines: 110
+
+  - name: estimand-heavy-spatial-explanation
+    profile: standard
+    config: cases/estimand-heavy-spatial-explanation.yml
+    required_sections:
+      - "## Scientific Problem"
+      - "## Method Overview"
+      - "## Key Contributions"
+      - "## Validation"
+      - "## Limitations"
+    forbidden_sections:
+      - "## Why Existing Approaches Are Insufficient"
+      - "## Computational Characteristics"
+    max_lines: 260
+
+  - name: learned-spatial-metric
+    profile: full
+    config: cases/learned-spatial-metric.yml
+    required_sections:
+      - "## Scientific Problem"
+      - "## Why Existing Approaches Are Insufficient"
+      - "## Proposed Method"
+      - "## Inputs, Outputs, and Interpretation"
+      - "## Validation"
+      - "## Computational Characteristics"
+      - "## Reproducibility"
+      - "## Limitations"
+    forbidden_sections: []
+    max_lines: 430
+
+  - name: nonlinear-spacetime-method
+    profile: full
+    config: cases/nonlinear-spacetime-method.yml
+    required_sections:
+      - "## Scientific Problem"
+      - "## Proposed Method"
+      - "### Algorithm Outline"
+      - "## Inputs, Outputs, and Interpretation"
+      - "## Validation"
+      - "## Reproducibility"
+    forbidden_sections: []
+    max_lines: 450
