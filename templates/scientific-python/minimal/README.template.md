@@ -1,10 +1,14 @@
-# {{ project_name }}
+{% if logo_path %}<p align="center">
+  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(180) }}">
+</p>
+
+{% endif %}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
-{% endif %}
-{% if intro %}{{ intro }}
+
+{% endif %}{% if intro %}{{ intro }}
 
 {% endif %}## Installation
 
