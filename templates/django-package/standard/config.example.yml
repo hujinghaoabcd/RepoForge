@@ -1,0 +1,70 @@
+logo_path: null
+project_name: django-audit-panel
+display_name: django-audit-panel
+tagline: Reusable model-change auditing with explicit Django integration and query APIs.
+badges: '[![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Django](https://img.shields.io/badge/Django-5.2%2B-green)](#compatibility) [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#compatibility) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#compatibility) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)'
+navigation: Features · Installation · Configuration · Quick Start · Docs
+why_text: Audit requirements are often reimplemented with model signals, ad-hoc history tables, and project-specific admin views. django-audit-panel packages the recurring integration points into one reusable application while keeping registration, retention, and visibility decisions explicit.
+features:
+- name: Explicit model registration
+  description: audit only the models a project opts into.
+- name: Structured audit entries
+  description: record actor, action, object identity, and selected field changes.
+- name: Admin integration
+  description: inspect history without building a custom back-office screen.
+- name: Query API
+  description: retrieve audit events from application code without coupling to admin views.
+installation_text: Install the package into the same environment as the host Django project.
+install_command: python -m pip install django-audit-panel
+configuration_steps:
+- name: '`INSTALLED_APPS`'
+  description: Enable the reusable application.
+  language: python
+  code: "INSTALLED_APPS = [\n    ...\n    \"audit_panel\",\n]"
+- name: URLs
+  description: Include the optional history views when the project wants browser-accessible audit pages.
+  language: python
+  code: "from django.urls import include, path\n\nurlpatterns = [\n    path(\"audit/\", include(\"audit_panel.urls\")),\n]"
+- name: Migrations
+  description: Create or update the package-owned database schema.
+  language: bash
+  code: python manage.py migrate
+settings:
+- name: AUDIT_PANEL_RETENTION_DAYS
+  default: '365'
+  purpose: number of days retained by the cleanup command.
+- name: AUDIT_PANEL_TRACK_M2M
+  default: 'False'
+  purpose: opt into many-to-many change recording.
+quickstart_intro: Register an audited model in an application configuration and then use the normal Django ORM.
+quickstart_language: python
+quickstart_code: "from django.apps import AppConfig\nfrom audit_panel import audit\n\nclass InventoryConfig(AppConfig):\n    name = \"inventory\"\n\n    def ready(self):\n        audit.register(\"inventory.Product\")"
+examples:
+- name: Query recent events
+  description: Query package records from normal application code.
+  language: python
+  code: "from audit_panel.models import AuditEntry\n\nrecent = AuditEntry.objects.for_object(product).order_by(\"-created_at\")[:20]"
+- name: Prune expired history
+  description: Apply the configured retention policy from a scheduled job.
+  language: bash
+  code: python manage.py audit_panel_prune
+compatibility_intro: The package should publish a tested compatibility window instead of saying only "works with Django".
+compatibility:
+- django: '5.2'
+  python: 3.11–3.14
+  status: supported
+- django: '6.0'
+  python: 3.12–3.14
+  status: supported
+documentation:
+- name: Getting Started
+  link: docs/getting-started.md
+  description: installation and first integration
+- name: Configuration
+  link: docs/configuration.md
+  description: settings and registration options
+- name: API
+  link: docs/api.md
+  description: public Python interfaces
+contributing_text: Contributions are welcome. Run the package test matrix against supported Django/Python combinations before opening a pull request.
+license_text: django-audit-panel is released under the BSD 3-Clause License.

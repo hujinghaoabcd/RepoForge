@@ -1,0 +1,21 @@
+logo_path: null
+project_name: django-audit-panel
+tagline: Lightweight model-change auditing for Django projects.
+badges: '[![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Django](https://img.shields.io/badge/Django-package-green)](#compatibility) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)'
+navigation: Installation · Setup · Quick Start · Compatibility
+intro_text: django-audit-panel is a reusable Django application that records selected model changes and exposes a small query API for project code.
+install_command: python -m pip install django-audit-panel
+setup_steps:
+- name: Enable the app
+  description: Add the package to the host project's installed applications.
+  language: python
+  code: "INSTALLED_APPS = [\n    ...\n    \"audit_panel\",\n]"
+- name: Apply package migrations
+  description: Create the package-owned audit table.
+  language: bash
+  code: python manage.py migrate
+quickstart_intro: Register a model for auditing during application startup.
+quickstart_language: python
+quickstart_code: "from audit_panel import audit\n\naudit.register(\"inventory.Product\")"
+compatibility_text: Use a supported Django/Python combination listed by the package release. Projects should keep this section explicit rather than relying on transitive dependency resolution.
+license_text: django-audit-panel is released under the BSD 3-Clause License.
