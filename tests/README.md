@@ -16,7 +16,7 @@ That gives **21 independent preview combinations**.
 For example:
 
 ```text
-templates/django-package/
+templates/web-application/
 ├── minimal/
 │   ├── PROFILE.md
 │   ├── README.template.md
@@ -25,7 +25,7 @@ templates/django-package/
 ├── standard/
 └── full/
 
-tests/previews/django-package/
+tests/previews/web-application/
 ├── minimal.md
 ├── standard.md
 └── full.md
@@ -64,17 +64,10 @@ Current renderer-backed suites include:
 ```text
 tests/stress/
 ├── scientific-python/
-│   ├── manifest.yml
-│   └── cases/
 ├── research-algorithm/
-│   ├── manifest.yml
-│   └── cases/
 ├── research-experiment/
-│   ├── manifest.yml
-│   └── cases/
-└── django-package/
-    ├── manifest.yml
-    └── cases/
+├── django-package/
+└── web-application/
 ```
 
 Stress cases deliberately cover edge shapes such as:
@@ -88,11 +81,16 @@ Stress cases deliberately cover edge shapes such as:
 - Django middleware where ordering changes correctness;
 - authorization backends requiring multiple host-project hooks;
 - broad Admin extensions with models, migrations, APIs, templates, and permissions;
-- Full-profile Django middleware packages with **no models, migrations, admin, or frontend surface**.
+- Full-profile Django middleware packages with no models or admin surface;
+- tiny internal web dashboards with no database;
+- traditional server-rendered web monoliths;
+- split frontend/API applications;
+- self-hosted multi-service applications with queues and object storage;
+- Full-profile web monoliths with no API, queue, object storage, search, or email service.
 
-The last case protects an important RepoForge rule: **Full means deeper documentation, not fabricated capabilities.**
+The final web case protects an important RepoForge rule: **Full means deeper documentation, not fabricated infrastructure.**
 
-A stress case is passed through the normal renderer. Tests check section contracts, profile separation, unresolved Jinja, code-fence balance, canonical preview branding, rough size limits, and project-type-specific semantic boundaries.
+A stress case is passed through the normal renderer. Tests check section contracts, profile separation, code-fence balance, canonical preview branding, rough size limits, and project-type-specific semantic boundaries.
 
 ## Test layers
 
@@ -118,4 +116,4 @@ For implemented template families, regenerate previews with:
 python scripts/generate_previews.py
 ```
 
-Committed previews are checked for the canonical RepoForge SVG path, while template-family tests keep examples aligned with actual renderer output.
+Committed previews are checked for the canonical RepoForge SVG path and configured logo width, while template-family tests keep examples aligned with actual renderer output.
