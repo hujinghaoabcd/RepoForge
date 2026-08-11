@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/repoforge-logo.png" alt="RepoForge" width="520">
+</p>
+
 # RepoForge
 
 **Reusable repository documentation and project standards.**
