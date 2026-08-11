@@ -1,0 +1,44 @@
+project_name: ExampleProject
+repository_url: https://github.com/example/example-project
+
+code_of_conduct:
+  scope_note: Project-specific events or spaces may publish additional participation rules that do not weaken this policy.
+  reporting_contact: Use a private contact method published by the project maintainers.
+  reporting_note: Include enough context to understand the incident, but avoid sharing unrelated personal or sensitive information.
+
+contributing:
+  development_intro: Create an isolated development environment and install the project with its development dependencies.
+  setup_command: |
+    git clone https://github.com/example/example-project.git
+    cd example-project
+    python -m pip install -e ".[test]"
+  checks:
+    - name: Tests
+      command: python -m pytest
+    - name: Lint
+      command: ruff check .
+    - name: Formatting
+      command: ruff format --check .
+  issue_url: https://github.com/example/example-project/issues
+  pull_request_expectations: Keep pull requests focused, explain the motivation, and describe how the change was tested.
+  branch_policy: Create a short-lived branch from the current default branch. Rebase or merge the default branch when needed before final review.
+  commit_guidance: Use concise commit messages that describe the change rather than the implementation process.
+
+security:
+  supported_versions:
+    - version: latest release
+      status: "✅"
+    - version: older releases
+      status: "❌"
+  reporting_contact: Use the project's documented private security contact or GitHub private vulnerability reporting when available.
+  reporting_instructions: Include the affected version, reproduction steps, impact, and any known mitigation.
+  response_expectation: Maintainers will acknowledge credible reports as soon as practical and will communicate next steps when enough information is available.
+  disclosure_policy: Coordinate public disclosure with maintainers so users have a reasonable opportunity to update or mitigate the issue.
+  security_scope: Security reports should concern the software, distributed artifacts, maintained services, or documented deployment paths controlled by the project.
+
+support:
+  support_channels:
+    - name: Repository issues
+      description: Use issues for reproducible bugs, documentation problems, and concrete feature requests.
+      location: https://github.com/example/example-project/issues
+  support_boundaries: The project does not guarantee individualized debugging, environment administration, deployment consulting, or support for unmaintained versions unless documented elsewhere.
