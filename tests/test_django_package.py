@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from repoforge.renderer import load_config, render_from_config
+from repoforge.renderer import load_config, render_from_config, render_readme
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,7 +42,11 @@ def test_django_package_profiles_render(profile, required, forbidden):
         template_root=TEMPLATES,
     )
 
-    assert rendered.startswith("# django-audit-panel")
+    header = rendered.split("\n## ", 1)[0]
+    assert rendered.startswith('<div align="center">')
+    assert "# django-audit-panel" in header
+    assert "img.shields.io" in header
+    assert "</div>" in header
     assert rendered.endswith("\n")
     assert "{{" not in rendered
     assert "{%" not in rendered
@@ -99,19 +103,24 @@ def test_full_django_package_keeps_host_project_boundaries_visible():
 
 
 def test_django_package_examples_and_previews_track_renderer():
-    logo_path = load_config(BRANDING)["logo_path"]
+    branding = load_config(BRANDING)
 
     for profile in ("minimal", "standard", "full"):
         profile_dir = TEMPLATES / "django-package" / profile
-        rendered = render_from_config(
-            "django-package",
-            profile,
-            profile_dir / "config.example.yml",
-            template_root=TEMPLATES,
+        config = load_config(profile_dir / "config.example.yml")
+        rendered = render_readme(
+            "django-package", profile, config, template_root=TEMPLATES
         )
         example = (profile_dir / "README.example.md").read_text(encoding="utf-8")
+
+        branded_config = dict(config)
+        branded_config.update(branding)
+        branded = render_readme(
+            "django-package", profile, branded_config, template_root=TEMPLATES
+        )
         preview = (PREVIEWS / "django-package" / f"{profile}.md").read_text(encoding="utf-8")
 
         assert example == rendered
-        assert logo_path in preview
-        assert preview.rstrip().endswith(rendered.rstrip())
+        assert preview == branded
+        assert branding["logo_path"] in preview
+        assert f'width="{branding["logo_width"]}"' in preview
