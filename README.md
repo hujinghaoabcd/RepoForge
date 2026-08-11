@@ -26,7 +26,7 @@
   <a href="#quick-start">Quick Start</a> ·
   <a href="#template-matrix">Templates</a> ·
   <a href="#profiles">Profiles</a> ·
-  <a href="#preview-gallery">Previews</a> ·
+  <a href="#preview">Previews</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
   <a href="#tests-and-stress-suites">Tests</a>
 </p>

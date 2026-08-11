@@ -26,7 +26,7 @@
   <a href="#快速开始">快速开始</a> ·
   <a href="#模板矩阵">模板</a> ·
   <a href="#profiles">Profiles</a> ·
-  <a href="#预览图库">预览</a> ·
+  <a href="#预览">预览</a> ·
   <a href="docs/ARCHITECTURE.md">架构</a> ·
   <a href="#测试与压力测试">测试</a>
 </p>
