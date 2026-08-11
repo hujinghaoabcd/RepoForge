@@ -1,0 +1,80 @@
+project_name: OpsLedger
+tagline: A production-oriented internal operations ledger delivered as one server-rendered application.
+overview_text: OpsLedger is deliberately simple at runtime: one application process and PostgreSQL. It has no supported public API, no background worker, no queue/cache service, and no object storage.
+features:
+  - name: Controlled records
+    description: maintain internal operational records with server-rendered forms.
+  - name: Audit trail
+    description: preserve changes in the primary relational database.
+architecture_intro: The production topology contains one application service and PostgreSQL behind the organization's standard TLS reverse proxy.
+architecture:
+  - component: Application
+    technology: Django
+    responsibility: HTML, forms, authentication, and business rules
+  - component: Database
+    technology: PostgreSQL
+    responsibility: all authoritative application state
+requirements:
+  - Python 3.12+
+  - PostgreSQL 16+
+local_command: |-
+  cp .env.example .env
+  python -m pip install -r requirements.txt
+  python manage.py migrate
+  python manage.py runserver
+local_urls:
+  - name: Application
+    url: http://localhost:8000
+configuration_intro: Local development uses `.env`; production secrets are injected by the deployment system.
+environment:
+  - name: DATABASE_URL
+    required: 'Yes'
+    secret: 'Yes'
+    purpose: PostgreSQL connection
+  - name: SECRET_KEY
+    required: 'Yes'
+    secret: 'Yes'
+    purpose: Django signing key
+database_text: PostgreSQL is authoritative state and Django migrations define schema upgrades.
+migration_command: python manage.py migrate
+api_text: null
+api_docs: null
+auth_text: null
+background_text: null
+storage_text: null
+deployment_intro: Deploy one immutable application image behind HTTPS and run migrations before switching traffic.
+deployment_steps:
+  - name: Apply migrations
+    description: Apply the release schema once.
+    command: python manage.py migrate
+  - name: Start application
+    description: Start the production ASGI process through the deployment service.
+    command: gunicorn opsledger.wsgi:application
+ci_cd_text: null
+operations:
+  - name: Health checks
+    description: Verify application and database readiness.
+    command: curl -f https://opsledger.example.org/health/
+  - name: Logs
+    description: Emit structured application logs and preserve request identifiers.
+    command: null
+backup_text: Back up PostgreSQL and regularly test restoration in a non-production environment.
+security_notes:
+  - keep production secrets outside Git;
+  - require HTTPS and secure session-cookie settings;
+  - restrict the application to the intended internal identity boundary;
+  - report vulnerabilities privately.
+testing_text: Run application tests and migration checks before release.
+test_command: |-
+  python -m pytest
+  python manage.py migrate --check
+documentation:
+  - name: Operations
+    link: docs/operations.md
+    description: deployment, health, backup, and restore
+upgrade_notes:
+  - back up PostgreSQL before schema-changing upgrades;
+  - run migrations before switching application traffic;
+  - verify health and authentication after rollout.
+contributing_text: Changes to schema, deployment, or authentication behavior must include tests and operator documentation.
+license_text: OpsLedger is released under the MIT License.

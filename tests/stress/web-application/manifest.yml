@@ -1,0 +1,36 @@
+cases:
+  - name: static-map-dashboard
+    profile: minimal
+    overrides: cases/static-map-dashboard.yml
+    min_lines: 30
+    max_lines: 70
+    required_sections: ['## Run Locally', '## Configuration', '## Deploy']
+    forbidden_sections: ['## Architecture', '## Database and Migrations', '## Observability and Operations']
+  - name: sqlite-monolith
+    profile: standard
+    overrides: cases/sqlite-monolith.yml
+    min_lines: 75
+    max_lines: 150
+    required_sections: ['## Local Development', '## Environment Variables', '## Database and Migrations', '## Deployment']
+    forbidden_sections: ['## Background Jobs and Queues', '## File and Object Storage']
+  - name: managed-team-portal
+    profile: standard
+    overrides: cases/managed-team-portal.yml
+    min_lines: 75
+    max_lines: 150
+    required_sections: ['## Overview', '## Tech Stack', '## Deployment', '## Testing']
+    forbidden_sections: ['## Backup and Restore', '## Observability and Operations']
+  - name: multiservice-geospatial-platform
+    profile: full
+    overrides: cases/multiservice-geospatial-platform.yml
+    min_lines: 170
+    max_lines: 270
+    required_sections: ['## Architecture', '## Background Jobs and Queues', '## File and Object Storage', '## Backup and Restore', '## Security']
+    forbidden_sections: []
+  - name: full-single-process-no-api
+    profile: full
+    overrides: cases/full-single-process-no-api.yml
+    min_lines: 120
+    max_lines: 230
+    required_sections: ['## Architecture', '## Observability and Operations', '## Backup and Restore', '## Security', '## Upgrade Notes']
+    forbidden_sections: ['## API', '## Authentication and Authorization', '## Background Jobs and Queues', '## File and Object Storage', '## CI/CD']

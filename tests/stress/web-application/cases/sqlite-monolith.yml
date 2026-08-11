@@ -1,0 +1,46 @@
+project_name: FieldNotes
+tagline: A small single-process Django application for team field notes.
+overview_text: FieldNotes is a conventional server-rendered Django application designed for small self-hosted teams. It uses SQLite by default and has no separate frontend build or background worker.
+demo_url: null
+features:
+  - name: Team notes
+    description: create, edit, and search structured field records.
+  - name: Attachments
+    description: store small local project attachments.
+tech_stack:
+  - layer: Application
+    technology: Django
+    role: HTML views, forms, authentication, and business rules
+  - layer: Database
+    technology: SQLite
+    role: small-team persistent state
+requirements:
+  - Python 3.12+
+local_command: |-
+  cp .env.example .env
+  python -m pip install -r requirements.txt
+  python manage.py migrate
+  python manage.py runserver
+local_urls:
+  - name: Application
+    url: http://localhost:8000
+environment:
+  - name: SECRET_KEY
+    required: 'Yes'
+    purpose: Django signing key
+    example: local-development-only
+database_text: SQLite is the supported default for small installations. Back up the database file before upgrades that contain migrations.
+migration_command: python manage.py migrate
+deployment_text: Run the Django application with a production WSGI/ASGI server behind HTTPS. Do not use `runserver` in production.
+deployment_command: gunicorn fieldnotes.wsgi:application
+project_structure: |-
+  fieldnotes/      Django project
+  notes/           domain app
+  docs/            deployment and operator notes
+testing_text: Run Django tests before deployment.
+test_command: python -m pytest
+documentation:
+  - name: Deployment
+    link: docs/deployment.md
+    description: production server, files, and upgrades
+license_text: FieldNotes is released under the MIT License.

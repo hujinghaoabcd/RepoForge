@@ -1,0 +1,18 @@
+project_name: StaticMapBoard
+tagline: A tiny browser-only dashboard for publishing a fixed set of project maps.
+intro_text: StaticMapBoard is a static Vite application with no database, accounts, server API, or persistent backend service.
+features:
+  - Preconfigured map views
+  - Static GeoJSON and tile-layer references
+  - Shareable URLs
+run_command: |-
+  npm install
+  npm run dev
+local_url: http://localhost:5173
+configuration:
+  - name: VITE_PUBLIC_BASE
+    description: public base path when the site is hosted below a subdirectory
+    example: /maps/
+deploy_text: Build the static bundle and publish `dist/` to any static hosting service.
+deploy_command: npm run build
+license_text: StaticMapBoard is released under the MIT License.

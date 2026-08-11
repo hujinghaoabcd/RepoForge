@@ -1,0 +1,61 @@
+project_name: TeamPortal
+tagline: A maintained full-stack portal with a managed PostgreSQL production target.
+overview_text: TeamPortal combines a React client and API service. Production is deployed to a managed platform rather than distributed as a self-hosting stack, so the README documents the supported deployment handoff without pretending every cloud provider is supported.
+demo_url: https://portal.example.org
+features:
+  - name: Team workspace
+    description: authenticated shared project dashboards.
+  - name: Search
+    description: search project records through the application API.
+tech_stack:
+  - layer: Frontend
+    technology: React + Vite
+    role: browser interface
+  - layer: Backend
+    technology: FastAPI
+    role: application API
+  - layer: Database
+    technology: PostgreSQL
+    role: persistent state
+requirements:
+  - Node.js 22+
+  - Python 3.12+
+  - PostgreSQL 16+
+local_command: |-
+  cp .env.example .env
+  docker compose up -d db
+  make dev
+local_urls:
+  - name: Web
+    url: http://localhost:5173
+  - name: API
+    url: http://localhost:8000
+environment:
+  - name: DATABASE_URL
+    required: 'Yes'
+    purpose: database connection
+    example: postgresql://localhost/teamportal
+  - name: APP_SECRET
+    required: 'Yes'
+    purpose: application signing secret
+    example: local-only
+database_text: Alembic migrations are applied by the release job before the new application version receives traffic.
+migration_command: alembic upgrade head
+deployment_text: The supported production target is the project's managed deployment pipeline. Forks should document their own infrastructure rather than copying provider-specific claims from this README.
+deployment_command: make deploy-staging
+project_structure: |-
+  web/       React client
+  api/       FastAPI service
+  migrations/ database migrations
+testing_text: Run API and frontend tests.
+test_command: |-
+  python -m pytest
+  npm --prefix web test
+documentation:
+  - name: Development
+    link: docs/development.md
+    description: local services and workflows
+  - name: Release
+    link: docs/release.md
+    description: managed deployment contract
+license_text: TeamPortal is released under the Apache-2.0 License.

@@ -1,0 +1,10 @@
+project_name: SpatialHub
+tagline: A self-hosted geospatial collaboration platform with asynchronous imports and object storage.
+overview_text: SpatialHub is intentionally multi-service: the web application, spatial database, queue, workers, and object storage have separate runtime and recovery responsibilities.
+backup_text: Back up PostgreSQL/PostGIS and the object-storage bucket as one recoverable release set. A database-only backup is incomplete because uploaded source artefacts live outside PostgreSQL.
+security_notes:
+  - keep production credentials in the deployment secret store;
+  - validate uploaded archives before geoprocessing;
+  - require explicit publish permissions for public datasets;
+  - revoke scoped API tokens when integrations are removed;
+  - report vulnerabilities through `SECURITY.md`.
