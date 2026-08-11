@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="ForecastBench" width="420">
+  <img src="../../../assets/logo.svg" alt="ForecastBench" width="280">
 </p>
 
 # ForecastBench
