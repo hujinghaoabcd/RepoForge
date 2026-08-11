@@ -4,12 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from repoforge.renderer import render_from_config
+from repoforge.renderer import load_config, render_from_config
 
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATES = ROOT / "templates"
 PREVIEWS = ROOT / "tests" / "previews"
+BRANDING = ROOT / "tests" / "branding.yml"
 
 
 @pytest.mark.parametrize(
@@ -81,15 +82,18 @@ def test_research_algorithm_profiles_have_distinct_depth():
     assert len(outputs["standard"].splitlines()) < len(outputs["full"].splitlines())
 
 
-def test_research_algorithm_examples_match_visible_previews():
+def test_research_algorithm_previews_use_repoforge_branding():
+    logo_url = load_config(BRANDING)["logo_path"]
+
     for profile in ("minimal", "standard", "full"):
         example = (
             TEMPLATES / "research-algorithm" / profile / "README.example.md"
-        ).read_text(encoding="utf-8")
+        ).read_text(encoding="utf-8").strip()
         preview = (PREVIEWS / "research-algorithm" / f"{profile}.md").read_text(
             encoding="utf-8"
         )
 
-        assert example == preview
+        assert logo_url in preview
+        assert preview.rstrip().endswith(example)
         assert "# LatentMap" in preview
         assert "MethodX" not in preview
