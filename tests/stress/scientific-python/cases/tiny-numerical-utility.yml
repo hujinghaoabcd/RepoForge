@@ -1,0 +1,17 @@
+logo_path: null
+project_name: NanoFit
+tagline: Tiny least-squares helpers for small reproducible numerical workflows.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![License](https://img.shields.io/badge/License-MIT-green)](#license)'
+intro: NanoFit provides a deliberately small API for fitting and inspecting ordinary least-squares models.
+install_command: python -m pip install nanofit
+quickstart_code: |
+  import numpy as np
+  from nanofit import fit_line
+
+  x = np.array([0.0, 1.0, 2.0, 3.0])
+  y = np.array([1.0, 3.1, 5.0, 7.2])
+  result = fit_line(x, y)
+  print(result.slope, result.intercept)
+documentation: See the API reference for the complete public surface.
+citation: null
+license_text: MIT.
