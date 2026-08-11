@@ -6,6 +6,8 @@ issue_forms:
   feature_title_prefix: "[Feature]: "
   require_code_of_conduct: true
   blank_issues_enabled: false
+  support_link_enabled: true
+  security_link_enabled: true
 
 pull_request:
   require_tests: true
