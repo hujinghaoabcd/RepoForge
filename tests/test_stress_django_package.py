@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from pathlib import Path
+import re
 
 import yaml
 
@@ -37,22 +38,41 @@ def _render_case(case: dict) -> str:
     return render_readme("django-package", profile, config, template_root=TEMPLATES)
 
 
+def _prose_outside_fenced_code(markdown: str) -> str:
+    """Remove fenced examples before checking for unresolved RepoForge Jinja.
+
+    Django's own template language legitimately uses ``{{ ... }}`` and
+    ``{% ... %}``, so those tokens are allowed inside documented code blocks.
+    """
+
+    return re.sub(r"```.*?```", "", markdown, flags=re.DOTALL)
+
+
 def test_django_package_stress_cases_render_cleanly():
     logo_path = load_config(BRANDING)["logo_path"]
 
     for case in _manifest():
         rendered = _render_case(case)
         line_count = len(rendered.splitlines())
+        prose = _prose_outside_fenced_code(rendered)
 
         assert case["min_lines"] <= line_count <= case["max_lines"], (case["name"], line_count)
         assert logo_path in rendered
-        assert "{{" not in rendered
-        assert "{%" not in rendered
+        assert "{{" not in prose
+        assert "{%" not in prose
         assert rendered.count("```") % 2 == 0
         for heading in case["required_sections"]:
             assert heading in rendered, (case["name"], heading)
         for heading in case["forbidden_sections"]:
             assert heading not in rendered, (case["name"], heading)
+
+
+def test_django_template_syntax_is_allowed_inside_documented_examples():
+    case = next(case for case in _manifest() if case["name"] == "tiny-template-tag-app")
+    rendered = _render_case(case)
+    assert "{% load human_time %}" in rendered
+    assert "{{ object.created_at|relative_time }}" in rendered
+    assert "{{" not in _prose_outside_fenced_code(rendered)
 
 
 def test_django_package_stress_suite_covers_all_profiles():
