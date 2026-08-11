@@ -135,6 +135,7 @@
 {% if citation.paper %}
 
 Paper: {{ citation.paper }}
+
 {% endif %}{% if citation.cff %}
 Software citation metadata: [`CITATION.cff`]({{ citation.cff }}).
 {% endif %}
