@@ -1,0 +1,90 @@
+logo_path: null
+screenshot_path: null
+project_name: GeoPortal
+tagline: A deployable geospatial web application for managing, exploring, and sharing map layers.
+badges: '[![Build](https://img.shields.io/badge/build-passing-brightgreen)](#testing) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing) [![Docker](https://img.shields.io/badge/docker-ready-blue)](#deployment) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Demo · Features · Local Development · Deployment · Docs
+overview_text: >-
+  GeoPortal combines a browser map interface with a small API and relational
+  database. It is intended to be run as an application: users interact with the
+  deployed service, while contributors develop the frontend and backend together.
+demo_url: https://demo.example.org
+features:
+  - name: Layer catalogue
+    description: publish project-approved vector and raster layers.
+  - name: Interactive exploration
+    description: filter, inspect, and share map views from the browser.
+  - name: Role-aware editing
+    description: restrict layer management operations to authenticated maintainers.
+  - name: Import workflow
+    description: upload supported geospatial files and track import status.
+tech_stack:
+  - layer: Frontend
+    technology: Vue 3 + Vite
+    role: browser UI and map interactions
+  - layer: Backend
+    technology: Django + Django REST Framework
+    role: API, authentication, and business rules
+  - layer: Database
+    technology: PostgreSQL + PostGIS
+    role: application and spatial data
+requirements:
+  - Node.js 22+
+  - Python 3.12+
+  - PostgreSQL 16+ with PostGIS
+  - Docker Compose (recommended for local services)
+local_command: |-
+  cp .env.example .env
+  docker compose up -d db
+  python -m pip install -r requirements.txt
+  python manage.py migrate
+  python manage.py runserver
+local_urls:
+  - name: Application
+    url: http://localhost:8000
+  - name: API
+    url: http://localhost:8000/api/
+environment:
+  - name: DATABASE_URL
+    required: 'Yes'
+    purpose: PostgreSQL/PostGIS connection string
+    example: postgresql://geoportal:geoportal@localhost:5432/geoportal
+  - name: SECRET_KEY
+    required: 'Yes'
+    purpose: Django cryptographic signing key
+    example: change-me-in-production
+  - name: DEBUG
+    required: 'No'
+    purpose: development debug mode only
+    example: 'true'
+database_text: >-
+  Schema changes are managed through Django migrations. Run migrations after
+  pulling changes that modify the application schema; do not point local
+  development commands at a production database.
+migration_command: python manage.py migrate
+deployment_text: >-
+  The reference deployment builds the frontend, collects Django static assets,
+  and runs the application behind a production HTTP server. Use the project
+  Docker Compose deployment for a small self-hosted instance.
+deployment_command: docker compose -f compose.prod.yml up -d
+project_structure: |-
+  frontend/        Vue application
+  backend/         Django project and apps
+  docs/            operator and developer guides
+  compose.yml      local services
+  compose.prod.yml reference self-host deployment
+testing_text: Run backend and frontend checks before submitting changes.
+test_command: |-
+  python -m pytest
+  npm --prefix frontend test
+documentation:
+  - name: Development
+    link: docs/development.md
+    description: local setup and contributor workflow
+  - name: Deployment
+    link: docs/deployment.md
+    description: production configuration and upgrades
+  - name: API
+    link: docs/api.md
+    description: HTTP endpoints and authentication
+license_text: GeoPortal is released under the MIT License.

@@ -1,0 +1,205 @@
+logo_path: null
+screenshot_path: null
+project_name: GeoPortal
+tagline: A production-oriented geospatial platform for publishing, managing, and exploring spatial data.
+badges: '[![Build](https://img.shields.io/badge/build-passing-brightgreen)](#testing) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing) [![Docker](https://img.shields.io/badge/docker-ready-blue)](#deployment) [![Security](https://img.shields.io/badge/security-policy-blue)](#security) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Demo · Architecture · Development · Deployment · Operations · Security
+overview_text: >-
+  GeoPortal is a self-hostable web platform for organizations that publish
+  geospatial catalogues and interactive maps. It combines a browser client,
+  authenticated API, spatial database, background import workers, and object
+  storage while keeping deployment and data-ownership boundaries explicit.
+demo_url: https://demo.example.org
+features:
+  - name: Spatial catalogue
+    description: manage vector, raster, metadata, and publication state.
+  - name: Interactive maps
+    description: compose map views, inspect features, and share stable links.
+  - name: Controlled publishing
+    description: separate public viewing, authenticated editing, and administrative operations.
+  - name: Asynchronous imports
+    description: process large geospatial uploads outside request/response paths.
+  - name: Self-hosted data ownership
+    description: keep application database and object storage under operator control.
+architecture_intro: >-
+  The reference deployment separates user-facing HTTP traffic from stateful
+  services and asynchronous work. Operators may replace individual infrastructure
+  services if they preserve the documented contracts.
+architecture:
+  - component: Web client
+    technology: Vue 3 + Vite + OpenLayers
+    responsibility: browser interface, maps, and upload UX
+  - component: Application API
+    technology: Django + Django REST Framework
+    responsibility: authentication, catalogue rules, and API endpoints
+  - component: Database
+    technology: PostgreSQL + PostGIS
+    responsibility: accounts, metadata, and spatial records
+  - component: Queue / cache
+    technology: Redis
+    responsibility: task broker, short-lived coordination, and cache data
+  - component: Worker
+    technology: Celery
+    responsibility: imports, previews, and long-running geoprocessing
+  - component: Object storage
+    technology: S3-compatible storage
+    responsibility: uploaded source files and generated assets
+requirements:
+  - Docker Engine + Compose plugin
+  - Node.js 22+ for frontend-only development
+  - Python 3.12+ for backend-only development
+  - at least one S3-compatible bucket for full import workflows
+local_command: |-
+  cp .env.example .env
+  docker compose up -d
+  python manage.py migrate
+  npm --prefix frontend install
+  npm --prefix frontend run dev
+local_urls:
+  - name: Web UI
+    url: http://localhost:5173
+  - name: API
+    url: http://localhost:8000/api/
+  - name: Health endpoint
+    url: http://localhost:8000/health/
+configuration_intro: >-
+  Copy `.env.example` for local development. Production secrets must come from
+  the deployment secret store rather than being committed to Git.
+environment:
+  - name: DATABASE_URL
+    required: 'Yes'
+    secret: 'Yes'
+    purpose: PostgreSQL/PostGIS connection
+  - name: SECRET_KEY
+    required: 'Yes'
+    secret: 'Yes'
+    purpose: Django signing and security primitives
+  - name: REDIS_URL
+    required: 'Yes'
+    secret: 'No'
+    purpose: queue broker and cache connection
+  - name: S3_ENDPOINT_URL
+    required: 'Yes'
+    secret: 'No'
+    purpose: S3-compatible object-storage endpoint
+  - name: S3_ACCESS_KEY_ID
+    required: 'Yes'
+    secret: 'Yes'
+    purpose: object-storage credential
+  - name: S3_SECRET_ACCESS_KEY
+    required: 'Yes'
+    secret: 'Yes'
+    purpose: object-storage credential
+database_text: >-
+  Django migrations define application schema changes. Deployments must run
+  migrations once per release before all application replicas are moved to code
+  that requires the new schema. Large data backfills should be explicit
+  operational jobs rather than hidden inside request startup.
+migration_command: |-
+  python manage.py migrate --check
+  python manage.py migrate
+api_text: >-
+  The authenticated JSON API serves the web client and supported integrations.
+  Public endpoints and administrative endpoints use separate permission policies;
+  internal worker callbacks are not part of the public API contract.
+api_docs: docs/api.md
+auth_text: >-
+  GeoPortal uses session authentication for the browser and scoped tokens for
+  supported API integrations. Authorization is role- and object-aware:
+  authenticated access does not imply permission to publish, delete, or
+  administer datasets.
+background_text: >-
+  Celery workers execute imports, preview generation, and long-running
+  geospatial jobs. Worker concurrency and retry policy must be tuned independently
+  from web-server concurrency. Failed jobs remain observable and should not be
+  treated as successful uploads.
+storage_text: >-
+  Uploaded source files and generated artefacts are stored in S3-compatible
+  object storage. Database backups do not include object content, so recovery
+  plans must cover both the database and storage bucket.
+deployment_intro: >-
+  The supported self-host deployment uses container images behind a TLS-terminating
+  reverse proxy. Production configuration must disable debug mode and use
+  persistent database/object-storage volumes or managed services.
+deployment_steps:
+  - name: Build or pull images
+    description: Use immutable image tags for releases rather than deploying from a mutable development checkout.
+    command: docker compose -f compose.prod.yml pull
+  - name: Run database migrations
+    description: Apply the release schema before switching all application replicas.
+    command: docker compose -f compose.prod.yml run --rm web python manage.py migrate
+  - name: Start services
+    description: Start web, worker, and supporting services and then verify health checks.
+    command: docker compose -f compose.prod.yml up -d
+  - name: Reverse proxy and TLS
+    description: >-
+      Terminate HTTPS at the reverse proxy, forward trusted proxy headers explicitly,
+      and keep upload-size/timeouts aligned with documented import limits.
+    command: null
+ci_cd_text: >-
+  CI runs unit/integration tests, frontend checks, container builds, and migration
+  checks. Production delivery should promote an immutable tested image; CI
+  credentials must not be copied into runtime environment files.
+operations:
+  - name: Health checks
+    description: >-
+      Use `/health/` for process readiness and a deeper operator check for database,
+      Redis, and object-storage connectivity.
+    command: curl -f https://geoportal.example.org/health/
+  - name: Logs
+    description: >-
+      Web and worker processes emit structured logs to stdout/stderr. Preserve
+      request/job identifiers across API and worker logs so asynchronous failures
+      can be traced.
+    command: null
+  - name: Metrics and alerts
+    description: >-
+      Monitor request error rate, queue depth, failed jobs, database capacity,
+      object-storage failures, and disk/volume pressure where applicable.
+    command: null
+backup_text: >-
+  Back up PostgreSQL/PostGIS and object storage as one recovery set. Test
+  restoration on a non-production environment. Redis is transient coordination
+  state and is not the authoritative copy of application data.
+security_notes:
+  - never commit production `.env` files, signing keys, database passwords, or object-storage credentials;
+  - run with `DEBUG=false`, explicit allowed hosts/origins, HTTPS, and secure cookie settings in production;
+  - uploaded geospatial files are untrusted input and must be size-limited, validated, and processed outside privileged paths;
+  - public sharing links and API tokens require revocation and scope rules;
+  - report vulnerabilities through `SECURITY.md` rather than a public issue.
+testing_text: >-
+  Run backend, frontend, and integration tests. Deployment changes should also
+  exercise migration and container smoke checks.
+test_command: |-
+  python -m pytest
+  npm --prefix frontend test
+  docker compose -f compose.test.yml up --abort-on-container-exit
+documentation:
+  - name: Architecture
+    link: docs/architecture.md
+    description: components, trust boundaries, and data flow
+  - name: Local Development
+    link: docs/development.md
+    description: frontend/backend workflows and local services
+  - name: Deployment
+    link: docs/deployment.md
+    description: production configuration, proxy, and service topology
+  - name: Operations
+    link: docs/operations.md
+    description: health, logs, metrics, backup, and restore
+  - name: API
+    link: docs/api.md
+    description: supported endpoints, tokens, and compatibility
+  - name: Security
+    link: SECURITY.md
+    description: private vulnerability reporting and security scope
+upgrade_notes:
+  - read release notes for schema, environment-variable, and service changes before replacing containers;
+  - back up the database and object storage before upgrades that include migrations or storage-format changes;
+  - run migrations exactly once per release and verify health checks before completing rollout;
+  - upgrade workers and web processes as one compatibility set unless the release notes explicitly support mixed versions.
+contributing_text: >-
+  Use the development guide to choose frontend, backend, or infrastructure setup.
+  Changes to public environment variables, API contracts, migrations, or deployment
+  topology must update the corresponding documentation and tests.
+license_text: GeoPortal is released under the MIT License.
