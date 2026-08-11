@@ -1,0 +1,13 @@
+project_name: FocusRing
+tagline: A tiny browser utility for showing keyboard-only focus rings.
+badges: '[![npm](https://img.shields.io/badge/npm-package-red)](#install) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+install_command: npm install focus-ring-lite
+setup_note: null
+quickstart_language: ts
+quickstart_code: |-
+  import { installFocusRing } from "focus-ring-lite"
+
+  const cleanup = installFocusRing(document)
+  // cleanup() when the host application is destroyed
+browser_support: Current evergreen browsers with `:focus-visible` support.
+license_text: FocusRing is released under the MIT License.
