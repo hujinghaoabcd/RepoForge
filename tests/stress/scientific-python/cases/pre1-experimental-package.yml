@@ -1,0 +1,55 @@
+logo_path: null
+language_switch: null
+project_name: ProtoSpectra
+tagline: Experimental spectral-analysis utilities with explicit API maturity and numerical boundaries.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![Status](https://img.shields.io/badge/status-0.x-orange)](#limitations) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Documentation · Examples · API
+why_text: ProtoSpectra provides a compact place to test and reuse a small family of spectral estimators while their public API is still evolving.
+features:
+  - name: Periodograms
+    description: Small explicit estimators for evenly sampled signals.
+  - name: Window functions
+    description: Named, inspectable spectral windows with documented normalization.
+  - name: Diagnostics
+    description: Frequency-grid and normalization metadata remain available in result objects.
+install_note: ProtoSpectra is a pre-1.0 package; pin a release in reproducible environments.
+install_command: python -m pip install protospectra
+verify_command: python -c "import protospectra; print(protospectra.__version__)"
+optional_install_commands: []
+quickstart_intro: Compute a simple periodogram from a deterministic signal.
+quickstart_code: |
+  import numpy as np
+  from protospectra import periodogram
+
+  t = np.linspace(0.0, 1.0, 128, endpoint=False)
+  signal = np.sin(2 * np.pi * 8 * t)
+  result = periodogram(signal, sample_rate=128.0)
+  print(result.frequency[result.power.argmax()])
+methods:
+  - name: periodogram
+    purpose: Estimate a basic power spectrum
+    notes: Even sampling only in the current public contract
+  - name: welch
+    purpose: Estimate an averaged spectrum
+    notes: Experimental API before 1.0
+validation:
+  summary: Documented estimators are checked against analytical signals and independent numerical calculations.
+  items:
+    - pure-tone fixtures recover expected peak frequencies
+    - normalization is checked against independent array calculations
+    - unstable or unsupported sampling contracts fail explicitly
+  link: docs/validation.md
+documentation:
+  - name: Getting Started
+    link: docs/getting-started.md
+    description: stable workflows and current boundaries
+  - name: API Reference
+    link: docs/api.md
+    description: public and experimental symbols
+citation: null
+limitations:
+  - public APIs may change before 1.0 and release notes must be consulted before upgrading
+  - irregular sampling is outside the current stable contract
+support_text: Use issues for reproducible defects; experimental API feedback is welcome in discussions.
+contributing_link: CONTRIBUTING.md
+license_text: ProtoSpectra is released under the MIT License.
