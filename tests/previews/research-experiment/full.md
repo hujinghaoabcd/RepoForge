@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/hujinghaoabcd/RepoForge/main/assets/repoforge-logo.png" alt="ForecastBench" width="420">
+  <img src="../../../assets/logo.svg" alt="ForecastBench" width="420">
 </p>
 
 # ForecastBench
