@@ -1,0 +1,164 @@
+logo_path: null
+logo_width: 160
+project_name: SpatialTools
+tagline: Reproducible spatial statistics and neighborhood-based modelling in Python.
+repository_url: https://github.com/example/spatialtools
+badges: >-
+  [![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation)
+  [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation)
+  [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation)
+  [![License](https://img.shields.io/badge/license-MIT-green)](#license)
+navigation: Documentation · Examples · API · Citation
+language_switch: null
+why_text: >-
+  Many spatial analyses repeat the same tasks: define neighborhoods, construct weights,
+  fit local models, inspect spatially varying results, and validate numerical behavior.
+  SpatialTools provides a small, explicit API for these workflows while keeping distances,
+  weights, fitted results, and validation choices visible.
+features:
+  - name: Spatial weights
+    description: Distance, k-nearest-neighbor, and explicit neighborhood structures.
+  - name: Local models
+    description: Reusable fitted objects with explicit spatial inputs.
+  - name: Diagnostics
+    description: Residual, influence, and stability summaries.
+  - name: Interoperability
+    description: NumPy, pandas, GeoPandas, and Shapely-friendly data.
+install_note: null
+install_command: python -m pip install spatialtools
+verify_command: python -c "import spatialtools; print(spatialtools.__version__)"
+optional_install_commands: []
+quickstart_intro: Fit a local model and inspect the result table.
+quickstart_code: |
+  import numpy as np
+  import pandas as pd
+  from spatialtools import LocalRegression
+
+  rng = np.random.default_rng(42)
+  coords = rng.uniform(0, 10, size=(100, 2))
+  X = pd.DataFrame(rng.normal(size=(100, 2)), columns=["income", "access"])
+  y = 2.0 + 1.4 * X["income"] - 0.8 * X["access"]
+
+  model = LocalRegression(bandwidth=20, kernel="bisquare")
+  result = model.fit(X, y, coords)
+  print(result.to_frame().head())
+methods:
+  - name: SpatialWeights
+    purpose: Build or validate neighborhoods
+    notes: Distance, KNN, or explicit matrices
+  - name: LocalRegression
+    purpose: Fit spatially varying relationships
+    notes: Fixed or adaptive neighborhoods
+  - name: LocalDiagnostics
+    purpose: Inspect fitted local behavior
+    notes: Residual and influence summaries
+validation:
+  summary: SpatialTools treats numerical checks as part of its scientific contract.
+  items:
+    - deterministic regression tests cover documented workflows
+    - selected methods are checked against independent reference calculations
+    - unsupported numerical conditions fail explicitly instead of being silently corrected
+  link: null
+documentation:
+  - name: Getting Started
+    link: docs/getting-started.md
+    description: installation and first workflows
+  - name: Examples
+    link: examples/
+    description: complete runnable examples
+  - name: API Reference
+    link: docs/api.md
+    description: public classes and functions
+  - name: Validation Guide
+    link: docs/validation.md
+    description: reference cases and limitations
+citation:
+  intro: If SpatialTools contributes to academic work, cite the software.
+  cff: CITATION.cff
+  doi: null
+  message: If you use this software in your work, please cite it using the metadata below.
+  version: 0.1.0
+  license: MIT
+  repository_code: https://github.com/example/spatialtools
+  url: https://github.com/example/spatialtools
+  abstract: Reproducible spatial statistics and neighborhood-based modelling in Python.
+  keywords:
+    - spatial statistics
+    - geospatial
+    - reproducibility
+  authors:
+    - family_names: Doe
+      given_names: Jane
+      orcid: null
+      affiliation: Example University
+limitations: []
+support_text: Use the documentation for usage guidance and the issue tracker for reproducible bugs or feature requests.
+contributing_link: CONTRIBUTING.md
+license_text: SpatialTools is released under the MIT License.
+
+code_of_conduct:
+  scope_note: Project-specific events or spaces may publish additional participation rules that do not weaken this policy.
+  reporting_contact: Replace this value with a private contact channel maintained by the project.
+  reporting_note: Include enough context to understand the incident without sharing unrelated sensitive information.
+
+contributing:
+  development_intro: Create an isolated environment and install the project with development dependencies.
+  setup_command: |
+    git clone https://github.com/example/spatialtools.git
+    cd spatialtools
+    python -m pip install -e ".[test]"
+  checks:
+    - name: Tests
+      command: python -m pytest
+    - name: Lint
+      command: ruff check .
+  issue_url: https://github.com/example/spatialtools/issues
+  pull_request_expectations: Keep pull requests focused, explain the motivation, and describe how the change was tested.
+  branch_policy: Create a short-lived branch from the current default branch.
+  commit_guidance: Use concise commit messages that describe the change.
+  related_policies: []
+
+security:
+  supported_versions:
+    - version: latest release
+      status: "✅"
+    - version: older releases
+      status: "❌"
+  reporting_contact: Replace this value with the project's private security contact or GitHub private vulnerability reporting channel.
+  reporting_instructions: Include the affected version, reproduction steps, impact, and any known mitigation.
+  response_expectation: Maintainers will acknowledge credible reports as soon as practical.
+  disclosure_policy: Coordinate public disclosure so users have a reasonable opportunity to update or mitigate the issue.
+  security_scope: Reports should concern maintained software, distributed artifacts, or documented deployment paths.
+
+support:
+  support_channels:
+    - name: Repository issues
+      description: Use issues for reproducible bugs, documentation problems, and concrete feature requests.
+      location: https://github.com/example/spatialtools/issues
+  support_boundaries: Support is best-effort and does not include guaranteed individualized debugging or environment administration.
+
+issue_forms:
+  bug_title_prefix: "[Bug]: "
+  feature_title_prefix: "[Feature]: "
+  require_code_of_conduct: true
+  blank_issues_enabled: false
+  support_link_enabled: false
+  security_link_enabled: true
+
+pull_request:
+  require_tests: true
+  require_docs: true
+  require_changelog: true
+  contributing_link_enabled: true
+  code_of_conduct_link_enabled: true
+
+changelog:
+  versioning_statement: This project follows Semantic Versioning.
+  unreleased:
+    Added: []
+    Changed: []
+    Deprecated: []
+    Removed: []
+    Fixed: []
+    Security: []
+  latest_version: null
