@@ -43,8 +43,6 @@ Expected sanity check: `results/main/metrics.json` exists and contains the study
 Cite the study paper when using the reported experiment and cite the software release when the implementation matters.
 
 Paper: docs/paper.md
-
-
 Software citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## License
