@@ -7,6 +7,7 @@ from typing import Any, Literal
 
 from .managed_readme import (
     build_managed_readme,
+    has_complete_managed_sections,
     merge_managed_sections,
     readme_management_mode,
 )
@@ -241,6 +242,12 @@ def materialize_planned_content(destination: Path, item: PlannedFile) -> str:
     return merge_managed_sections(existing, item.content)
 
 
+def _managed_update_is_safe(destination: Path, item: PlannedFile) -> bool:
+    if item.management != "managed-sections" or not destination.is_file():
+        return False
+    return has_complete_managed_sections(destination.read_text(encoding="utf-8"))
+
+
 def inspect_apply_plan(
     target: str | Path,
     plan: list[PlannedFile],
@@ -276,7 +283,16 @@ def apply_to_repository(
     if dry_run:
         return results
 
-    conflicts = [result.path for result in results if result.status == "overwrite"]
+    item_by_path = {item.path: item for item in plan}
+    conflicts: list[Path] = []
+    for result in results:
+        if result.status != "overwrite":
+            continue
+        destination = root / result.path
+        item = item_by_path[result.path]
+        if not _managed_update_is_safe(destination, item):
+            conflicts.append(result.path)
+
     if conflicts and not force:
         formatted = "\n".join(f"  - {path}" for path in conflicts)
         raise FileExistsError(
@@ -284,7 +300,6 @@ def apply_to_repository(
             f"{formatted}"
         )
 
-    item_by_path = {item.path: item for item in plan}
     for result in results:
         if result.status == "unchanged":
             continue
