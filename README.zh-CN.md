@@ -26,6 +26,7 @@
   <a href="#快速开始">快速开始</a> ·
   <a href="#模板矩阵">模板</a> ·
   <a href="#profiles">Profiles</a> ·
+  <a href="#仓库标准">仓库标准</a> ·
   <a href="#预览">预览</a> ·
   <a href="docs/ARCHITECTURE.md">架构</a> ·
   <a href="#测试与压力测试">测试</a>
@@ -171,7 +172,7 @@ README.template.md
 
 Renderer 使用 Jinja2 `StrictUndefined`。模板需要但配置缺失的变量会直接失败，不会静默输出残缺章节。
 
-当前 CLI 范围有意保持明确：已经实现的是 `repoforge render`。仓库检测与 apply/update 工作流放在 [项目状态](#项目状态) 中作为下一阶段目标，不会提前当成已经可用的命令宣传。
+当前 CLI 范围有意保持明确：已经实现的是 `repoforge render`。仓库级标准现在已经在 `standards/` 中建模，而 apply/update 工作流仍属于后续 Roadmap，不会提前当成已经可用的命令宣传。
 
 ## Preview 与 Golden Output
 
@@ -227,6 +228,17 @@ tests/stress/
 
 > **Full 表示文档深度更高，不代表可以伪造项目实际不存在的能力或基础设施。**
 
+## 仓库标准
+
+RepoForge 现在除了 README 矩阵，还加入了第一批仓库健康标准：
+
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) —— 社区参与与行为边界；
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) —— 贡献流程与模板修改规则；
+- [`SECURITY.md`](SECURITY.md) —— 私下漏洞报告与受支持版本策略；
+- [`SUPPORT.md`](SUPPORT.md) —— 使用问题、Bug、安全问题和行为问题分别应该走什么渠道。
+
+可复用 Jinja 模板位于 [`standards/community/`](standards/community/)，[`standards/matrix.yml`](standards/matrix.yml) 则为每个显式项目类型/Profile 组合标记这些文件是 `default`、`recommended` 还是 `optional`。这一层明确**不做项目类型自动判断**。
+
 ## 仓库结构
 
 ```text
@@ -235,6 +247,7 @@ RepoForge
 ├── src/repoforge/                  # Renderer 与 CLI
 ├── templates/                      # 7 类项目 × 3 Profiles
 ├── profiles/                       # 跨项目 Profile 规则
+├── standards/                      # 社区、安全、支持等仓库级合同
 ├── partials/                       # 可复用文档组件
 ├── tests/
 │   ├── previews/                   # 已批准渲染效果
@@ -271,7 +284,6 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成”**�
 
 还没有实现：
 
-- 自动识别项目类型；
 - `init`、`apply`、`diff`、`check` 等仓库工作流；
 - 对已经人工修改过的 README 做受控局部更新；
 - 正式发布到 PyPI。
@@ -282,12 +294,11 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成”**�
 
 RepoForge 当前处于 **Alpha** 阶段。模板层的第一阶段已经完成：21 种项目类型/Profile 组合全部存在，Renderer 可执行，Preview 已提交，而且七个家族都有 Contract 和 Stress Coverage。
 
-下一阶段是围绕模板补齐仓库级工作流：
+下一阶段先补齐仓库级标准，再通过显式的项目类型/Profile 选择把它们应用到仓库：
 
 ```text
-repoforge detect .     # 计划：识别项目特征
 repoforge init .       # 计划：创建 RepoForge 配置
-repoforge apply .      # 计划：应用到已有仓库
+repoforge apply .      # 计划：应用 README + 选定仓库标准
 repoforge diff .       # 计划：预览受管理的变化
 repoforge check .      # 计划：检查仓库文档合同
 ```
