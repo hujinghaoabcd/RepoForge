@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoDesk" width="280">
-</p>
 <h1 align="center">GeoDesk</h1>
 <p align="center"><strong>A lightweight cross-platform desktop viewer for local geospatial datasets.</strong></p>
 <p align="center">

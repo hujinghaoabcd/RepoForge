@@ -1,0 +1,99 @@
+project_name: LabArchive
+display_name: LabArchive
+tagline: A mature Windows desktop application for managing local laboratory archives.
+screenshot_path: null
+badges:
+  - alt: Latest release
+    image: https://img.shields.io/badge/release-v4.1-blue
+    link: '#downloads-and-release-channels'
+  - alt: Windows build
+    image: https://img.shields.io/badge/Windows-passing-brightgreen
+    link: '#platform-compatibility'
+  - alt: Tests
+    image: https://img.shields.io/badge/tests-passing-brightgreen
+    link: '#development-and-testing'
+  - alt: Security
+    image: https://img.shields.io/badge/security-policy-blue
+    link: '#security'
+  - alt: License
+    image: https://img.shields.io/badge/license-MIT-green
+    link: '#license'
+navigation:
+  - label: Download
+    link: '#downloads-and-release-channels'
+  - label: User Guide
+    link: docs/user-guide.md
+  - label: Issues
+    link: https://github.com/example/labarchive/issues
+why_text: LabArchive is a long-lived Windows application whose main risks are archive compatibility, data recovery, and signed installer releases rather than plugins or cross-platform distribution.
+features:
+  - name: Local archives
+    description: manage laboratory records in user-selected archive directories.
+  - name: Versioned archive metadata
+    description: migrate documented older archive schemas during supported upgrades.
+  - name: Signed Windows releases
+    description: distribute one project-maintained x64 installer.
+download_options:
+  - platform: Windows stable
+    package: signed x64 installer
+    support: maintained
+    link: Releases
+compatibility:
+  - target: Windows
+    range: Windows 11 x64
+    notes: only supported desktop operating system
+  - target: Archive schema
+    range: v4 reads supported v3/v4 archives
+    notes: migration is explicit and backup-first
+architecture: []
+data_locations:
+  - name: Preferences
+    location: '`%APPDATA%/LabArchive`'
+    purpose: application settings
+  - name: Archives
+    location: user-selected directories
+    purpose: authoritative data; must be backed up
+file_formats:
+  - name: Archive metadata
+    description: versioned local metadata stored with laboratory records.
+    compatibility: documented migration between supported releases.
+extensions_text: null
+update_text: null
+portable_text: null
+privacy_text: LabArchive operates on local archives and performs no background network requests during normal use.
+telemetry_text: null
+security_notes:
+  - Stable Windows installers are signed by the project release process.
+  - Archive backups must be taken before schema migrations.
+  - Security reports follow `SECURITY.md`.
+build_text: Developer builds use the documented Windows toolchain; signing credentials are not required for local builds.
+build_command: |-
+  python -m pip install -e '.[dev]'
+  python -m labarchive
+packaging_text: Releases build one Windows x64 installer from a tagged commit and sign only in the protected release environment.
+packaging_steps:
+  - name: Validate release
+    description: run tests and archive-migration fixtures.
+    command: python -m pytest
+  - name: Build Windows installer
+    description: create the x64 installer from the tagged source tree.
+    command: python tools/package_windows.py
+  - name: Sign and publish
+    description: sign the installer and publish checksums in the protected release job.
+    command: null
+development_text: Regression tests focus on archive reading, migration, recovery, and desktop workflows.
+development_command: python -m labarchive --debug
+test_command: python -m pytest
+backup_text: Back up archive directories before upgrades. Preferences are optional and can be recreated.
+troubleshooting:
+  - problem: Archive migration fails
+    guidance: restore the pre-upgrade backup and collect the local diagnostic log before retrying.
+documentation:
+  - name: User Guide
+    link: docs/user-guide.md
+    description: archives, backups, and recovery
+  - name: Migration Guide
+    link: docs/migrations.md
+    description: supported archive schema transitions
+contributing_text: Archive format, migration, installer, and recovery changes require tests and documentation.
+license_text: LabArchive is released under the MIT License.

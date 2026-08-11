@@ -1,0 +1,102 @@
+logo_path: null
+logo_width: 180
+screenshot_path: docs/images/geodesk-main.png
+screenshot_width: 900
+project_name: GeoDesk
+tagline: A cross-platform GIS desktop application for browsing, styling, and organizing local spatial data.
+badges:
+  - alt: Latest release
+    image: https://img.shields.io/badge/release-v1.2.0-blue
+    link: https://github.com/example/geodesk/releases
+  - alt: Platforms
+    image: https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey
+    link: '#platform-compatibility'
+  - alt: Tests
+    image: https://img.shields.io/badge/tests-passing-brightgreen
+    link: '#development-and-testing'
+  - alt: Docs
+    image: https://img.shields.io/badge/docs-online-blue
+    link: docs/
+  - alt: License
+    image: https://img.shields.io/badge/license-MIT-green
+    link: '#license'
+navigation:
+  - label: Download
+    link: '#download-and-install'
+  - label: Documentation
+    link: docs/
+  - label: Changelog
+    link: CHANGELOG.md
+  - label: Issues
+    link: https://github.com/example/geodesk/issues
+overview_text: GeoDesk is a local-first desktop GIS for analysts who need to inspect and organize common vector and raster datasets without deploying a server. The application uses one project file across supported desktop platforms and keeps user data under explicit per-user directories.
+features:
+  - name: Vector and raster viewing
+    description: open common geospatial formats and compose them into desktop map projects.
+  - name: Styling and inspection
+    description: control layer visibility, symbols, labels, identify results, and metadata.
+  - name: Saved projects
+    description: preserve layer order, paths, view state, and application-level project settings.
+  - name: Local-first workflow
+    description: normal browsing and project editing work without an account or cloud service.
+download_options:
+  - platform: Windows 11
+    package: x64 `.exe` installer
+    notes: per-user install; signed release build
+    link: https://github.com/example/geodesk/releases
+  - platform: macOS 13+
+    package: universal `.dmg`
+    notes: notarized application bundle
+    link: https://github.com/example/geodesk/releases
+  - platform: Linux
+    package: x86_64 AppImage
+    notes: portable package for common desktop distributions
+    link: https://github.com/example/geodesk/releases
+first_launch: On first launch, GeoDesk creates its user configuration directory and an empty recent-project list. Open a dataset directly or create a `.geodesk` project. No account is required.
+compatibility:
+  - target: Windows
+    range: Windows 11 x64
+    notes: installer builds tested in CI release jobs
+  - target: macOS
+    range: macOS 13+
+    notes: Apple Silicon and Intel universal application bundle
+  - target: Linux
+    range: Ubuntu 24.04 / Fedora 42 class desktops
+    notes: AppImage is the maintained binary distribution
+  - target: Project files
+    range: GeoDesk 1.x
+    notes: minor releases preserve backward-readable project metadata
+data_locations:
+  - name: Configuration
+    location: platform user-config directory / `GeoDesk`
+    purpose: preferences, recent files, UI state
+  - name: Cache
+    location: platform user-cache directory / `GeoDesk`
+    purpose: thumbnails and disposable map cache
+  - name: Projects
+    location: user-selected `.geodesk` files
+    purpose: portable project metadata; back these up with referenced data when needed
+build_text: Source builds use Python 3.12+, PySide6, GDAL-compatible Python wheels or system libraries, and the repository development extras.
+build_command: |-
+  python -m venv .venv
+  . .venv/bin/activate
+  python -m pip install -e '.[dev]'
+  python -m geodesk
+development_command: |-
+  python -m pip install -e '.[dev]'
+  python -m geodesk
+test_command: |-
+  python -m pytest
+  python -m ruff check .
+documentation:
+  - name: User Guide
+    link: docs/user-guide.md
+    description: projects, layers, styling, and preferences
+  - name: Build Guide
+    link: docs/building.md
+    description: platform prerequisites and source builds
+  - name: Release Notes
+    link: CHANGELOG.md
+    description: user-visible changes and compatibility notes
+contributing_text: Read `CONTRIBUTING.md` before changing UI behavior, project-file schema, packaging metadata, or platform support. User-facing behavior changes should include documentation and tests.
+license_text: GeoDesk is released under the MIT License.

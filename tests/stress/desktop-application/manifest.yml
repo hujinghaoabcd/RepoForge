@@ -1,0 +1,61 @@
+cases:
+  - name: windows-only-utility
+    profile: minimal
+    overrides: cases/windows-only-utility.yml
+    min_lines: 30
+    max_lines: 90
+    required_sections:
+      - '## Download and Install'
+      - '## Supported Platforms'
+    forbidden_sections:
+      - '## Architecture'
+      - '## Plugins and Extensions'
+  - name: qt-scientific-workbench
+    profile: standard
+    overrides: cases/qt-scientific-workbench.yml
+    min_lines: 55
+    max_lines: 150
+    required_sections:
+      - '## Platform Compatibility'
+      - '## User Data and Configuration'
+      - '## Build from Source'
+    forbidden_sections:
+      - '## Telemetry'
+      - '## Packaging and Release Engineering'
+  - name: electron-offline-editor
+    profile: standard
+    overrides: cases/electron-offline-editor.yml
+    min_lines: 55
+    max_lines: 150
+    required_sections:
+      - '## Download and Install'
+      - '## First Launch'
+      - '## Development and Testing'
+    forbidden_sections:
+      - '## Plugins and Extensions'
+      - '## Packaging and Release Engineering'
+  - name: full-plugin-workstation
+    profile: full
+    overrides: cases/full-plugin-workstation.yml
+    min_lines: 130
+    max_lines: 260
+    required_sections:
+      - '## Architecture'
+      - '## Plugins and Extensions'
+      - '## Updates and Release Compatibility'
+      - '## Packaging and Release Engineering'
+    forbidden_sections: []
+  - name: full-windows-no-plugins
+    profile: full
+    overrides: cases/full-windows-no-plugins.yml
+    min_lines: 90
+    max_lines: 220
+    required_sections:
+      - '## Downloads and Release Channels'
+      - '## Security'
+      - '## Packaging and Release Engineering'
+    forbidden_sections:
+      - '## Plugins and Extensions'
+      - '## Updates and Release Compatibility'
+      - '## Portable Mode'
+      - '## Telemetry'
