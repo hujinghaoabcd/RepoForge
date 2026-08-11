@@ -22,6 +22,12 @@ Whole-file rendering is useful when RepoForge owns the complete README, but it i
 
 Managed Sections v1 changes that ownership boundary. RepoForge manages only a few stable header regions and preserves every other byte of the existing README.
 
+## `render` versus repository management
+
+`repoforge render` remains a pure renderer. It renders the selected README template to the requested output path and does not add managed-section markers.
+
+Managed markers belong to the repository workflow created by `repoforge init` and consumed by `diff`, `apply`, and `check`. This keeps template examples and golden previews ordinary Markdown while giving an applied repository explicit ownership boundaries.
+
 ## Managed regions in v1
 
 The first version intentionally manages only:
