@@ -1,4 +1,8 @@
-# {{ project_name }}
+{% if logo_path %}<p align="center">
+  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(360) }}">
+</p>
+
+{% endif %}# {{ project_name }}
 
 **{{ tagline }}**
 
