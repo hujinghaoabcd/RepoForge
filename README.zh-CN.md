@@ -2,78 +2,161 @@
 
 **可复用的代码仓库文档与项目规范体系。**
 
-RepoForge 用于把统一、可复用的文档与仓库规范应用到已经生成好的软件或科研项目中。它并不替代 Cookiecutter、Scientific Python Cookie、Vite、Django 模板等项目脚手架，而是作为脚手架之后的“规范层”。
+RepoForge 用于把统一、可复用的 README 与仓库文档规范应用到已经生成好的软件或科研项目中。它不替代 Cookiecutter、Scientific Python Cookie、Django 模板、Vite 等脚手架，而是作为项目脚手架之后的“文档与规范层”。
 
 [English](README.md) · **简体中文**
 
 ## 为什么需要 RepoForge？
 
-项目脚手架擅长生成代码结构，但一个真正可维护、可发布、可复现的仓库，还需要清晰的 README、文档入口以及贡献、引用、测试、部署等规范。RepoForge 将这两类工作分开：
+项目脚手架擅长生成代码结构，但仓库还需要清晰的公开文档入口。RepoForge 将这两类工作分开：
 
-1. **先用最适合技术栈的脚手架生成项目**；
-2. **再用 RepoForge 套用统一的 README 与仓库文档结构**；
-3. **最后补充项目特有内容**，例如算法、截图、实验、部署、API 和论文信息。
+1. 先用最适合技术栈的工具生成项目结构；
+2. 选择 RepoForge 的项目类型和一套独立 Profile；
+3. 用显式 YAML 配置渲染普通 Markdown README；
+4. 把完整理论、API、实验细节和部署手册继续放在 `docs/` 中，而不是全部塞进 README。
 
-RepoForge 的目标不是让所有 README 长得完全一样，而是让不同类型的项目保持统一的家族风格，同时保留各自真正需要的信息。
+目标不是让所有 README 完全相同，而是形成统一的家族风格，同时保留不同项目真正需要的信息。
 
-## 首批项目类型
+## 当前已实现
 
-RepoForge 计划首先支持七类模板：
+第一套已经可以实际渲染的模板是：
 
-- `scientific-python` —— 科研 Python 包；
+```text
+scientific-python
+├── minimal
+├── standard
+└── full
+```
+
+三种 Profile 是 **三套独立模板**，不是一个大模板里的条件分支。
+
+每个 Profile 都包含：
+
+```text
+PROFILE.md
+README.template.md
+README.example.md
+config.example.yml
+```
+
+## 快速开始
+
+从源码安装：
+
+```bash
+git clone https://github.com/hujinghaoabcd/RepoForge.git
+cd RepoForge
+python -m pip install -e ".[test]"
+```
+
+生成 Minimal：
+
+```bash
+repoforge render scientific-python minimal \
+  --config templates/scientific-python/minimal/config.example.yml \
+  --output README.generated.md
+```
+
+生成 Standard：
+
+```bash
+repoforge render scientific-python standard \
+  --config templates/scientific-python/standard/config.example.yml \
+  --output README.generated.md
+```
+
+生成 Full：
+
+```bash
+repoforge render scientific-python full \
+  --config templates/scientific-python/full/config.example.yml \
+  --output README.generated.md
+```
+
+渲染器使用严格变量检查：模板需要但 YAML 没有声明的字段会直接报错，不会静默生成残缺 README。
+
+## 查看生成效果
+
+预览文件位于：
+
+```text
+tests/previews/<project-type>/<profile>.md
+```
+
+当前科研 Python 预览为：
+
+```text
+tests/previews/scientific-python/
+├── minimal.md
+├── standard.md
+└── full.md
+```
+
+重新生成科研 Python 三档预览：
+
+```bash
+python scripts/generate_previews.py
+```
+
+## 计划支持的项目类型
+
+RepoForge 按七类项目组织模板：
+
+- `scientific-python` —— 可复用科研 Python 包；
 - `research-algorithm` —— 原创方法与创新算法实现；
 - `research-experiment` —— 论文代码、基准实验与可复现实验仓库；
 - `django-package` —— 可复用 Django 应用与扩展；
-- `web-application` —— 从小型网站到大型 Web 应用；
-- `frontend-library` —— 前端库、插件和组件；
+- `web-application` —— 小型到大型 Web 应用；
+- `frontend-library` —— 前端库、插件与组件；
 - `desktop-application` —— 桌面端与跨平台软件。
 
-## 文档深度 Profiles
+目前只有 `scientific-python` 已具备完整可执行渲染合同；其他类型目前已经拆分出独立的 Minimal / Standard / Full 视觉预览，后续逐类实现。
 
-每一种项目类型再区分三种文档深度：
+## Profiles
 
-- **minimal** —— Demo、小工具、原型、小型插件；
-- **standard** —— 大多数正式维护的开源项目，默认推荐；
-- **full** —— 成熟科研软件、大型应用、复杂可复现实验。
+Profile 控制文档深度，但每一档都是独立模板：
 
-项目类型与项目规模是两个不同维度。例如，小型网站和大型网站都属于 `web-application`，只是使用不同 profile，而不需要维护两套完全独立的模板。
+- **Minimal** —— 小型、聚焦项目，最短但完整；
+- **Standard** —— 大多数正式维护开源项目的默认选择；
+- **Full** —— 方法较多、科学边界复杂或成熟度较高的项目。
 
-## 架构
-
-RepoForge 初始结构由三个可复用层组成：
+## 仓库结构
 
 ```text
 RepoForge
-├── templates/   # 按项目类型组织的 README 结构
-├── profiles/    # minimal / standard / full 深度规则
-├── partials/    # badges、citation、testing、deployment 等可复用模块
-└── docs/        # 设计规范与编写规则
+├── src/repoforge/                 # renderer 与 CLI
+├── templates/                     # 项目类型 / Profile 模板
+├── profiles/                      # 跨项目 Profile 规则
+├── partials/                      # 可复用文档模块
+├── tests/
+│   └── previews/                  # 可视化预览
+├── scripts/                       # 维护脚本
+└── docs/                          # 架构与规范
 ```
 
-未来计划提供如下命令：
-
-```bash
-repoforge apply .
-repoforge apply . --type scientific-python --profile standard
-repoforge check .
-```
-
-RepoForge 应尽可能自动识别 `pyproject.toml`、`package.json`、Django 项目文件、测试、文档与 CI 配置，只询问无法安全推断的信息。
-
-初始设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
+详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
 ## 设计原则
 
-- **README 是项目入口，不是完整说明书。** 理论、API、部署手册和开发说明过长时应下沉到 `docs/`。
-- **项目类型和项目规模分开建模。** 不因为项目更大就复制一套新模板。
-- **通用模块尽量复用。** 安装、徽章、引用、测试、安全、部署、贡献说明不应在每个模板中重新发明。
-- **科研软件拥有科研专属需求。** Validation、Reproducibility、Limitations、Citation 在适用时是一级内容。
-- **生成结果必须仍是普通可读 Markdown。** 不依赖专有格式才能维护项目。
+- **README 是项目入口，不是完整说明书。**
+- **Minimal、Standard、Full 必须保持独立模板。**
+- **项目类型和文档深度是两个不同维度。**
+- **科研软件把 Validation、Reproducibility、Limitations、Citation 作为一级需求。**
+- **生成结果始终是普通可读 Markdown。**
+- **配置缺失时应明确失败，而不是生成误导性的文档。**
+
+## 测试
+
+```bash
+python -m pytest
+```
+
+GitHub Actions 会在支持的 Python 版本上运行测试，并执行 CLI 渲染 smoke test。
 
 ## 当前状态
 
-RepoForge 处于初始设计与模板调研阶段。第一阶段先完成 `scientific-python`，以成熟 Scientific Python 项目和现有科研包作为参考案例。
+RepoForge 处于早期开发阶段。`scientific-python` 是第一套正式实现的渲染模板，下一步将继续完善预览同步并实现其他项目类型。
 
 ## License
 
-首个公开版本发布前再确定项目许可证。
+MIT.
