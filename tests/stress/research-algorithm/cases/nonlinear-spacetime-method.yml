@@ -1,0 +1,109 @@
+logo_path: null
+method_figure: null
+project_name: KernelSTAR
+tagline: A nonlinear space-time autoregressive method with kernelized lag interactions and explicit forecast semantics.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)'
+navigation: Paper · Method · Simulation · Validation · API · Citation
+problem_text: Classical space-time autoregressive models represent lagged temporal and spatial dependence through linear coefficients. That structure can be too restrictive when the effect of a lagged neighborhood state varies nonlinearly with the state itself.
+gap_text: Replacing the whole model with a black-box sequence network may improve flexibility but discards the explicit lag-and-weight structure that makes STAR-type models scientifically interpretable. KernelSTAR retains declared temporal lags and spatial weight orders while allowing the lag response to vary nonlinearly.
+objective:
+  title: Conditional mean target
+  text: KernelSTAR estimates the conditional mean of the current spatial field from explicit temporal lags and spatially lagged states through regularized kernel functions.
+  equation: >-
+    $$\mathbb{E}[y_t\mid\mathcal F_{t-1}] = \mu + \sum_{p=1}^{P}\sum_{\ell=0}^{L} g_{p\ell}\!\left(W^{(\ell)}y_{t-p}\right).$$
+formulation:
+  text: Each declared lag-order pair retains its own nonlinear response function. Spatial weights remain user-specified model inputs, so nonlinear flexibility does not silently redefine spatial connectivity.
+  equation: >-
+    $$g_{p\ell}(x)=\sum_{m=1}^{M_{p\ell}} \alpha_{p\ell m}\,K(x,c_{p\ell m}),$$
+algorithm_steps:
+  - name: Validate lag structure
+    description: check time ordering, spatial-weight matrices, lag orders, and missing-value policy.
+  - name: Construct lagged states
+    description: create temporal and spatially lagged predictors without future leakage.
+  - name: Fit nonlinear lag functions
+    description: estimate regularized kernel expansions for each declared lag-order component.
+  - name: Produce forecasts
+    description: iterate one-step or recursive forecasts using a documented conditioning convention.
+  - name: Diagnose dependence
+    description: inspect residual space-time dependence, stability, and sensitivity to kernel complexity.
+contributions:
+  - preserves explicit STAR lag and spatial-weight structure while relaxing linear lag responses
+  - separates the spatial connectivity matrix from the nonlinear response function
+  - exposes component-wise lag functions for inspection rather than only aggregate predictions
+  - defines recursive forecast semantics and simulation contracts explicitly
+install_command: python -m pip install kernelstar
+development_install: |-
+  git clone https://github.com/example/kernelstar.git
+  cd kernelstar
+  python -m pip install -e ".[dev,docs]"
+quickstart_intro: Fit a small nonlinear space-time model with one temporal lag and one spatial-weight order.
+quickstart_code: |
+  import numpy as np
+  from kernelstar import KernelSTAR
+
+  rng = np.random.default_rng(42)
+  y = rng.normal(size=(120, 5))
+  W = np.full((5, 5), 0.25)
+  np.fill_diagonal(W, 0.0)
+
+  model = KernelSTAR(time_lags=(1,), spatial_orders=(0, 1), regularization=0.1)
+  result = model.fit(y, spatial_weights=[np.eye(5), W])
+  forecast = result.forecast(steps=3)
+  print(forecast.shape)
+interpretation_contracts:
+  - name: component_functions_
+    meaning: fitted nonlinear response functions for declared temporal-lag and spatial-order pairs
+    boundary: shapes describe conditional association under the specified model and are not causal response curves
+  - name: spatial_weights_
+    meaning: fixed spatial interaction operators supplied to the model
+    boundary: the method does not learn or validate the scientific correctness of those matrices by itself
+  - name: forecast
+    meaning: conditional forecasts under the documented recursive or one-step convention
+    boundary: uncertainty and error accumulation depend on the selected forecast mode and model specification
+validation:
+  summary: KernelSTAR validates nonlinear estimation separately from forecasting performance and separately from scientific interpretation of lag functions.
+  sections:
+    - name: Linear nesting
+      text: Synthetic cases with linear lag functions verify recovery toward a classical STAR specification when nonlinear complexity is constrained.
+    - name: Nonlinear recovery
+      text: Controlled simulations with known smooth lag functions evaluate component-shape and conditional-mean recovery.
+    - name: Forecast checks
+      text: One-step and recursive forecasts are tested for time-index alignment, leakage prevention, and deterministic behavior under fixed configuration.
+    - name: Residual diagnostics
+      text: Remaining temporal and spatial dependence is reported as model adequacy evidence rather than hidden behind aggregate forecast metrics.
+  link: docs/validation/index.md
+computational_text: Cost grows with the number of declared lag-order components, kernel basis size, time points, and spatial dimension. Recursive forecasting adds repeated state construction; performance benchmarks should report these dimensions explicitly rather than only wall-clock time.
+reproducibility:
+  - simulation generators and spatial-weight matrices are versioned
+  - train/validation/test time boundaries are recorded explicitly
+  - kernel basis, regularization, lag orders, and forecast convention are stored with fitted results
+  - paper benchmark tables are regenerated from archived experiment configs rather than unit tests
+limitations:
+  - flexible lag functions increase identifiability and overfitting risk when time series are short
+  - supplied spatial-weight matrices remain scientific assumptions that require external justification
+  - component curves describe model-conditioned association, not causal effects
+  - recursive forecast uncertainty can accumulate beyond what point predictions reveal
+documentation:
+  - name: Method Guide
+    link: docs/method/index.md
+    description: lag structure, kernel formulation, and forecast semantics
+  - name: Simulation Guide
+    link: docs/simulation.md
+    description: linear nesting and nonlinear recovery cases
+  - name: Validation Guide
+    link: docs/validation/index.md
+    description: recovery, forecast alignment, and residual diagnostics
+  - name: Examples
+    link: examples/
+    description: fitting, forecasting, and component inspection
+  - name: API Reference
+    link: docs/api.md
+    description: estimator, result, simulation, and forecast interfaces
+citation:
+  intro: Cite the method paper for KernelSTAR and the software release when the implementation or simulation framework contributes materially to the work.
+  paper: docs/paper.md
+  bibtex: null
+  cff: CITATION.cff
+support_text: Use the method and simulation guides for scientific questions and the issue tracker for reproducible software defects.
+contributing_link: CONTRIBUTING.md
+license_text: KernelSTAR is released under the BSD 3-Clause License.
