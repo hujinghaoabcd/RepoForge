@@ -36,6 +36,7 @@ features:
   - name: Reproducibility
     description: Deterministic examples, explicit random seeds, and reference comparisons.
 install_command: python -m pip install spatialtools
+verify_command: null
 optional_install_commands:
   - command: python -m pip install "spatialtools[plot]"
     description: plotting helpers
@@ -93,6 +94,7 @@ representative_example:
         frame[["income", "access"]], frame["target"], coords
     )
     frame.join(result.to_frame()).to_file("local_results.gpkg")
+  link: null
 validation:
   summary: SpatialTools separates scientific validation claims from feature descriptions.
   items:
@@ -100,6 +102,7 @@ validation:
     - selected numerical results are checked against independent calculations
     - reference fixtures are versioned with the code
     - unsupported numerical conditions fail explicitly
+  link: null
 examples:
   - name: Basic local model
     link: examples/01_basic.py
