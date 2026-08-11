@@ -13,3 +13,5 @@ pull_request:
   require_tests: true
   require_docs: true
   require_changelog: false
+  contributing_link_enabled: true
+  code_of_conduct_link_enabled: true
