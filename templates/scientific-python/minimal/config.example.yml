@@ -1,5 +1,5 @@
 logo_path: null
-logo_width: 180
+logo_width: 160
 project_name: SpatialTools
 tagline: A compact Python package for reproducible spatial analysis.
 badges: >-

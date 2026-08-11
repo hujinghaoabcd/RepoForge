@@ -1,5 +1,5 @@
 logo_path: null
-logo_width: 360
+logo_width: 160
 project_name: ForecastBench
 tagline: Minimal reproducible code for a short-horizon traffic forecasting study.
 badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#environment) [![Paper](https://img.shields.io/badge/paper-study-blue)](#citation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'

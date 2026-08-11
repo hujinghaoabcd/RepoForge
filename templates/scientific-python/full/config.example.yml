@@ -1,5 +1,5 @@
 logo_path: null
-logo_width: 460
+logo_width: 160
 project_name: SpatialTools
 tagline: A research-oriented Python library for spatial statistics, local modelling, diagnostics, and reproducible geospatial workflows.
 badges: >-

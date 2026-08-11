@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="django-audit-panel" width="280">
+  <img src="../../../assets/logo.svg" alt="django-audit-panel" width="160">
+</p>
+
+<p align="center">
+  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="django-audit-panel screenshot" width="780">
 </p>
 
 # django-audit-panel

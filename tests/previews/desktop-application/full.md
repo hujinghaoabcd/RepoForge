@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="GeoDesk" width="280">
+  <img src="../../../assets/logo.svg" alt="GeoDesk" width="160">
 </p>
 <h1 align="center">GeoDesk</h1>
 <p align="center"><strong>A production-oriented cross-platform GIS workstation with local projects, optional Python plugins, and explicit release compatibility.</strong></p>
@@ -14,7 +14,7 @@
 <p align="center">
   <a href="#downloads-and-release-channels">Download</a> ·  <a href="docs/user-guide.md">User Guide</a> ·  <a href="docs/plugins.md">Plugins</a> ·  <a href="docs/building.md">Build</a> ·  <a href="https://github.com/example/geodesk/issues">Issues</a></p>
 <p align="center">
-  <img src="docs/images/geodesk-workspace.png" alt="GeoDesk screenshot" width="940">
+  <img src="../../../assets/screenshots/repoforge-preview.webp" alt="GeoDesk screenshot" width="780">
 </p>
 
 ## Why GeoDesk?

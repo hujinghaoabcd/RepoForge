@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="MapWidget" width="280">
+  <img src="../../../assets/logo.svg" alt="MapWidget" width="160">
 </p>
 
 # MapWidget
