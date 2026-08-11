@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="django-audit-panel" width="420">
-</p>
-
 # django-audit-panel
 
 **A production-oriented reusable Django auditing application with admin, API, retention, and integration contracts.**

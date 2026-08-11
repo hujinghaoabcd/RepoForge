@@ -1,0 +1,39 @@
+project_name: django-request-id
+display_name: django-request-id
+tagline: Request correlation IDs with explicit Django middleware ordering.
+why_text: Request IDs are useful only when the middleware runs early enough to annotate responses and later code can consistently access the same identifier.
+features:
+  - name: Request IDs
+    description: attach one correlation identifier to each request and response.
+  - name: Logging context
+    description: expose the current identifier to project logging code.
+installation_text: Install into the host Django environment.
+install_command: python -m pip install django-request-id
+configuration_steps:
+  - name: Middleware ordering
+    description: Place the middleware near the top so downstream middleware and views observe the identifier.
+    language: python
+    code: "MIDDLEWARE = [\n    \"request_id.middleware.RequestIDMiddleware\",\n    ...\n]"
+settings:
+  - name: REQUEST_ID_HEADER
+    default: X-Request-ID
+    purpose: accepted inbound and emitted response header.
+quickstart_intro: Access the request ID from application code after middleware execution.
+quickstart_language: python
+quickstart_code: "request.request_id"
+examples:
+  - name: Log the identifier
+    description: Include it in structured application logs.
+    language: python
+    code: "logger.info(\"handled request\", extra={\"request_id\": request.request_id})"
+compatibility_intro: Middleware ordering is part of the supported integration contract.
+compatibility:
+  - django: '5.2–6.0'
+    python: 3.11–3.14
+    status: supported
+documentation:
+  - name: Configuration
+    link: docs/configuration.md
+    description: middleware order and settings
+contributing_text: Include a minimal middleware stack when reporting ordering bugs.
+license_text: BSD 3-Clause.

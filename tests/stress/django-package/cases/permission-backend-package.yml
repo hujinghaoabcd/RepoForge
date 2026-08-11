@@ -1,0 +1,44 @@
+project_name: django-object-rules
+display_name: django-object-rules
+tagline: Reusable per-object permission checks for Django authorization.
+why_text: Project-specific permission logic becomes difficult to audit when object checks are scattered through views and serializers. This package centralizes a documented backend and helper API.
+features:
+  - name: Object permissions
+    description: evaluate permissions against individual model instances.
+  - name: Backend integration
+    description: participate in Django's normal authentication-backend chain.
+installation_text: Install the reusable authorization package.
+install_command: python -m pip install django-object-rules
+configuration_steps:
+  - name: '`INSTALLED_APPS`'
+    description: Enable package models and migrations.
+    language: python
+    code: "INSTALLED_APPS = [\n    ...\n    \"object_rules\",\n]"
+  - name: Authentication backend
+    description: Add the package after Django's model backend.
+    language: python
+    code: "AUTHENTICATION_BACKENDS = [\n    \"django.contrib.auth.backends.ModelBackend\",\n    \"object_rules.backends.ObjectPermissionBackend\",\n]"
+  - name: Migrations
+    description: Apply package-owned permission tables.
+    language: bash
+    code: python manage.py migrate
+settings: []
+quickstart_intro: Assign and check one object-level permission.
+quickstart_language: python
+quickstart_code: "from object_rules.shortcuts import grant\n\ngrant(\"inventory.change_product\", user, product)\nassert user.has_perm(\"inventory.change_product\", product)"
+examples:
+  - name: Revoke a permission
+    description: Remove a previously granted object permission.
+    language: python
+    code: "from object_rules.shortcuts import revoke\n\nrevoke(\"inventory.change_product\", user, product)"
+compatibility_intro: Authorization integrations must publish tested Django/Python support.
+compatibility:
+  - django: '5.2–6.0'
+    python: 3.11–3.14
+    status: supported
+documentation:
+  - name: Permission Guide
+    link: docs/permissions.md
+    description: backend semantics and object checks
+contributing_text: Permission changes require regression tests demonstrating allowed and denied cases.
+license_text: BSD 3-Clause.
