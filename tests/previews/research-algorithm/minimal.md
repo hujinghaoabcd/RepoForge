@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/hujinghaoabcd/RepoForge/main/assets/repoforge-logo.png" alt="LatentMap" width="420">
+</p>
+
 # LatentMap
 
 **A compact research method for learning task-aware latent distances.**
