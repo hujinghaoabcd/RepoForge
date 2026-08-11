@@ -1,5 +1,5 @@
 logo_path: ../../../assets/logo.svg
-logo_width: 420
+logo_width: 280
 
 # RepoForge's own preview and stress outputs use this single repository SVG.
 # This path is resolved by Markdown previews under tests/previews/<type>/<profile>.md.
