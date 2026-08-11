@@ -58,28 +58,33 @@ jobs:
           test -s /tmp/README.frontend-library.md
           test -s /tmp/README.desktop-application.md
 
-      - name: Apply smoke
+      - name: Init and apply smoke
         run: |
-          mkdir -p /tmp/repoforge-apply
+          rm -rf /tmp/repoforge-init
+          mkdir -p /tmp/repoforge-init
 
-          repoforge apply /tmp/repoforge-apply \
+          repoforge init /tmp/repoforge-init \
             --type scientific-python \
             --profile standard \
-            --config examples/apply/scientific-python-standard.yml \
+            --name SmokeProject \
+            --repository-url https://github.com/example/smoke-project
+
+          test -s /tmp/repoforge-init/repoforge.yml
+
+          repoforge apply /tmp/repoforge-init \
+            --config /tmp/repoforge-init/repoforge.yml \
             --dry-run
 
-          test ! -e /tmp/repoforge-apply/README.md
+          test ! -e /tmp/repoforge-init/README.md
 
-          repoforge apply /tmp/repoforge-apply \
-            --type scientific-python \
-            --profile standard \
-            --config examples/apply/scientific-python-standard.yml
+          repoforge apply /tmp/repoforge-init \
+            --config /tmp/repoforge-init/repoforge.yml
 
-          test -s /tmp/repoforge-apply/README.md
-          test -s /tmp/repoforge-apply/CODE_OF_CONDUCT.md
-          test -s /tmp/repoforge-apply/CONTRIBUTING.md
-          test -s /tmp/repoforge-apply/SECURITY.md
-          test -s /tmp/repoforge-apply/CITATION.cff
-          test -s /tmp/repoforge-apply/CHANGELOG.md
-          test -s /tmp/repoforge-apply/.github/ISSUE_TEMPLATE/01-bug-report.yml
-          test -s /tmp/repoforge-apply/.github/pull_request_template.md
+          test -s /tmp/repoforge-init/README.md
+          test -s /tmp/repoforge-init/CODE_OF_CONDUCT.md
+          test -s /tmp/repoforge-init/CONTRIBUTING.md
+          test -s /tmp/repoforge-init/SECURITY.md
+          test -s /tmp/repoforge-init/CITATION.cff
+          test -s /tmp/repoforge-init/CHANGELOG.md
+          test -s /tmp/repoforge-init/.github/ISSUE_TEMPLATE/01-bug-report.yml
+          test -s /tmp/repoforge-init/.github/pull_request_template.md
