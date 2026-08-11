@@ -40,6 +40,7 @@ Cite the study paper when using the reported experiment and cite the software re
 
 Paper: docs/paper.md
 
+
 Software citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## License
