@@ -198,7 +198,14 @@ jobs:
             --repository-url https://github.com/example/wheel-smoke
           /tmp/repoforge-wheel-env/bin/repoforge apply /tmp/repoforge-wheel-project \
             --config /tmp/repoforge-wheel-project/repoforge.yml
-          /tmp/repoforge-wheel-env/bin/repoforge check /tmp/repoforge-wheel-project
+
+          if /tmp/repoforge-wheel-env/bin/repoforge check /tmp/repoforge-wheel-project > /tmp/repoforge-wheel-check.txt; then
+            echo "fresh init unexpectedly passed placeholder validation"
+            exit 1
+          fi
+          grep -q "PASS  README.md" /tmp/repoforge-wheel-check.txt
+          grep -q "Code of Conduct reporting_contact is still a generic placeholder" /tmp/repoforge-wheel-check.txt
+          grep -q "Security reporting_contact is still a generic placeholder" /tmp/repoforge-wheel-check.txt
           test -s /tmp/repoforge-wheel-project/README.md
           test -s /tmp/repoforge-wheel-project/CODE_OF_CONDUCT.md
 
