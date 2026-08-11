@@ -104,6 +104,23 @@ def test_check_reports_invalid_citation_structure(tmp_path):
     )
 
 
+def test_check_reports_invalid_issue_form_structure(tmp_path):
+    config = _config()
+    plan = _plan(config)
+    apply_to_repository(tmp_path, plan)
+    issue_form = tmp_path / ".github/ISSUE_TEMPLATE/01-bug-report.yml"
+    issue_form.write_text("name: Broken\ndescription: Broken form\nbody: [\n", encoding="utf-8")
+
+    results = check_repository(tmp_path, plan, config)
+
+    assert any(
+        item.level == "FAIL"
+        and item.subject == ".github/ISSUE_TEMPLATE/01-bug-report.yml"
+        and "invalid YAML" in item.message
+        for item in results
+    )
+
+
 def test_check_fails_for_critical_reporting_placeholders(tmp_path):
     config = _config()
     config["security"]["reporting_contact"] = (
