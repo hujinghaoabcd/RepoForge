@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml/badge.svg"></a>
-  <a href="pyproject.toml"><img alt="Version" src="https://img.shields.io/badge/version-0.1.0.dev0-174D5B.svg"></a>
+  <a href="pyproject.toml"><img alt="Version" src="https://img.shields.io/badge/version-0.1.0a1-174D5B.svg"></a>
   <a href="#模板矩阵"><img alt="README templates" src="https://img.shields.io/badge/templates-21-139C5A.svg"></a>
   <a href="pyproject.toml"><img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-174D5B.svg"></a>
   <a href="#项目状态"><img alt="Status" src="https://img.shields.io/badge/Status-Alpha-F4B942.svg"></a>
@@ -29,6 +29,7 @@
   <a href="#仓库标准">仓库标准</a> ·
   <a href="#预览">预览</a> ·
   <a href="docs/ARCHITECTURE.md">架构</a> ·
+  <a href="docs/RELEASE.md">发布</a> ·
   <a href="#测试与压力测试">测试</a>
 </p>
 
@@ -122,7 +123,14 @@ Full 项目并不需要支持所有平台、框架、服务、Adapter、插件�
 
 ## 快速开始
 
-从源码安装 RepoForge：
+PyPI Distribution 名称为 `repoforge-standards`，Python Import 与 CLI 仍保持 `repoforge`。对于已经正式发布的版本：
+
+```bash
+python -m pip install repoforge-standards
+repoforge --version
+```
+
+开发未发布版本或参与贡献时，从源码安装：
 
 ```bash
 git clone https://github.com/hujinghaoabcd/RepoForge.git
@@ -149,7 +157,7 @@ repoforge apply /path/to/project --config /path/to/project/repoforge.yml
 repoforge check /path/to/project
 ```
 
-`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)、[`docs/DIFF.md`](docs/DIFF.md) 和 [`docs/APPLY.md`](docs/APPLY.md)。
+`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)、[`docs/DIFF.md`](docs/DIFF.md)、[`docs/APPLY.md`](docs/APPLY.md)、[`docs/CHECK.md`](docs/CHECK.md) 和 [`docs/RELEASE.md`](docs/RELEASE.md)。
 
 选择项目类型和 Profile 渲染 README：
 
@@ -330,7 +338,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 还没有实现：
 
 - 对 v1 头部区域之外的 README 正文做语义级托管/合并；
-- 正式发布到 PyPI。
+- 正式发布到 PyPI；`0.1.0a1` 已按 `repoforge-standards` Distribution 名完成打包与 Trusted Publishing 自动化准备，但尚未执行首次索引发布。
 
 因此当前版本已经可以作为**README 与仓库标准应用工具**实际使用，而且会保持显式配置，而不是发展成零配置的项目类型猜测器。
 
@@ -338,7 +346,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 RepoForge 当前处于 **Alpha** 阶段。模板层的第一阶段已经完成：21 种项目类型/Profile 组合全部存在，Renderer 可执行，Preview 已提交，而且七个家族都有 Contract 和 Stress Coverage。
 
-仓库标准层以及 `init`、`diff`、`apply`、`check` 工作流已经实现。Managed Sections v1 现在可以保留人工维护的 README 正文，只更新稳定头部区域。下一阶段重点转向更广泛的正文语义托管，以及正式包发布。
+仓库标准层以及 `init`、`diff`、`apply`、`check` 工作流已经实现。Managed Sections v1 可以保留人工维护的 README 正文，只更新稳定头部区域。`0.1.0a1` 已通过 wheel/sdist 构建与脱离源码安装验证，并准备好 Trusted Publishing；剩余发布步骤是在 Publisher 配置完成后执行首次 TestPyPI/PyPI 发布。
 
 当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init`、`repoforge diff`、`repoforge apply` 和 `repoforge check`。新的 `init` 配置默认使用 `readme_management: managed-sections`，详见 [`docs/MANAGED_SECTIONS.md`](docs/MANAGED_SECTIONS.md)。
 
