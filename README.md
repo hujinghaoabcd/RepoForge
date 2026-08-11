@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="RepoForge" width="520">
+  <img src="assets/logo.svg" alt="RepoForge" width="280">
 </p>
 
 # RepoForge
