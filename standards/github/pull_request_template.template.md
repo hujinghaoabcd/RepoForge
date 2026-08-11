@@ -30,8 +30,9 @@ Describe how you tested or reviewed the change. Include commands, datasets, envi
 
 - [ ] This pull request is focused on one coherent change.
 - [ ] Generated files, snapshots, fixtures, or examples were updated when required.
-- [ ] I followed `CONTRIBUTING.md` and the project's Code of Conduct.
-
+{% if contributing_link_enabled %}- [ ] I followed `CONTRIBUTING.md`.
+{% endif %}{% if code_of_conduct_link_enabled %}- [ ] I followed the project's `CODE_OF_CONDUCT.md`.
+{% endif %}
 ## Additional notes
 
 Add reviewer guidance, follow-up work, known limitations, or intentionally deferred items here.
