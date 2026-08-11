@@ -86,6 +86,24 @@ def standard_plan(
     return _validate_plan(matrix["matrix"][project_type][profile])
 
 
+def load_github_matrix(
+    *, standards_root: str | Path | None = None
+) -> dict[str, Any]:
+    root = find_standards_root(standards_root)
+    return load_config(root / "github" / "matrix.yml")
+
+
+def github_plan(
+    project_type: str,
+    profile: str,
+    *,
+    standards_root: str | Path | None = None,
+) -> dict[str, str]:
+    _validate_project_type_and_profile(project_type, profile)
+    matrix = load_github_matrix(standards_root=standards_root)
+    return _validate_plan(matrix["matrix"][project_type][profile])
+
+
 def load_metadata_matrix(
     *, standards_root: str | Path | None = None
 ) -> dict[str, Any]:
@@ -150,11 +168,7 @@ def render_community_standard(
         "repository_url": config.get("repository_url"),
         **section,
     }
-    return _render_standard_template(
-        root=root,
-        template_name=template_name,
-        context=context,
-    )
+    return _render_standard_template(root=root, template_name=template_name, context=context)
 
 
 def render_github_standard(
@@ -180,11 +194,7 @@ def render_github_standard(
         "repository_url": config["repository_url"],
         **section,
     }
-    return _render_standard_template(
-        root=root,
-        template_name=template_name,
-        context=context,
-    )
+    return _render_standard_template(root=root, template_name=template_name, context=context)
 
 
 def render_metadata_standard(
@@ -210,8 +220,4 @@ def render_metadata_standard(
         "repository_url": config["repository_url"],
         **section,
     }
-    return _render_standard_template(
-        root=root,
-        template_name=template_name,
-        context=context,
-    )
+    return _render_standard_template(root=root, template_name=template_name, context=context)
