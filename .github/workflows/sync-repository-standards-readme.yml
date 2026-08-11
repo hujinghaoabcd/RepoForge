@@ -1,0 +1,98 @@
+name: sync-repository-standards-readme
+
+on:
+  push:
+    branches:
+      - feature/repository-standards-v1
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/repository-standards-v1
+          fetch-depth: 0
+
+      - name: Update English and Chinese README roadmap
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              "README.md": [
+                  (
+                      '  <a href="#profiles">Profiles</a> ·\n  <a href="#preview">Previews</a> ·',
+                      '  <a href="#profiles">Profiles</a> ·\n  <a href="#repository-standards">Standards</a> ·\n  <a href="#preview">Previews</a> ·',
+                  ),
+                  (
+                      'Current CLI scope is intentionally narrow: `repoforge render` is implemented. Repository detection and apply/update workflows are listed under [Project status](#project-status) as the next stage rather than being presented as finished commands.',
+                      'Current CLI scope is intentionally narrow: `repoforge render` is implemented. Repository-level standards are now modeled under `standards/`, while apply/update workflows remain roadmap work rather than finished commands.',
+                  ),
+                  (
+                      '## Repository structure\n',
+                      '''## Repository standards\n\nRepoForge now includes a first repository-health pack beside the README matrix:\n\n- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — participation and conduct expectations;\n- [`CONTRIBUTING.md`](CONTRIBUTING.md) — contribution workflow and template-change rules;\n- [`SECURITY.md`](SECURITY.md) — private vulnerability reporting and supported-version policy;\n- [`SUPPORT.md`](SUPPORT.md) — where usage questions, bugs, security reports, and conduct concerns belong.\n\nReusable Jinja templates live under [`standards/community/`](standards/community/), and [`standards/matrix.yml`](standards/matrix.yml) records whether each file is `default`, `recommended`, or `optional` for every explicit project type/profile pair. The standards layer intentionally does **not** infer project type.\n\n## Repository structure\n''',
+                  ),
+                  (
+                      '├── profiles/                       # cross-project profile rules\n├── partials/',
+                      '├── profiles/                       # cross-project profile rules\n├── standards/                      # repository community/security/support contracts\n├── partials/',
+                  ),
+                  (
+                      'Not implemented yet:\n\n- automatic project detection;\n- `init`, `apply`, `diff`, and `check` repository workflows;',
+                      'Not implemented yet:\n\n- `init`, `apply`, `diff`, and `check` repository workflows;',
+                  ),
+                  (
+                      'The next implementation stage is the repository workflow around those templates:\n\n```text\nrepoforge detect .     # planned: infer project signals\nrepoforge init .       # planned: create a RepoForge config\nrepoforge apply .      # planned: apply standards to an existing repository\nrepoforge diff .       # planned: preview managed changes\nrepoforge check .      # planned: validate repository documentation contracts\n```',
+                      'The next implementation stage is to finish repository-level standards and then apply them with an explicit type/profile selection:\n\n```text\nrepoforge init .       # planned: create a RepoForge config\nrepoforge apply .      # planned: apply README + selected repository standards\nrepoforge diff .       # planned: preview managed changes\nrepoforge check .      # planned: validate repository documentation contracts\n```',
+                  ),
+              ],
+              "README.zh-CN.md": [
+                  (
+                      '  <a href="#profiles">Profiles</a> ·\n  <a href="#预览">预览</a> ·',
+                      '  <a href="#profiles">Profiles</a> ·\n  <a href="#仓库标准">仓库标准</a> ·\n  <a href="#预览">预览</a> ·',
+                  ),
+                  (
+                      '当前 CLI 范围有意保持明确：已经实现的是 `repoforge render`。仓库检测与 apply/update 工作流放在 [项目状态](#项目状态) 中作为下一阶段目标，不会提前当成已经可用的命令宣传。',
+                      '当前 CLI 范围有意保持明确：已经实现的是 `repoforge render`。仓库级标准现在已经在 `standards/` 中建模，而 apply/update 工作流仍属于后续 Roadmap，不会提前当成已经可用的命令宣传。',
+                  ),
+                  (
+                      '## 仓库结构\n',
+                      '''## 仓库标准\n\nRepoForge 现在除了 README 矩阵，还加入了第一批仓库健康标准：\n\n- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) —— 社区参与与行为边界；\n- [`CONTRIBUTING.md`](CONTRIBUTING.md) —— 贡献流程与模板修改规则；\n- [`SECURITY.md`](SECURITY.md) —— 私下漏洞报告与受支持版本策略；\n- [`SUPPORT.md`](SUPPORT.md) —— 使用问题、Bug、安全问题和行为问题分别应该走什么渠道。\n\n可复用 Jinja 模板位于 [`standards/community/`](standards/community/)，[`standards/matrix.yml`](standards/matrix.yml) 则为每个显式项目类型/Profile 组合标记这些文件是 `default`、`recommended` 还是 `optional`。这一层明确**不做项目类型自动判断**。\n\n## 仓库结构\n''',
+                  ),
+                  (
+                      '├── profiles/                       # 跨项目 Profile 规则\n├── partials/',
+                      '├── profiles/                       # 跨项目 Profile 规则\n├── standards/                      # 社区、安全、支持等仓库级合同\n├── partials/',
+                  ),
+                  (
+                      '还没有实现：\n\n- 自动识别项目类型；\n- `init`、`apply`、`diff`、`check` 等仓库工作流；',
+                      '还没有实现：\n\n- `init`、`apply`、`diff`、`check` 等仓库工作流；',
+                  ),
+                  (
+                      '下一阶段是围绕模板补齐仓库级工作流：\n\n```text\nrepoforge detect .     # 计划：识别项目特征\nrepoforge init .       # 计划：创建 RepoForge 配置\nrepoforge apply .      # 计划：应用到已有仓库\nrepoforge diff .       # 计划：预览受管理的变化\nrepoforge check .      # 计划：检查仓库文档合同\n```',
+                      '下一阶段先补齐仓库级标准，再通过显式的项目类型/Profile 选择把它们应用到仓库：\n\n```text\nrepoforge init .       # 计划：创建 RepoForge 配置\nrepoforge apply .      # 计划：应用 README + 选定仓库标准\nrepoforge diff .       # 计划：预览受管理的变化\nrepoforge check .      # 计划：检查仓库文档合同\n```',
+                  ),
+              ],
+          }
+
+          for filename, pairs in replacements.items():
+              path = Path(filename)
+              text = path.read_text(encoding="utf-8")
+              for old, new in pairs:
+                  if old not in text:
+                      raise SystemExit(f"Expected README block not found in {filename}: {old[:80]!r}")
+                  text = text.replace(old, new, 1)
+              path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Remove one-shot workflow and commit
+        run: |
+          git rm -f .github/workflows/sync-repository-standards-readme.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md README.zh-CN.md
+          git commit -m "docs: document repository standards roadmap"
+          git push origin HEAD:feature/repository-standards-v1
