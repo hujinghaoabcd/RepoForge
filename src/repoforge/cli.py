@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from .apply import STANDARD_KEYS, apply_to_repository, build_apply_plan
+from .init_config import init_repository_config, resolve_project_selection
 from .renderer import SUPPORTED_TYPES, load_config, render_from_config
 
 
@@ -22,6 +23,55 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optional path to RepoForge's templates directory",
     )
 
+    init_parser = subparsers.add_parser(
+        "init",
+        help="Create a combined repoforge.yml starter configuration for an existing repository.",
+    )
+    init_parser.add_argument("target", help="Existing repository directory")
+    init_parser.add_argument(
+        "--type",
+        dest="project_type",
+        required=True,
+        choices=tuple(sorted(SUPPORTED_TYPES)),
+        help="Explicit RepoForge project type",
+    )
+    init_parser.add_argument(
+        "--profile",
+        required=True,
+        choices=("minimal", "standard", "full"),
+        help="README documentation profile",
+    )
+    init_parser.add_argument(
+        "--name",
+        default=None,
+        help="Project name; defaults to the target directory name",
+    )
+    init_parser.add_argument(
+        "--repository-url",
+        default=None,
+        help="Repository URL used by generated support, issue, and citation settings",
+    )
+    init_parser.add_argument(
+        "--output",
+        default="repoforge.yml",
+        help="Config path relative to the target repository",
+    )
+    init_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Replace an existing RepoForge config",
+    )
+    init_parser.add_argument(
+        "--template-root",
+        default=None,
+        help="Optional path to RepoForge's templates directory",
+    )
+    init_parser.add_argument(
+        "--standards-root",
+        default=None,
+        help="Optional path to RepoForge's standards directory",
+    )
+
     apply_parser = subparsers.add_parser(
         "apply",
         help="Apply a README and selected repository standards to an existing repository.",
@@ -30,15 +80,13 @@ def build_parser() -> argparse.ArgumentParser:
     apply_parser.add_argument(
         "--type",
         dest="project_type",
-        required=True,
         choices=tuple(sorted(SUPPORTED_TYPES)),
-        help="Explicit RepoForge project type",
+        help="Explicit RepoForge project type; optional when stored in repoforge.yml",
     )
     apply_parser.add_argument(
         "--profile",
-        required=True,
         choices=("minimal", "standard", "full"),
-        help="README documentation profile",
+        help="README profile; optional when stored in repoforge.yml",
     )
     apply_parser.add_argument(
         "--config",
@@ -107,11 +155,32 @@ def main(argv: list[str] | None = None) -> int:
         print(output)
         return 0
 
-    if args.command == "apply":
-        config = load_config(args.config)
-        plan = build_apply_plan(
+    if args.command == "init":
+        output = init_repository_config(
+            args.target,
             args.project_type,
             args.profile,
+            project_name=args.name,
+            repository_url=args.repository_url,
+            output=args.output,
+            force=args.force,
+            template_root=args.template_root,
+            standards_root=args.standards_root,
+        )
+        print(output)
+        print("Review the generated config before running repoforge apply.")
+        return 0
+
+    if args.command == "apply":
+        config = load_config(args.config)
+        project_type, profile = resolve_project_selection(
+            config,
+            args.project_type,
+            args.profile,
+        )
+        plan = build_apply_plan(
+            project_type,
+            profile,
             config,
             standards_policy=args.standards,
             include=set(args.include),
