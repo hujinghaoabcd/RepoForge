@@ -94,7 +94,7 @@
 
 {{ validation.summary }}
 
-{% if validation.items %}{% for item in validation.items %}- {{ item }}
+{% if validation["items"] %}{% for item in validation["items"] %}- {{ item }}
 {% endfor %}
 {% endif %}{% if validation.link %}
 See {{ validation.link }} for reference cases, tolerances, and claim boundaries.
