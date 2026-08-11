@@ -23,7 +23,7 @@ The goal is a recognizable family style without forcing unrelated projects into 
 
 ## Implemented template families
 
-RepoForge currently has five executable renderer families:
+RepoForge currently has six executable renderer families:
 
 ```text
 scientific-python
@@ -50,6 +50,11 @@ web-application
 ├── minimal
 ├── standard
 └── full
+
+frontend-library
+├── minimal
+├── standard
+└── full
 ```
 
 The three profiles are **independent templates**, not conditional views inside one giant README template.
@@ -58,7 +63,8 @@ The three profiles are **independent templates**, not conditional views inside o
 - `research-algorithm` — original scientific or technical methods;
 - `research-experiment` — paper code, benchmark studies, and reproducibility repositories;
 - `django-package` — reusable Django applications, extensions, middleware, backends, and admin integrations;
-- `web-application` — complete browser products and deployable web systems, from small monoliths to multi-service self-hosted applications.
+- `web-application` — complete browser products and deployable web systems, from small monoliths to multi-service self-hosted applications;
+- `frontend-library` — reusable browser libraries, plugins, components, hooks, and framework/map-engine adapters.
 
 Each implemented family has a contract, reference analysis, independent profile rules, Jinja templates, YAML example configs, rendered examples, branded previews, renderer tests, and deliberately difficult stress cases.
 
@@ -112,6 +118,14 @@ repoforge render web-application full \
   --output README.generated.md
 ```
 
+Render a frontend library README:
+
+```bash
+repoforge render frontend-library standard \
+  --config templates/frontend-library/standard/config.example.yml \
+  --output README.generated.md
+```
+
 The renderer uses strict Jinja configuration validation: missing template variables fail visibly instead of silently producing incomplete documentation.
 
 ## Previewing profiles
@@ -128,7 +142,7 @@ RepoForge's own previews use one repository brand source:
 assets/logo.svg
 ```
 
-The shared preview configuration currently renders the RepoForge logo at 280 px. User-facing `README.example.md` files remain brand-neutral so generated projects can supply their own `logo_path` and size.
+The shared preview configuration currently renders the RepoForge logo at **280 px**. User-facing `README.example.md` files remain brand-neutral so generated projects can supply their own `logo_path` and size.
 
 Regenerate previews for implemented template families with:
 
@@ -146,10 +160,11 @@ tests/stress/
 ├── research-algorithm/
 ├── research-experiment/
 ├── django-package/
-└── web-application/
+├── web-application/
+└── frontend-library/
 ```
 
-They deliberately exercise project shapes that make a generic README design fail. The web-application suite covers a tiny internal dashboard, a server-rendered monolith, a split frontend/API system, a self-hosted multi-service platform, and a Full-profile monolith with **no API, queue, object storage, search, or email service**.
+They deliberately exercise project shapes that make a generic README design fail. The frontend-library suite includes a tiny DOM utility, a CSS-heavy widget, a framework adapter, a multi-package UI toolkit, and a Full vanilla library with **no React/Vue adapters and no SSR guarantee**.
 
 That last case protects a core RepoForge rule: **Full means deeper documentation, not fabricated capabilities or infrastructure.**
 
@@ -165,7 +180,7 @@ RepoForge's target template system is organized around seven project types:
 - `frontend-library` — frontend libraries, plugins, and components;
 - `desktop-application` — desktop software and cross-platform applications.
 
-The remaining two families will be implemented incrementally using the same contracts and tests.
+The remaining family, `desktop-application`, will be implemented using the same contracts and tests.
 
 ## Profiles
 
@@ -175,7 +190,7 @@ Profiles control documentation depth, but each profile is a separate artifact.
 - **Standard** — the default for most maintained open-source projects.
 - **Full** — a deeper landing page for mature projects with broader integration, compatibility, validation, reproducibility, security, deployment, or upgrade boundaries.
 
-For web applications specifically, profile depth is independent from architecture: a Full monolith remains a monolith, while a Standard split frontend/API project does not become Full merely because it has two processes.
+For frontend libraries specifically, profile depth is independent from ecosystem breadth: a Full vanilla TypeScript library does not need React/Vue adapters, SSR support, or multiple packages unless those capabilities are actually maintained.
 
 ## Repository structure
 
@@ -204,6 +219,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the design.
 - **Experiment repositories make data identity, protocol, seeds, result identity, and reproduction commands explicit.**
 - **Django packages make host-project integration hooks, compatibility, migrations, security, and upgrade boundaries explicit.**
 - **Web applications separate product identity, local development, configuration, persistent data, deployment, operations, and security.**
+- **Frontend libraries keep install/import/CSS/peer-dependency, API/event, adapter, browser, TypeScript, SSR, bundle, accessibility, and versioning contracts explicit when they actually apply.**
 - **Full profiles must not invent capabilities that a project does not have.**
 - **Generated output remains ordinary readable Markdown.**
 - **Incomplete configuration should fail explicitly rather than create misleading documentation.**
@@ -218,7 +234,7 @@ GitHub Actions runs the suite on Python 3.11, 3.12, and 3.13 and performs CLI re
 
 ## Status
 
-RepoForge is in early development. Five template families are executable: `scientific-python`, `research-algorithm`, `research-experiment`, `django-package`, and `web-application`. The remaining planned families are `frontend-library` and `desktop-application`.
+RepoForge is in early development. Six template families are executable: `scientific-python`, `research-algorithm`, `research-experiment`, `django-package`, `web-application`, and `frontend-library`. The final planned family is `desktop-application`.
 
 ## License
 
