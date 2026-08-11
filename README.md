@@ -181,17 +181,16 @@ Approved rendered previews live under:
 tests/previews/<project-type>/<profile>.md
 ```
 
-RepoForge's preview suite uses one shared brand source:
+RepoForge's preview suite uses one shared brand source and one neutral media placeholder:
 
 ```text
 assets/logo.svg
-assets/screenshots/repoforge-preview.webp
-assets/screenshots/repoforge-workflow.webp
+assets/placeholders/screenshot.svg
         ↑
 tests/branding.yml
 ```
 
-The canonical README logo display width is **160 px**. Preview-only screenshot overrides use the uploaded RepoForge visuals above; user-facing `README.example.md` files remain project-neutral and may supply their own assets.
+The canonical README logo display width is **160 px**. Preview-only media uses the deliberately empty placeholder above; user-facing `README.example.md` files remain project-neutral and may supply their own real logo, screenshots, diagrams, or demo media.
 
 Regenerate the preview matrix with:
 

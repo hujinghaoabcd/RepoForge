@@ -181,17 +181,16 @@ Renderer 使用 Jinja2 `StrictUndefined`。模板需要但配置缺失的变量�
 tests/previews/<project-type>/<profile>.md
 ```
 
-RepoForge 自己的 Preview 统一使用：
+RepoForge 自己的 Preview 统一使用一个品牌源和一个中性媒体占位图：
 
 ```text
 assets/logo.svg
-assets/screenshots/repoforge-preview.webp
-assets/screenshots/repoforge-workflow.webp
+assets/placeholders/screenshot.svg
         ↑
 tests/branding.yml
 ```
 
-README Logo 的统一显示宽度为 **160px**。Preview 中的截图统一使用你已经保存到项目素材库的 RepoForge 图；面向用户的 `README.example.md` 保持项目中立，可自行提供 Logo 与截图。
+README Logo 的统一显示宽度为 **160px**。Preview 中需要截图、方法图或 Demo 图的位置统一使用刻意留空的占位图；面向用户的 `README.example.md` 保持项目中立，可以自行提供真实 Logo、截图、方法图或 Demo 素材。
 
 重新生成 21 个 Preview：
 
