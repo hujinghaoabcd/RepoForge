@@ -1,4 +1,5 @@
 logo_path: null
+logo_width: 360
 project_name: SpatialTools
 tagline: Reproducible spatial statistics and neighborhood-based modelling in Python.
 badges: >-
@@ -7,6 +8,7 @@ badges: >-
   [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation)
   [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 navigation: Documentation · Examples · API · Citation
+language_switch: null
 why_text: >-
   Many spatial analyses repeat the same tasks: define neighborhoods, construct weights,
   fit local models, inspect spatially varying results, and validate numerical behavior.
@@ -21,8 +23,10 @@ features:
     description: Residual, influence, and stability summaries.
   - name: Interoperability
     description: NumPy, pandas, GeoPandas, and Shapely-friendly data.
+install_note: null
 install_command: python -m pip install spatialtools
 verify_command: python -c "import spatialtools; print(spatialtools.__version__)"
+optional_install_commands: []
 quickstart_intro: Fit a local model and inspect the result table.
 quickstart_code: |
   import numpy as np
@@ -53,6 +57,7 @@ validation:
     - deterministic regression tests cover documented workflows
     - selected methods are checked against independent reference calculations
     - unsupported numerical conditions fail explicitly instead of being silently corrected
+  link: null
 documentation:
   - name: Getting Started
     link: docs/getting-started.md
@@ -69,6 +74,8 @@ documentation:
 citation:
   intro: If SpatialTools contributes to academic work, cite the software.
   cff: CITATION.cff
+  doi: null
+limitations: []
 support_text: Use the documentation for usage guidance and the issue tracker for reproducible bugs or feature requests.
 contributing_link: CONTRIBUTING.md
 license_text: SpatialTools is released under the MIT License.
