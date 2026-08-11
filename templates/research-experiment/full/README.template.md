@@ -101,7 +101,7 @@
 ## Result and Artifact Identity
 
 | Artifact | Stable location / rule | Purpose |
-| --- | --- | --- |
+| --- | --- | --- | --- |
 {% for artifact in artifacts %}| **{{ artifact.name }}** | `{{ artifact.path }}` | {{ artifact.purpose }} |
 {% endfor %}
 
@@ -121,8 +121,7 @@
 
 ## Documentation Map
 
-{% for doc in documentation %}- **{{ doc.name }}:** {{ doc.link }}{% if doc.description %} — {{ doc.description }}{% endif %}{{ "\n" }}{% endfor %}
-## Reproducibility Boundaries
+{% for doc in documentation %}- **{{ doc.name }}:** {{ doc.link }}{% if doc.description %} — {{ doc.description }}{% endif %}{{ "\n" }}{% endfor %}{{ "\n" }}## Reproducibility Boundaries
 
 {% for boundary in boundaries %}- {{ boundary }}
 {% endfor %}
