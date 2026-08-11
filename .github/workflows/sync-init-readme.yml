@@ -1,0 +1,103 @@
+name: sync-init-readme
+
+on:
+  push:
+    branches: [feature/init-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/init-v1
+
+      - name: Update README status for init
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_required(text, old, new, label):
+              if old not in text:
+                  raise SystemExit(f"missing README fragment: {label}")
+              return text.replace(old, new, 1)
+
+          path = Path("README.md")
+          text = path.read_text(encoding="utf-8")
+          text = replace_required(
+              text,
+              '''Apply a README and the repository standards selected by the matrices to an existing repository:\n\n```bash\nrepoforge apply /path/to/project \\\n  --type scientific-python \\\n  --profile standard \\\n  --config examples/apply/scientific-python-standard.yml \\\n  --dry-run\n```\n\nReview the plan, then run the same command without `--dry-run`. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/APPLY.md`](docs/APPLY.md).''',
+              '''Initialize one combined project config with an explicit type/profile:\n\n```bash\nrepoforge init /path/to/project \\\n  --type scientific-python \\\n  --profile standard \\\n  --name MyPackage \\\n  --repository-url https://github.com/example/my-package\n```\n\nReview `repoforge.yml`, then preview and apply it:\n\n```bash\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```\n\n`init` records the explicit project type/profile in the config, so normal `apply` does not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md) and [`docs/APPLY.md`](docs/APPLY.md).''',
+              "english quick start",
+          )
+          text = replace_required(
+              text,
+              "The current CLI implements both `repoforge render` and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.",
+              "The current CLI implements `repoforge render`, explicit `repoforge init`, and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.",
+              "english CLI scope",
+          )
+          text = replace_required(
+              text,
+              "- `repoforge render`;\n- `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;",
+              "- `repoforge render`;\n- `repoforge init` for one combined, explicitly typed `repoforge.yml`;\n- `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;",
+              "english available",
+          )
+          text = replace_required(
+              text,
+              "- `init`, `diff`, and `check` repository workflows;",
+              "- `diff` and `check` repository workflows;",
+              "english missing",
+          )
+          text = replace_required(
+              text,
+              '''The repository standards packs and first apply workflow are now implemented. The next workflow layer is:\n\n```text\nrepoforge init .       # planned: create a combined RepoForge config\nrepoforge diff .       # planned: show textual diffs for the apply plan\nrepoforge check .      # planned: validate repository documentation contracts\n```\n\nThe currently supported CLI commands are `repoforge render` and `repoforge apply`.''',
+              '''The repository standards packs, `init`, and the first safe `apply` workflow are now implemented. The next workflow layer is:\n\n```text\nrepoforge diff .       # planned: show textual diffs for the apply plan\nrepoforge check .      # planned: validate repository documentation contracts\n```\n\nThe currently supported CLI commands are `repoforge render`, `repoforge init`, and `repoforge apply`.''',
+              "english status",
+          )
+          path.write_text(text, encoding="utf-8")
+
+          path = Path("README.zh-CN.md")
+          text = path.read_text(encoding="utf-8")
+          text = replace_required(
+              text,
+              "当前 CLI 已经实现 `repoforge render` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。",
+              "当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。",
+              "chinese CLI scope",
+          )
+          text = replace_required(
+              text,
+              "- `repoforge render`；\n- `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；",
+              "- `repoforge render`；\n- `repoforge init`，生成包含显式项目类型/Profile 的统一 `repoforge.yml`；\n- `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；",
+              "chinese available",
+          )
+          text = replace_required(
+              text,
+              "- `init`、`diff`、`check` 等仓库工作流；",
+              "- `diff`、`check` 等仓库工作流；",
+              "chinese missing",
+          )
+          text = replace_required(
+              text,
+              '''仓库标准层和第一版 Apply 工作流已经实现。下一阶段是：\n\n```text\nrepoforge init .       # 计划：创建合并的 RepoForge 配置\nrepoforge diff .       # 计划：展示 Apply 计划的文本 Diff\nrepoforge check .      # 计划：检查仓库文档合同\n```\n\n当前正式支持的 CLI 命令是 `repoforge render` 和 `repoforge apply`。''',
+              '''仓库标准层、`init` 和第一版安全 Apply 工作流已经实现。下一阶段是：\n\n```text\nrepoforge diff .       # 计划：展示 Apply 计划的文本 Diff\nrepoforge check .      # 计划：检查仓库文档合同\n```\n\n当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init` 和 `repoforge apply`。''',
+              "chinese status",
+          )
+          marker = "选择项目类型和 Profile 渲染 README："
+          insert = '''先为已有项目生成统一配置：\n\n```bash\nrepoforge init /path/to/project \\\n  --type scientific-python \\\n  --profile standard \\\n  --name MyPackage \\\n  --repository-url https://github.com/example/my-package\n```\n\n编辑生成的 `repoforge.yml` 后，可以直接预览并应用：\n\n```bash\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run\nrepoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```\n\n`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)。\n\n选择项目类型和 Profile 渲染 README：'''
+          text = replace_required(text, marker, insert, "chinese quick start")
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Remove one-shot workflow
+        run: rm .github/workflows/sync-init-readme.yml
+
+      - name: Commit README sync
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md README.zh-CN.md .github/workflows/sync-init-readme.yml
+          git commit -m "docs: document repoforge init workflow"
+          git push origin HEAD:feature/init-v1
