@@ -5,7 +5,7 @@ from difflib import unified_diff
 from pathlib import Path
 from typing import Literal
 
-from .apply import PlannedFile
+from .apply import PlannedFile, materialize_planned_content
 
 
 DiffStatus = Literal["create", "overwrite", "unchanged"]
@@ -61,10 +61,11 @@ def build_repository_diff(
     for item in plan:
         destination = root / item.path
         old = _read_existing(destination)
+        desired = materialize_planned_content(destination, item)
 
         if not destination.exists():
             status: DiffStatus = "create"
-        elif destination.is_file() and old == item.content:
+        elif destination.is_file() and old == desired:
             status = "unchanged"
         else:
             status = "overwrite"
@@ -75,7 +76,7 @@ def build_repository_diff(
         text_diff = "" if status == "unchanged" else _unified_text_diff(
             item.path,
             old,
-            item.content,
+            desired,
             context,
         )
         results.append(FileDiff(item.path, status, text_diff, item.source))

@@ -26,7 +26,8 @@ The current check workflow validates:
 
 - `repoforge.yml` config version and stored project type/profile;
 - whether every file selected by the current RepoForge plan exists;
-- whether selected files exactly match the current renderer/standards output;
+- whether selected whole-file-managed standards exactly match the current renderer/standards output;
+- whether README-managed regions match the current configuration when `readme_management: managed-sections` is enabled;
 - `CITATION.cff` YAML and core CFF structure when Citation is selected;
 - GitHub Bug Report and Feature Request Issue Form YAML/structure when Issue Forms are selected;
 - Issue chooser configuration shape;
@@ -35,7 +36,22 @@ The current check workflow validates:
 - example Citation author/ORCID values;
 - selected contribution setup commands that still point at the generic example repository.
 
-The README header, badges, navigation, and profile-specific content are covered by the exact generated-content comparison. If a managed README differs from the current template/config output, `check` fails and points you to `repoforge diff` for the textual change.
+## README behavior
+
+New `repoforge init` configs use:
+
+```yaml
+repoforge:
+  readme_management: managed-sections
+```
+
+In this mode, only the stable `identity`, `badges`, and `navigation` marker regions are RepoForge-owned in v1. Hand edits outside those markers are user-owned and do **not** make `check` fail.
+
+If the title, configured logo/tagline, badges, or navigation inside a managed region differs from the current configuration, `check` reports README drift and points you to `repoforge diff`.
+
+Configs without a `readme_management` key retain legacy `whole-file` behavior, where any README difference is drift.
+
+Malformed, duplicate, or incomplete RepoForge marker sets fail closed instead of being treated as user-owned prose. See [`MANAGED_SECTIONS.md`](MANAGED_SECTIONS.md) for the complete ownership contract.
 
 ## Output
 
@@ -52,7 +68,7 @@ Summary: 10 passed, 0 warnings, 0 failed.
 Repository standards are in sync.
 ```
 
-A repository with drift or missing files looks like:
+A repository with managed drift or missing files looks like:
 
 ```text
 PASS  repoforge.yml  configuration and explicit selection are valid
@@ -113,7 +129,7 @@ CI
 For repositories already under RepoForge management, normal maintenance is shorter:
 
 ```text
-edit repoforge.yml / update RepoForge
+edit repoforge.yml / hand-edit user-owned README body
         ↓
 repoforge diff .
         ↓
@@ -121,6 +137,8 @@ repoforge apply .
         ↓
 repoforge check .
 ```
+
+A hand edit outside managed README markers does not require a subsequent apply merely to satisfy `check`.
 
 ## GitHub Actions example
 
@@ -135,6 +153,8 @@ Use normal mode instead of `--strict` when placeholder-style warnings are accept
 
 ## Current boundary
 
-`check` validates only files selected by the current RepoForge plan. It does not scan unrelated repository files, enforce arbitrary project coding style, or semantically merge hand-written README sections.
+`check` validates only files selected by the current RepoForge plan. It does not scan unrelated repository files or enforce arbitrary project coding style.
 
-Because current RepoForge management is whole-file based, a hand-edited managed file is intentionally reported as drift. Use `repoforge diff` to review the difference before deciding whether to update the config, retain the hand-written file, or apply the generated version.
+Managed Sections v1 is marker-based rather than semantic: it knows ownership boundaries for `identity`, `badges`, and `navigation`, but it does not interpret or reconcile hand-written body sections such as Overview, Methods, Features, Experiments, or Installation prose.
+
+Other selected repository-standard files remain whole-file managed. Use `repoforge diff` to review their differences before deciding whether to update configuration or apply generated content.

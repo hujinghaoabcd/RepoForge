@@ -320,6 +320,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 - `repoforge diff`，以 Unified Diff 无写入审查当前 Apply 计划的精确变化；
 - `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；
 - `repoforge check`，用于 CI 中检查配置、漂移、CFF/Issue Form 结构以及关键占位符；
+- Managed Sections v1，仅托管 README 的 `identity`、`badges`、`navigation`，正文继续由用户维护；
 - 7 类项目 × 3 套独立 Profile；
 - 社区、GitHub 协作、Citation 与 Changelog 标准；
 - 严格 Jinja/YAML 配置校验；
@@ -328,7 +329,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 还没有实现：
 
-- 对已经人工修改过的 README 做受控局部更新或语义合并；
+- 对 v1 头部区域之外的 README 正文做语义级托管/合并；
 - 正式发布到 PyPI。
 
 因此当前版本已经可以作为**README 与仓库标准应用工具**实际使用，而且会保持显式配置，而不是发展成零配置的项目类型猜测器。
@@ -337,9 +338,9 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 RepoForge 当前处于 **Alpha** 阶段。模板层的第一阶段已经完成：21 种项目类型/Profile 组合全部存在，Renderer 可执行，Preview 已提交，而且七个家族都有 Contract 和 Stress Coverage。
 
-仓库标准层以及 `init`、`diff`、`apply`、`check` 工作流已经实现。下一阶段重点转向对人工维护文件的受控局部/语义更新，以及正式包发布。
+仓库标准层以及 `init`、`diff`、`apply`、`check` 工作流已经实现。Managed Sections v1 现在可以保留人工维护的 README 正文，只更新稳定头部区域。下一阶段重点转向更广泛的正文语义托管，以及正式包发布。
 
-当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init`、`repoforge diff`、`repoforge apply` 和 `repoforge check`。
+当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init`、`repoforge diff`、`repoforge apply` 和 `repoforge check`。新的 `init` 配置默认使用 `readme_management: managed-sections`，详见 [`docs/MANAGED_SECTIONS.md`](docs/MANAGED_SECTIONS.md)。
 
 ## Contributing
 

@@ -308,6 +308,7 @@ Available now:
 - `repoforge diff` for unified, no-write review of the exact selected apply plan;
 - `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;
 - `repoforge check` for CI-facing config, drift, CFF/Issue Form, and placeholder validation;
+- Managed Sections v1 for README `identity`, `badges`, and `navigation`, while body prose remains user-owned;
 - 7 project types × 3 independent profiles;
 - community, GitHub collaboration, citation, and changelog standards;
 - strict Jinja/YAML validation;
@@ -316,7 +317,7 @@ Available now:
 
 Not implemented yet:
 
-- managed partial updates or semantic merges inside an existing hand-edited README;
+- semantic management/merging of README body sections beyond the v1 header regions;
 - a published PyPI release.
 
 So the current release is already useful as a **README and repository-standards application tool**, but it intentionally remains explicit rather than becoming a zero-configuration project detector.
@@ -325,9 +326,9 @@ So the current release is already useful as a **README and repository-standards 
 
 RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
 
-The repository standards packs plus `init`, `diff`, `apply`, and `check` are now implemented. The next productization layer is managed partial/semantic updates for hand-edited files and a published package.
+The repository standards packs plus `init`, `diff`, `apply`, and `check` are implemented. Managed Sections v1 now preserves hand-edited README body prose while maintaining the stable header regions. The next productization layer is broader semantic body management and a published package.
 
-The currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, `repoforge apply`, and `repoforge check`.
+The currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, `repoforge apply`, and `repoforge check`. New `init` configs use `readme_management: managed-sections`; see [`docs/MANAGED_SECTIONS.md`](docs/MANAGED_SECTIONS.md).
 
 ## Contributing
 

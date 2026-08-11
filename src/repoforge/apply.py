@@ -5,6 +5,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
 
+from .managed_readme import (
+    build_managed_readme,
+    has_complete_managed_sections,
+    merge_managed_sections,
+    readme_management_mode,
+)
 from .renderer import render_readme
 from .standards import (
     github_plan,
@@ -16,6 +22,7 @@ from .standards import (
 )
 
 StandardsPolicy = Literal["none", "default", "recommended"]
+FileManagement = Literal["whole-file", "managed-sections"]
 
 COMMUNITY_OUTPUTS = {
     "code_of_conduct": Path("CODE_OF_CONDUCT.md"),
@@ -50,6 +57,7 @@ class PlannedFile:
     path: Path
     content: str
     source: str
+    management: FileManagement = "whole-file"
 
 
 @dataclass(frozen=True)
@@ -91,6 +99,30 @@ def _validate_overrides(include: set[str], exclude: set[str]) -> None:
         )
 
 
+def _readme_plan(
+    project_type: str,
+    profile: str,
+    config: dict[str, Any],
+    *,
+    template_root: str | Path | None = None,
+) -> PlannedFile:
+    rendered = render_readme(
+        project_type,
+        profile,
+        config,
+        template_root=template_root,
+    )
+    management = readme_management_mode(config)
+    if management == "managed-sections":
+        rendered = build_managed_readme(rendered, config)
+    return PlannedFile(
+        path=Path("README.md"),
+        content=rendered,
+        source="readme",
+        management=management,
+    )
+
+
 def build_apply_plan(
     project_type: str,
     profile: str,
@@ -107,15 +139,11 @@ def build_apply_plan(
     _validate_overrides(include_set, exclude_set)
 
     files = [
-        PlannedFile(
-            path=Path("README.md"),
-            content=render_readme(
-                project_type,
-                profile,
-                config,
-                template_root=template_root,
-            ),
-            source="readme",
+        _readme_plan(
+            project_type,
+            profile,
+            config,
+            template_root=template_root,
         )
     ]
 
@@ -206,6 +234,20 @@ def build_apply_plan(
     return files
 
 
+def materialize_planned_content(destination: Path, item: PlannedFile) -> str:
+    """Resolve the exact content that diff/apply/check should compare or write."""
+    if item.management == "whole-file" or not destination.is_file():
+        return item.content
+    existing = destination.read_text(encoding="utf-8")
+    return merge_managed_sections(existing, item.content)
+
+
+def _managed_update_is_safe(destination: Path, item: PlannedFile) -> bool:
+    if item.management != "managed-sections" or not destination.is_file():
+        return False
+    return has_complete_managed_sections(destination.read_text(encoding="utf-8"))
+
+
 def inspect_apply_plan(
     target: str | Path,
     plan: list[PlannedFile],
@@ -217,9 +259,10 @@ def inspect_apply_plan(
     results: list[ApplyResult] = []
     for item in plan:
         destination = root / item.path
+        desired = materialize_planned_content(destination, item)
         if not destination.exists():
             status: Literal["create", "overwrite", "unchanged"] = "create"
-        elif destination.is_file() and destination.read_text(encoding="utf-8") == item.content:
+        elif destination.is_file() and destination.read_text(encoding="utf-8") == desired:
             status = "unchanged"
         else:
             status = "overwrite"
@@ -240,7 +283,16 @@ def apply_to_repository(
     if dry_run:
         return results
 
-    conflicts = [result.path for result in results if result.status == "overwrite"]
+    item_by_path = {item.path: item for item in plan}
+    conflicts: list[Path] = []
+    for result in results:
+        if result.status != "overwrite":
+            continue
+        destination = root / result.path
+        item = item_by_path[result.path]
+        if not _managed_update_is_safe(destination, item):
+            conflicts.append(result.path)
+
     if conflicts and not force:
         formatted = "\n".join(f"  - {path}" for path in conflicts)
         raise FileExistsError(
@@ -248,12 +300,12 @@ def apply_to_repository(
             f"{formatted}"
         )
 
-    content_by_path = {item.path: item.content for item in plan}
     for result in results:
         if result.status == "unchanged":
             continue
         destination = root / result.path
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(content_by_path[result.path], encoding="utf-8")
+        desired = materialize_planned_content(destination, item_by_path[result.path])
+        destination.write_text(desired, encoding="utf-8")
 
     return results
