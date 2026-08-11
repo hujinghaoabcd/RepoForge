@@ -15,13 +15,15 @@ RepoForge 用于把统一、可复用的 README 与仓库文档规范应用到�
 项目脚手架负责代码结构，RepoForge 负责仓库对外呈现和文档规范：
 
 1. 先用最合适的脚手架生成项目；
-2. 选择 RepoForge 项目类型和独立 Profile；
-3. 用 YAML 配置渲染普通 Markdown README；
-4. 详细理论、API、实验和部署内容继续下沉到 `docs/`。
+2. 选择 RepoForge 项目类型和一个独立 Profile；
+3. 用显式 YAML 配置渲染普通 Markdown README；
+4. 详细理论、API、实验和部署手册继续下沉到 `docs/`。
 
 目标不是让所有 README 完全相同，而是形成统一家族风格，同时保留不同项目真正需要的信息。
 
 ## 当前已实现的模板类型
+
+RepoForge 目前已有四套可执行模板家族：
 
 ```text
 scientific-python
@@ -38,15 +40,21 @@ research-experiment
 ├── minimal
 ├── standard
 └── full
+
+django-package
+├── minimal
+├── standard
+└── full
 ```
 
 三种 Profile 都是**独立模板**，不是一个大模板里的条件分支。
 
 - `scientific-python` —— 可复用科研 Python 软件包；
 - `research-algorithm` —— 原创科学/技术方法与创新算法；
-- `research-experiment` —— 论文代码、基准实验与可复现实验仓库。
+- `research-experiment` —— 论文代码、基准实验与可复现实验仓库；
+- `django-package` —— 可复用 Django App、扩展、中间件、认证/权限后端与 Admin 集成。
 
-每个已实现家族都具有独立 Profile 合同、Jinja 模板、YAML 示例配置、生成示例、预览和 renderer 测试。科研软件与原创算法家族还包含专门的压力测试。
+每个已实现家族都具有 Contract、真实案例分析、独立 Profile 规则、Jinja 模板、YAML 示例配置、生成示例、带统一 Logo 的 Preview、renderer 测试以及压力测试。
 
 ## 快速开始
 
@@ -82,7 +90,15 @@ repoforge render research-experiment full \
   --output README.generated.md
 ```
 
-渲染器使用严格变量检查：模板需要但 YAML 没有声明的字段会直接报错，不会静默生成残缺 README。
+生成 Django 可复用包 Standard README：
+
+```bash
+repoforge render django-package standard \
+  --config templates/django-package/standard/config.example.yml \
+  --output README.generated.md
+```
+
+渲染器使用严格的 Jinja 变量检查：模板需要但 YAML 未声明的字段会直接报错，不会静默生成残缺 README。
 
 ## 预览
 
@@ -92,7 +108,7 @@ repoforge render research-experiment full \
 tests/previews/<project-type>/<profile>.md
 ```
 
-RepoForge 自己的预览统一使用仓库中的唯一品牌源：
+RepoForge 自己的 Preview 统一使用唯一品牌源：
 
 ```text
 assets/logo.svg
@@ -104,6 +120,8 @@ assets/logo.svg
 python scripts/generate_previews.py
 ```
 
+用户项目的 `README.example.md` 不强制使用 RepoForge Logo，真正生成项目时仍可自由提供自己的 `logo_path`。
+
 ## 压力测试
 
 Renderer-backed 压力测试位于：
@@ -111,10 +129,12 @@ Renderer-backed 压力测试位于：
 ```text
 tests/stress/
 ├── scientific-python/
-└── research-algorithm/
+├── research-algorithm/
+├── research-experiment/
+└── django-package/
 ```
 
-它们会故意使用差异很大的科研项目形态，检查 Profile 是否过度僵化、过度膨胀或语义不合适。压力测试输出统一使用 RepoForge Logo，但用户真正生成自己的项目 README 时仍可自由提供 `logo_path`。
+Django 压力测试故意覆盖差异很大的可复用包形态：极小 Template Tag App、中间件顺序约束、权限 Backend、复杂 Admin 扩展，以及**没有 Models/Admin 的 Full 中间件包**。因此 Full 表示“文档深度更高”，而不是强行让项目拥有所有功能。
 
 ## 七类项目类型
 
@@ -126,28 +146,48 @@ tests/stress/
 - `frontend-library` —— 前端库、插件与组件；
 - `desktop-application` —— 桌面端与跨平台软件。
 
-其余类型目前保留三档视觉预览，后续逐类升级为可执行模板。
+剩余三类将继续按照同一套 Contract、独立 Profile、Preview 和压力测试规则逐类实现。
 
 ## Profiles
 
 - **Minimal** —— 小型、聚焦项目，最短但完整；
 - **Standard** —— 大多数正式维护开源项目的默认选择；
-- **Full** —— 方法较多、科学边界复杂或成熟度较高的项目。
+- **Full** —— 面向集成面、兼容性、验证、复现、安全或升级边界更复杂的成熟项目。
+
+## Django Package 的边界
+
+`django-package` 面向“安装到另一个 Django 项目中的可复用组件”，因此重点是：
+
+```text
+包是什么
+  ↓
+如何安装
+  ↓
+需要哪些 Django 接入点
+  ↓
+最短可运行用法
+  ↓
+公开 API / Admin / Middleware / Backend 等实际能力
+  ↓
+兼容性、安全与升级边界
+```
+
+完整 Django 网站、SaaS、后台系统等不属于这一类，它们后续进入 `web-application`。
 
 ## 仓库结构
 
 ```text
 RepoForge
-├── assets/                        # RepoForge 品牌资产
-├── src/repoforge/                 # renderer 与 CLI
-├── templates/                     # 项目类型 / Profile 模板
-├── profiles/                      # 跨项目 Profile 规则
-├── partials/                      # 可复用文档模块
+├── assets/                         # RepoForge 品牌资产
+├── src/repoforge/                  # renderer 与 CLI
+├── templates/                      # 项目类型 / Profile 模板
+├── profiles/                       # 跨项目 Profile 规则
+├── partials/                       # 可复用文档模块
 ├── tests/
-│   ├── previews/                  # 可视化预览
-│   └── stress/                    # 压力测试配置
-├── scripts/                       # 维护脚本
-└── docs/                          # 架构与规范
+│   ├── previews/                   # 可视化生成效果
+│   └── stress/                     # 极端真实形态压力测试
+├── scripts/                        # 维护脚本
+└── docs/                           # 架构与规范
 ```
 
 详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
@@ -159,6 +199,8 @@ RepoForge
 - **项目类型和文档深度是两个不同维度。**
 - **科研软件把 Validation、Reproducibility、Limitations、Citation 作为一级需求。**
 - **实验仓库必须明确数据身份、实验协议、随机种子、结果身份和复现命令。**
+- **Django 包必须明确宿主项目接入点、兼容性、迁移、安全和升级边界。**
+- **Full Profile 不能凭空生成项目实际不存在的能力。**
 - **生成结果始终是普通可读 Markdown。**
 - **配置缺失时应明确失败，而不是生成误导性的文档。**
 
@@ -168,11 +210,11 @@ RepoForge
 python -m pytest
 ```
 
-GitHub Actions 会在支持的 Python 版本上运行测试，并执行 CLI 渲染 smoke test。
+GitHub Actions 会在 Python 3.11、3.12、3.13 上运行测试，并对每个已实现模板家族执行 CLI render smoke test。
 
 ## 当前状态
 
-RepoForge 目前已有三套可执行模板家族：`scientific-python`、`research-algorithm` 和 `research-experiment`。后续将继续按同一套独立 Profile + Preview/Stress Test 规则逐类实现。
+RepoForge 目前已有四套可执行模板家族：`scientific-python`、`research-algorithm`、`research-experiment` 和 `django-package`。下一类开始实现 `web-application`。
 
 ## License
 
