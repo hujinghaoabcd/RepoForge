@@ -7,6 +7,7 @@ from typing import Any, Literal
 import yaml
 
 from .apply import PlannedFile, inspect_apply_plan
+from .renderer import SUPPORTED_PROFILES, SUPPORTED_TYPES
 
 CheckLevel = Literal["PASS", "WARN", "FAIL"]
 
@@ -125,6 +126,17 @@ def _config_check(config: dict[str, Any]) -> list[CheckResult]:
         return [_result("FAIL", "repoforge.yml", "repoforge section must be a mapping")]
     if repoforge.get("config_version") != 1:
         return [_result("FAIL", "repoforge.yml", "unsupported or missing config_version")]
+
+    project_type = repoforge.get("project_type")
+    profile = repoforge.get("profile")
+    problems: list[str] = []
+    if project_type not in SUPPORTED_TYPES:
+        problems.append("stored project_type is missing or unsupported")
+    if profile not in SUPPORTED_PROFILES:
+        problems.append("stored profile is missing or unsupported")
+    if problems:
+        return [_result("FAIL", "repoforge.yml", "; ".join(problems))]
+
     return [_result("PASS", "repoforge.yml", "configuration and explicit selection are valid")]
 
 
