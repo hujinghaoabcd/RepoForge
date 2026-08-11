@@ -13,6 +13,14 @@ STANDARD_TEMPLATES = {
     "security": ("SECURITY.template.md", "security"),
     "support": ("SUPPORT.template.md", "support"),
 }
+
+GITHUB_TEMPLATES = {
+    "bug_report": ("ISSUE_TEMPLATE/bug_report.template.yml", "issue_forms"),
+    "feature_request": ("ISSUE_TEMPLATE/feature_request.template.yml", "issue_forms"),
+    "issue_config": ("ISSUE_TEMPLATE/config.template.yml", "issue_forms"),
+    "pull_request_template": ("pull_request_template.template.md", "pull_request"),
+}
+
 STANDARD_STATES = {"default", "recommended", "optional"}
 
 
@@ -67,6 +75,29 @@ def standard_plan(
     return dict(plan)
 
 
+def _render_standard_template(
+    *,
+    root: Path,
+    template_name: str,
+    context: dict[str, Any],
+) -> str:
+    template_path = root / template_name
+    if not template_path.is_file():
+        raise FileNotFoundError(f"Standard template not found: {template_path}")
+
+    environment = Environment(
+        loader=FileSystemLoader(root),
+        undefined=StrictUndefined,
+        autoescape=False,
+        keep_trailing_newline=True,
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+    template = environment.get_template(template_name)
+    rendered = template.render(**context)
+    return rendered.rstrip() + "\n"
+
+
 def render_community_standard(
     standard_name: str,
     config: dict[str, Any],
@@ -79,13 +110,8 @@ def render_community_standard(
             f"Supported: {', '.join(sorted(STANDARD_TEMPLATES))}"
         )
 
-    root = find_standards_root(standards_root)
-    community_root = root / "community"
+    root = find_standards_root(standards_root) / "community"
     template_name, section_name = STANDARD_TEMPLATES[standard_name]
-    template_path = community_root / template_name
-    if not template_path.is_file():
-        raise FileNotFoundError(f"Community standard template not found: {template_path}")
-
     section = config.get(section_name)
     if not isinstance(section, dict):
         raise ValueError(f"Config section must be a mapping: {section_name}")
@@ -95,15 +121,38 @@ def render_community_standard(
         "repository_url": config.get("repository_url"),
         **section,
     }
-
-    environment = Environment(
-        loader=FileSystemLoader(community_root),
-        undefined=StrictUndefined,
-        autoescape=False,
-        keep_trailing_newline=True,
-        trim_blocks=True,
-        lstrip_blocks=True,
+    return _render_standard_template(
+        root=root,
+        template_name=template_name,
+        context=context,
     )
-    template = environment.get_template(template_name)
-    rendered = template.render(**context)
-    return rendered.rstrip() + "\n"
+
+
+def render_github_standard(
+    standard_name: str,
+    config: dict[str, Any],
+    *,
+    standards_root: str | Path | None = None,
+) -> str:
+    if standard_name not in GITHUB_TEMPLATES:
+        raise ValueError(
+            f"Unsupported GitHub standard: {standard_name}. "
+            f"Supported: {', '.join(sorted(GITHUB_TEMPLATES))}"
+        )
+
+    root = find_standards_root(standards_root) / "github"
+    template_name, section_name = GITHUB_TEMPLATES[standard_name]
+    section = config.get(section_name)
+    if not isinstance(section, dict):
+        raise ValueError(f"Config section must be a mapping: {section_name}")
+
+    context = {
+        "project_name": config["project_name"],
+        "repository_url": config["repository_url"],
+        **section,
+    }
+    return _render_standard_template(
+        root=root,
+        template_name=template_name,
+        context=context,
+    )
