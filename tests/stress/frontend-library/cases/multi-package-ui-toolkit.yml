@@ -1,0 +1,39 @@
+project_name: GeoUIToolkit
+display_name: GeoUIToolkit
+tagline: A multi-package geospatial UI toolkit with framework adapters, typed APIs, and browser/runtime contracts.
+why_text: Large mapping products often need the same controls across vanilla, React, and Vue applications. GeoUIToolkit separates reusable browser primitives from optional framework and map-engine adapters.
+features:
+  - name: Modular packages
+    description: install only the controls and adapters needed by the host application.
+  - name: Typed events
+    description: share public event payloads across framework wrappers.
+  - name: Theme contract
+    description: customize documented CSS variables across all packages.
+  - name: Runtime boundaries
+    description: distinguish browser-only controls from SSR-safe state utilities.
+packages:
+  - name: '@geo-ui/core'
+    purpose: shared state, types, and browser-neutral utilities
+    install: npm install @geo-ui/core
+  - name: '@geo-ui/controls'
+    purpose: DOM controls and shared CSS
+    install: npm install @geo-ui/controls
+  - name: '@geo-ui/react'
+    purpose: React wrappers
+    install: npm install @geo-ui/react react
+  - name: '@geo-ui/vue'
+    purpose: Vue wrappers
+    install: npm install @geo-ui/vue vue
+adapters:
+  - name: React
+    package: '@geo-ui/react'
+    notes: official wrapper; React is a peer dependency
+  - name: Vue
+    package: '@geo-ui/vue'
+    notes: official wrapper; Vue is a peer dependency
+typescript_text: All public packages ship declarations and share exported option/event types from `@geo-ui/core`.
+bundle_text: ESM entry points are designed for tree-shaking; CSS is imported explicitly from the controls package.
+ssr_text: Core state utilities are SSR-safe. DOM controls and wrappers create browser objects only after client mount.
+accessibility_text: Built-in controls test keyboard navigation, focus visibility, labels, and disabled-state behavior.
+versioning_text: Public JavaScript/TypeScript exports and documented CSS variables use Semantic Versioning across coordinated package releases.
+license_text: GeoUIToolkit is released under the MIT License.

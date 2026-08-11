@@ -1,0 +1,36 @@
+cases:
+  - name: tiny-dom-utility
+    profile: minimal
+    overrides: cases/tiny-dom-utility.yml
+    min_lines: 25
+    max_lines: 70
+    required_sections: ['## Install', '## Quick Start', '## Browser Support']
+    forbidden_sections: ['## Framework Integration', '## Bundle and Tree-Shaking', '## Accessibility']
+  - name: css-heavy-widget
+    profile: standard
+    overrides: cases/css-heavy-widget.yml
+    min_lines: 70
+    max_lines: 150
+    required_sections: ['## Installation', '## Styling and Theming', '## Compatibility']
+    forbidden_sections: ['## SSR and Non-Browser Environments', '## Release and Versioning Policy']
+  - name: framework-adapter-plugin
+    profile: standard
+    overrides: cases/framework-adapter-plugin.yml
+    min_lines: 70
+    max_lines: 155
+    required_sections: ['## Framework Integration', '## API Overview', '## Compatibility']
+    forbidden_sections: ['## Packages and Installation', '## Accessibility']
+  - name: multi-package-ui-toolkit
+    profile: full
+    overrides: cases/multi-package-ui-toolkit.yml
+    min_lines: 130
+    max_lines: 230
+    required_sections: ['## Packages and Installation', '## Framework Adapters', '## TypeScript Support', '## Bundle and Tree-Shaking', '## SSR and Non-Browser Environments', '## Accessibility']
+    forbidden_sections: []
+  - name: full-vanilla-no-frameworks
+    profile: full
+    overrides: cases/full-vanilla-no-frameworks.yml
+    min_lines: 100
+    max_lines: 210
+    required_sections: ['## API Overview', '## Events and Lifecycle', '## Styling, Themes, and CSS Contract', '## Browser Compatibility', '## Release and Versioning Policy']
+    forbidden_sections: ['## Framework Adapters', '## SSR and Non-Browser Environments']

@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="MapWidget" width="280">
-</p>
-
 # MapWidget
 
 **A modular TypeScript map-control toolkit with a framework-neutral core, official adapters, and explicit runtime contracts.**

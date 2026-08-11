@@ -1,0 +1,47 @@
+project_name: VueMapMeasure
+display_name: VueMapMeasure
+tagline: A Vue adapter for a framework-neutral map measurement engine.
+why_text: Vue applications need lifecycle-safe mounting and reactive option updates around an existing measurement engine. This package documents the adapter boundary instead of presenting the engine as Vue-native code.
+features:
+  - name: Vue lifecycle wrapper
+    description: mount and destroy the measurement control with component lifecycle.
+  - name: Reactive options
+    description: update supported engine options from Vue props.
+  - name: Typed events
+    description: emit documented measurement results to the host application.
+install_command: npm install @geo-ui/vue-map-measure vue @geo-ui/map-measure
+setup_text: Vue and `@geo-ui/map-measure` are peer dependencies and are not bundled by the adapter.
+quickstart_language: vue
+quickstart_code: |-
+  <script setup lang="ts">
+  import { MeasureControl } from "@geo-ui/vue-map-measure"
+  </script>
+
+  <template>
+    <MeasureControl mode="distance" @finish="console.log" />
+  </template>
+api_items:
+  - name: MeasureControl
+    purpose: Vue component wrapper for the core engine.
+  - name: finish event
+    purpose: emit the completed measurement result.
+styling_text: null
+integrations:
+  - name: Vue
+    description: official adapter package; Vue remains a peer dependency.
+    link: docs/vue.md
+compatibility:
+  - target: Vue
+    range: 3.4+
+    notes: required peer dependency
+  - target: TypeScript
+    range: 5.4+
+    notes: component props and events are typed
+  - target: Browsers
+    range: current evergreen releases
+    notes: same browser contract as the core engine
+documentation:
+  - name: Vue Adapter
+    link: docs/vue.md
+    description: props, events, lifecycle, and SSR notes
+license_text: VueMapMeasure is released under the MIT License.

@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="MapWidget" width="280">
-</p>
-
 # MapWidget
 
 **A framework-neutral TypeScript layer-control widget with events, theming, and map-library adapters.**

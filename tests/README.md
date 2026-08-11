@@ -13,24 +13,6 @@ That gives **21 independent preview combinations**.
 
 `minimal`, `standard`, and `full` are not three conditional views inside one preview file. Each implemented profile has its own template, rendered example, configuration, and visible preview.
 
-For example:
-
-```text
-templates/web-application/
-├── minimal/
-│   ├── PROFILE.md
-│   ├── README.template.md
-│   ├── README.example.md
-│   └── config.example.yml
-├── standard/
-└── full/
-
-tests/previews/web-application/
-├── minimal.md
-├── standard.md
-└── full.md
-```
-
 The same separation is required for every project type.
 
 ## Shared preview branding
@@ -43,7 +25,7 @@ assets/logo.svg
 tests/branding.yml
 ```
 
-The preview-relative path is `../../../assets/logo.svg`. User-facing `README.example.md` files do **not** force this brand asset; normal project configs remain free to supply their own `logo_path`.
+The preview-relative path is `../../../assets/logo.svg`, and the current shared Markdown display width is **280px**. User-facing `README.example.md` files do **not** force this brand asset; normal project configs remain free to supply their own `logo_path`.
 
 ## Previews
 
@@ -67,7 +49,8 @@ tests/stress/
 ├── research-algorithm/
 ├── research-experiment/
 ├── django-package/
-└── web-application/
+├── web-application/
+└── frontend-library/
 ```
 
 Stress cases deliberately cover edge shapes such as:
@@ -77,20 +60,19 @@ Stress cases deliberately cover edge shapes such as:
 - estimand-heavy original methods and learned scientific geometry;
 - one-command paper reproduction and checkpoint-first evaluation;
 - multi-dataset, multi-baseline, multi-seed experiment repositories;
-- tiny Django template-tag applications;
-- Django middleware where ordering changes correctness;
-- authorization backends requiring multiple host-project hooks;
-- broad Admin extensions with models, migrations, APIs, templates, and permissions;
+- tiny Django template-tag applications and middleware ordering constraints;
+- authorization backends and broad Admin extensions;
 - Full-profile Django middleware packages with no models or admin surface;
-- tiny internal web dashboards with no database;
-- traditional server-rendered web monoliths;
-- split frontend/API applications;
-- self-hosted multi-service applications with queues and object storage;
-- Full-profile web monoliths with no API, queue, object storage, search, or email service.
+- tiny internal web dashboards, server-rendered monoliths, split frontend/API systems, and self-hosted multi-service applications;
+- Full-profile web monoliths with no API, queue, object storage, search, or email service;
+- tiny DOM utilities and CSS-heavy frontend widgets;
+- framework adapter packages with explicit peer dependencies;
+- multi-package UI toolkits with TypeScript, SSR, tree-shaking, and accessibility contracts;
+- Full-profile vanilla frontend libraries with no React/Vue adapter and no SSR guarantee.
 
-The final web case protects an important RepoForge rule: **Full means deeper documentation, not fabricated infrastructure.**
+The final cases protect an important RepoForge rule: **Full means deeper documentation, not fabricated infrastructure or ecosystem capabilities.**
 
-A stress case is passed through the normal renderer. Tests check section contracts, profile separation, code-fence balance, canonical preview branding, rough size limits, and project-type-specific semantic boundaries.
+A stress case is passed through the normal renderer. Tests check section contracts, profile separation, code-fence balance, canonical 280px preview branding, rough size limits, and project-type-specific semantic boundaries.
 
 ## Test layers
 

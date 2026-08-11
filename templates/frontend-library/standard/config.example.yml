@@ -1,0 +1,81 @@
+logo_path: null
+demo_image: null
+project_name: MapWidget
+display_name: MapWidget
+tagline: A framework-neutral TypeScript layer-control widget with events, theming, and map-library adapters.
+badges: '[![npm](https://img.shields.io/badge/npm-package-red)](#installation) [![TypeScript](https://img.shields.io/badge/TypeScript-ready-blue)](#api-overview) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#development-and-testing) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Demo · Install · Quick Start · API · Compatibility
+why_text: Map applications repeatedly rebuild layer switching, visibility state, keyboard behavior, and map-engine glue. MapWidget keeps the UI framework-neutral and exposes small adapters rather than requiring a new application framework.
+features:
+  - name: Framework-neutral core
+    description: use the widget from vanilla TypeScript or wrap it in an application framework.
+  - name: Map adapters
+    description: optional bindings keep Leaflet and MapLibre synchronization outside the core state model.
+  - name: Accessible controls
+    description: keyboard navigation and labelled interactive elements are part of the public behavior.
+  - name: Themeable CSS
+    description: customize documented CSS variables without copying package styles.
+demo_url: https://example.org/map-widget/demo
+install_command: npm install @geo-ui/map-widget
+setup_text: Import `@geo-ui/map-widget/style.css` once before mounting the widget.
+quickstart_language: ts
+quickstart_code: |-
+  import { MapWidget } from "@geo-ui/map-widget"
+  import "@geo-ui/map-widget/style.css"
+
+  const widget = new MapWidget({
+    target: document.querySelector("#layers")!,
+    layers: [
+      { id: "roads", label: "Roads", visible: true },
+      { id: "water", label: "Water", visible: false },
+    ],
+  })
+
+  widget.on("change", ({ id, visible }) => console.log(id, visible))
+api_items:
+  - name: MapWidget(options)
+    purpose: create and mount a layer-control instance.
+  - name: select(id)
+    purpose: move the active selection to one layer.
+  - name: setVisible(id, visible)
+    purpose: update layer visibility state.
+  - name: on(event, listener)
+    purpose: subscribe to documented widget events.
+styling_text: The package ships one namespaced stylesheet and documented CSS custom properties. DOM class names not listed in the styling guide are implementation details.
+integrations:
+  - name: Leaflet
+    description: official adapter synchronizes widget state with Leaflet layers.
+    link: docs/adapters/leaflet.md
+  - name: MapLibre GL JS
+    description: official adapter synchronizes style-layer visibility.
+    link: docs/adapters/maplibre.md
+compatibility:
+  - target: Browsers
+    range: current evergreen releases
+    notes: ES2020 modules and standard DOM APIs
+  - target: TypeScript
+    range: 5.4+
+    notes: declarations ship with the package
+  - target: Leaflet adapter
+    range: Leaflet 1.9+
+    notes: optional peer dependency
+  - target: MapLibre adapter
+    range: MapLibre GL JS 5+
+    notes: optional peer dependency
+development_command: |-
+  pnpm install
+  pnpm dev
+test_command: |-
+  pnpm test
+  pnpm test:e2e
+documentation:
+  - name: Getting Started
+    link: docs/getting-started.md
+    description: install, CSS, and first widget
+  - name: API
+    link: docs/api.md
+    description: public methods, options, and events
+  - name: Adapters
+    link: docs/adapters.md
+    description: Leaflet and MapLibre integrations
+license_text: MapWidget is released under the MIT License.

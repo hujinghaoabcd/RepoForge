@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="MapWidget" width="280">
-</p>
-
 # MapWidget
 
 **A tiny TypeScript layer-control widget for browser maps.**

@@ -12,6 +12,7 @@ SUPPORTED_TYPES = {
     "research-experiment",
     "django-package",
     "web-application",
+    "frontend-library",
 }
 SUPPORTED_PROFILES = {"minimal", "standard", "full"}
 
