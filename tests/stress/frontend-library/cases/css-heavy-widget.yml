@@ -1,0 +1,38 @@
+project_name: ColorScaleLegend
+display_name: ColorScaleLegend
+tagline: A themeable TypeScript legend widget for continuous and categorical map scales.
+why_text: Mapping applications need legends that stay visually consistent across datasets and themes. ColorScaleLegend provides a documented CSS-variable contract instead of requiring consumers to fork package styles.
+features:
+  - name: Scale-aware rendering
+    description: continuous, stepped, and categorical legends.
+  - name: CSS-variable theming
+    description: customize supported colors, spacing, typography, and swatches.
+  - name: Keyboard-friendly controls
+    description: optional collapsible legends preserve focus behavior.
+demo_url: https://example.org/color-scale-legend
+install_command: npm install color-scale-legend
+setup_text: Import `color-scale-legend/style.css`. The stylesheet is required; copying internal selectors is unsupported.
+api_items:
+  - name: Legend(options)
+    purpose: mount a legend.
+  - name: setScale(scale)
+    purpose: replace the displayed scale.
+  - name: destroy()
+    purpose: remove DOM and listeners.
+styling_text: The supported customization surface consists of documented CSS custom properties. Internal class selectors may change without a major release.
+integrations: []
+compatibility:
+  - target: Browsers
+    range: current evergreen releases
+    notes: CSS custom properties and SVG support required
+  - target: TypeScript
+    range: 5.4+
+    notes: declarations included
+documentation:
+  - name: Styling
+    link: docs/styling.md
+    description: supported CSS variables and states
+  - name: API
+    link: docs/api.md
+    description: public widget lifecycle
+license_text: ColorScaleLegend is released under the MIT License.
