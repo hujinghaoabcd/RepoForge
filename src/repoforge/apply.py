@@ -86,9 +86,7 @@ def build_apply_plan(
     if standards_policy == "none":
         return files
 
-    community = standard_plan(
-        project_type, profile, standards_root=standards_root
-    )
+    community = standard_plan(project_type, profile, standards_root=standards_root)
     for name, state in community.items():
         if not _selected(state, standards_policy):
             continue
@@ -127,9 +125,7 @@ def build_apply_plan(
             )
         )
 
-    metadata = metadata_plan(
-        project_type, profile, standards_root=standards_root
-    )
+    metadata = metadata_plan(project_type, profile, standards_root=standards_root)
     for name, state in metadata.items():
         if not _selected(state, standards_policy):
             continue
@@ -180,6 +176,9 @@ def apply_to_repository(
     root = Path(target).expanduser().resolve()
     results = inspect_apply_plan(root, plan)
 
+    if dry_run:
+        return results
+
     conflicts = [result.path for result in results if result.status == "overwrite"]
     if conflicts and not force:
         formatted = "\n".join(f"  - {path}" for path in conflicts)
@@ -187,9 +186,6 @@ def apply_to_repository(
             "RepoForge will not overwrite existing files without --force:\n"
             f"{formatted}"
         )
-
-    if dry_run:
-        return results
 
     content_by_path = {item.path: item.content for item in plan}
     for result in results:
