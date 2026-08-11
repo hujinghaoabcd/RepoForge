@@ -3,13 +3,21 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+import yaml
+from jinja2 import UndefinedError
+
 from .apply import STANDARD_KEYS, apply_to_repository, build_apply_plan
+from .check import check_exit_code, check_repository, format_check_results
 from .diff import build_repository_diff, format_repository_diff
 from .init_config import init_repository_config, resolve_project_selection
 from .renderer import SUPPORTED_TYPES, load_config, render_from_config
 
 
-def _add_plan_selection_args(parser: argparse.ArgumentParser) -> None:
+def _add_plan_selection_args(
+    parser: argparse.ArgumentParser,
+    *,
+    config_required: bool = True,
+) -> None:
     parser.add_argument("target", help="Existing repository directory")
     parser.add_argument(
         "--type",
@@ -24,8 +32,13 @@ def _add_plan_selection_args(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument(
         "--config",
-        required=True,
-        help="Combined RepoForge YAML configuration",
+        required=config_required,
+        default=None,
+        help=(
+            "Combined RepoForge YAML configuration"
+            if config_required
+            else "Combined RepoForge YAML configuration; defaults to TARGET/repoforge.yml"
+        ),
     )
     parser.add_argument(
         "--standards",
@@ -143,6 +156,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Also list selected files whose generated content already matches",
     )
 
+    check_parser = subparsers.add_parser(
+        "check",
+        help="Validate RepoForge-managed repository files and CI-facing contracts.",
+    )
+    _add_plan_selection_args(check_parser, config_required=False)
+    check_parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Return a non-zero exit code for warnings as well as failures",
+    )
+
     apply_parser = subparsers.add_parser(
         "apply",
         help="Apply a README and selected repository standards to an existing repository.",
@@ -161,8 +185,14 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _config_path_from_args(args: argparse.Namespace) -> Path:
+    if args.config:
+        return Path(args.config).expanduser().resolve()
+    return Path(args.target).expanduser().resolve() / "repoforge.yml"
+
+
 def _build_plan_from_args(args: argparse.Namespace):
-    config = load_config(args.config)
+    config = load_config(_config_path_from_args(args))
     project_type, profile = resolve_project_selection(
         config,
         args.project_type,
@@ -178,7 +208,7 @@ def _build_plan_from_args(args: argparse.Namespace):
         template_root=args.template_root,
         standards_root=args.standards_root,
     )
-    return plan
+    return config, plan
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -214,7 +244,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "diff":
-        plan = _build_plan_from_args(args)
+        _, plan = _build_plan_from_args(args)
         results = build_repository_diff(
             args.target,
             plan,
@@ -224,8 +254,19 @@ def main(argv: list[str] | None = None) -> int:
         print(format_repository_diff(results), end="")
         return 0
 
+    if args.command == "check":
+        try:
+            config, plan = _build_plan_from_args(args)
+            results = check_repository(args.target, plan, config)
+        except (FileNotFoundError, ValueError, yaml.YAMLError, UndefinedError) as exc:
+            print(f"FAIL  repoforge.yml  {exc}")
+            print("\nSummary: 0 passed, 0 warnings, 1 failed.")
+            return 1
+        print(format_check_results(results), end="")
+        return check_exit_code(results, strict=args.strict)
+
     if args.command == "apply":
-        plan = _build_plan_from_args(args)
+        _, plan = _build_plan_from_args(args)
         results = apply_to_repository(
             args.target,
             plan,
