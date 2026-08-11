@@ -1,28 +1,26 @@
 {% if logo_path %}<p align="center">
-  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(460) }}">
+  <img src="{{ logo_path }}" alt="{{ project_name }}" width="{{ logo_width | default(440) }}">
 </p>
-{% endif %}
 
-# {{ project_name }}
+{% endif %}# {{ project_name }}
 
 **{{ tagline }}**
 
 {% if badges %}{{ badges }}
-{% endif %}
-{% if language_switch %}{{ language_switch }}
-{% endif %}
-{% if navigation %}{{ navigation }}
-{% endif %}
 
-## What {{ project_name }} Is
+{% endif %}{% if language_switch %}{{ language_switch }}
+
+{% endif %}{% if navigation %}{{ navigation }}
+
+{% endif %}## What {{ project_name }} is
 
 {{ overview_text }}
 
-## Why Use It?
+## Why use it?
 
 {{ why_text }}
 
-## Scientific Scope
+## Scientific scope
 
 {{ scope_text }}
 
@@ -39,49 +37,49 @@
 {{ install_command }}
 ```
 
-{% if optional_install_commands %}### Optional features
+{% if verify_command %}Verify the installation:
+
+```bash
+{{ verify_command }}
+```
+
+{% endif %}{% if optional_install_commands %}### Optional features
 
 {% for item in optional_install_commands %}```bash
 {{ item.command }}  # {{ item.description }}
 ```
-{% endfor %}
-{% endif %}
 
-{% if development_install %}### Development install
+{% endfor %}{% endif %}{% if development_install %}### Development install
 
 ```bash
 {{ development_install }}
 ```
-{% endif %}
 
-## Five-Minute Example
+{% endif %}## Five-minute example
 
-{{ quickstart_intro }}
+{% if quickstart_intro %}{{ quickstart_intro }}
 
-```python
+{% endif %}```python
 {{ quickstart_code }}
 ```
 
-{% if methods %}## Method Catalogue
+{% if methods %}## Method catalogue
 
-| Method / area | Purpose | New-data operation | Notes |
+| Method / area | Purpose | New-data operation | Important boundary |
 | --- | --- | --- | --- |
 {% for method in methods %}| `{{ method.name }}` | {{ method.purpose }} | {{ method.operation }} | {{ method.notes }} |
 {% endfor %}
 
-{% endif %}
-{% if method_selection %}## Choosing a Method
+{% endif %}{% if method_selection %}## Choosing a method
 
 {{ method_selection }}
 
-{% endif %}
-{% if data_contracts %}## Data Contracts and Conventions
+{% endif %}{% if data_contracts %}## Data contracts and conventions
 
 {% for item in data_contracts %}- {{ item }}
 {% endfor %}
 
-{% endif %}
-{% if representative_example %}## Representative Workflow
+{% endif %}{% if representative_example %}## Representative workflow
 
 {{ representative_example.intro }}
 
@@ -89,16 +87,20 @@
 {{ representative_example.code }}
 ```
 
+{% if representative_example.link %}See {{ representative_example.link }} for the complete workflow.
 {% endif %}
-{% if validation %}## Validation and Reproducibility
+
+{% endif %}{% if validation %}## Validation and reproducibility
 
 {{ validation.summary }}
 
-{% for item in validation.items %}- {{ item }}
+{% if validation.items %}{% for item in validation.items %}- {{ item }}
 {% endfor %}
-
+{% endif %}{% if validation.link %}
+See {{ validation.link }} for reference cases, tolerances, and claim boundaries.
 {% endif %}
-{% if examples %}## Examples
+
+{% endif %}{% if examples %}## Examples
 
 {% for example in examples %}- **{{ example.name }}:** {{ example.link }}{% if example.description %} — {{ example.description }}{% endif %}
 {% endfor %}
@@ -108,28 +110,25 @@
 {% for doc in documentation %}- **{{ doc.name }}:** {{ doc.link }}{% if doc.description %} — {{ doc.description }}{% endif %}
 {% endfor %}
 
-{% if project_status %}## Project Status and API Stability
+{% if project_status %}## Project status and API stability
 
 {{ project_status }}
 
-{% endif %}
-{% if limitations %}## Limitations
+{% endif %}{% if limitations %}## Limitations and interpretation boundaries
 
 {% for limitation in limitations %}- {{ limitation }}
 {% endfor %}
 
-{% endif %}
-{% if citation %}## Citation
+{% endif %}{% if citation %}## Citation
 
 {{ citation.intro }}
 
 {% if citation.bibtex %}```bibtex
 {{ citation.bibtex }}
 ```
-{% endif %}
-{% if citation.cff %}Citation metadata is available in [`CITATION.cff`]({{ citation.cff }}).
-{% endif %}
-{% if citation.doi %}DOI: {{ citation.doi }}
+
+{% endif %}{% if citation.cff %}Citation metadata is available in [`CITATION.cff`]({{ citation.cff }}).
+{% endif %}{% if citation.doi %}DOI: {{ citation.doi }}
 {% endif %}
 
 {% endif %}## Support and Contributing
