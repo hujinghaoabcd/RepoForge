@@ -26,6 +26,7 @@
   <a href="#quick-start">Quick Start</a> ·
   <a href="#template-matrix">Templates</a> ·
   <a href="#profiles">Profiles</a> ·
+  <a href="#repository-standards">Standards</a> ·
   <a href="#preview">Previews</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
   <a href="#tests-and-stress-suites">Tests</a>
@@ -171,7 +172,7 @@ project type / profile
 
 The renderer uses Jinja2 `StrictUndefined`. A template that requires missing configuration fails instead of silently rendering an incomplete section.
 
-Current CLI scope is intentionally narrow: `repoforge render` is implemented. Repository detection and apply/update workflows are listed under [Project status](#project-status) as the next stage rather than being presented as finished commands.
+Current CLI scope is intentionally narrow: `repoforge render` is implemented. Repository-level standards are now modeled under `standards/`, while apply/update workflows remain roadmap work rather than finished commands.
 
 ## Previews and golden outputs
 
@@ -227,6 +228,17 @@ The invariant is simple:
 
 > **Full means deeper documentation, not fabricated capabilities or infrastructure.**
 
+## Repository standards
+
+RepoForge now includes a first repository-health pack beside the README matrix:
+
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — participation and conduct expectations;
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — contribution workflow and template-change rules;
+- [`SECURITY.md`](SECURITY.md) — private vulnerability reporting and supported-version policy;
+- [`SUPPORT.md`](SUPPORT.md) — where usage questions, bugs, security reports, and conduct concerns belong.
+
+Reusable Jinja templates live under [`standards/community/`](standards/community/), and [`standards/matrix.yml`](standards/matrix.yml) records whether each file is `default`, `recommended`, or `optional` for every explicit project type/profile pair. The standards layer intentionally does **not** infer project type.
+
 ## Repository structure
 
 ```text
@@ -235,6 +247,7 @@ RepoForge
 ├── src/repoforge/                  # renderer and CLI
 ├── templates/                      # 7 project families × 3 profiles
 ├── profiles/                       # cross-project profile rules
+├── standards/                      # repository community/security/support contracts
 ├── partials/                       # reusable documentation components
 ├── tests/
 │   ├── previews/                   # approved rendered views
@@ -271,7 +284,6 @@ Available now:
 
 Not implemented yet:
 
-- automatic project detection;
 - `init`, `apply`, `diff`, and `check` repository workflows;
 - managed partial updates to an existing hand-edited README;
 - a published PyPI release.
@@ -282,12 +294,11 @@ So the current release is already useful as a **template renderer and standards 
 
 RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
 
-The next implementation stage is the repository workflow around those templates:
+The next implementation stage is to finish repository-level standards and then apply them with an explicit type/profile selection:
 
 ```text
-repoforge detect .     # planned: infer project signals
 repoforge init .       # planned: create a RepoForge config
-repoforge apply .      # planned: apply standards to an existing repository
+repoforge apply .      # planned: apply README + selected repository standards
 repoforge diff .       # planned: preview managed changes
 repoforge check .      # planned: validate repository documentation contracts
 ```
