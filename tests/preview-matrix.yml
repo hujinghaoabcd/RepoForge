@@ -1,0 +1,36 @@
+profiles:
+  - minimal
+  - standard
+  - full
+
+project_types:
+  - scientific-python
+  - research-algorithm
+  - research-experiment
+  - django-package
+  - web-application
+  - frontend-library
+  - desktop-application
+
+cases:
+  - scientific-python/minimal
+  - scientific-python/standard
+  - scientific-python/full
+  - research-algorithm/minimal
+  - research-algorithm/standard
+  - research-algorithm/full
+  - research-experiment/minimal
+  - research-experiment/standard
+  - research-experiment/full
+  - django-package/minimal
+  - django-package/standard
+  - django-package/full
+  - web-application/minimal
+  - web-application/standard
+  - web-application/full
+  - frontend-library/minimal
+  - frontend-library/standard
+  - frontend-library/full
+  - desktop-application/minimal
+  - desktop-application/standard
+  - desktop-application/full
