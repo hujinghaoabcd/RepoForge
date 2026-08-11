@@ -54,10 +54,7 @@
 
 {% endif %}{% if integrations %}## Framework Integration
 
-{% for item in integrations %}- **{{ item.name }}:** {{ item.description }}{% if item.link %} — {{ item.link }}{% endif %}
-{% endfor %}
-
-{% endif %}## Compatibility
+{% for item in integrations %}- **{{ item.name }}:** {{ item.description }}{% if item.link %} — {{ item.link }}{% endif %}{{ "\n" }}{% endfor %}{{ "\n" }}{% endif %}## Compatibility
 
 | Target | Supported range | Notes |
 | --- | --- | --- |
