@@ -140,14 +140,15 @@ repoforge init /path/to/project \
   --repository-url https://github.com/example/my-package
 ```
 
-编辑生成的 `repoforge.yml` 后，可以直接预览并应用：
+编辑生成的 `repoforge.yml` 后，先查看精确文本差异，再应用：
 
 ```bash
+repoforge diff /path/to/project --config /path/to/project/repoforge.yml
 repoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run
 repoforge apply /path/to/project --config /path/to/project/repoforge.yml
 ```
 
-`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)。
+`init` 会把显式选择的项目类型/Profile 写入配置，不进行项目类型自动识别。详细说明见 [`docs/INIT.md`](docs/INIT.md)、[`docs/DIFF.md`](docs/DIFF.md) 和 [`docs/APPLY.md`](docs/APPLY.md)。
 
 选择项目类型和 Profile 渲染 README：
 
@@ -203,7 +204,7 @@ README.template.md
 
 Renderer 使用 Jinja2 `StrictUndefined`。模板需要但配置缺失的变量会直接失败，不会静默输出残缺章节。
 
-当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。
+当前 CLI 已经实现 `repoforge render`、显式配置的 `repoforge init`、用于精确审查的 `repoforge diff` 和安全优先的 `repoforge apply`。仓库标准根据显式选择的项目类型/Profile 矩阵决定；RepoForge 明确不做项目类型自动判断。
 
 ## Preview 与 Golden Output
 
@@ -238,7 +239,7 @@ python scripts/generate_previews.py
 python -m pytest
 ```
 
-GitHub Actions 会在 Python **3.11、3.12、3.13** 上运行测试，对全部七类模板执行 CLI Render Smoke Test，并在临时仓库上真实执行 `repoforge apply`。
+GitHub Actions 会在 Python **3.11、3.12、3.13** 上运行测试，对全部七类模板执行 CLI Render Smoke Test，并在临时仓库上真实执行完整的 `init → diff → apply` 流程。
 
 Renderer-backed 压力测试位于：
 
@@ -315,6 +316,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 - `repoforge render`；
 - `repoforge init`，生成包含显式项目类型/Profile 的统一 `repoforge.yml`；
+- `repoforge diff`，以 Unified Diff 无写入审查当前 Apply 计划的精确变化；
 - `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；
 - 7 类项目 × 3 套独立 Profile；
 - 社区、GitHub 协作、Citation 与 Changelog 标准；
@@ -324,7 +326,7 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 还没有实现：
 
-- `diff`、`check` 等仓库工作流；
+- `check` 仓库工作流；
 - 对已经人工修改过的 README 做受控局部更新或语义合并；
 - 正式发布到 PyPI。
 
@@ -334,14 +336,13 @@ RepoForge **现在已经可以用于“显式配置驱动的 README 生成 + 仓
 
 RepoForge 当前处于 **Alpha** 阶段。模板层的第一阶段已经完成：21 种项目类型/Profile 组合全部存在，Renderer 可执行，Preview 已提交，而且七个家族都有 Contract 和 Stress Coverage。
 
-仓库标准层、`init` 和第一版安全 Apply 工作流已经实现。下一阶段是：
+仓库标准层以及 `init`、`diff` 和第一版安全 Apply 工作流已经实现。下一阶段是：
 
 ```text
-repoforge diff .       # 计划：展示 Apply 计划的文本 Diff
 repoforge check .      # 计划：检查仓库文档合同
 ```
 
-当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init` 和 `repoforge apply`。
+当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init`、`repoforge diff` 和 `repoforge apply`。
 
 ## Contributing
 

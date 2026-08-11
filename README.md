@@ -166,14 +166,15 @@ repoforge init /path/to/project \
   --repository-url https://github.com/example/my-package
 ```
 
-Review `repoforge.yml`, then preview and apply it:
+Review `repoforge.yml`, inspect the exact text changes, then apply it:
 
 ```bash
+repoforge diff /path/to/project --config /path/to/project/repoforge.yml
 repoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run
 repoforge apply /path/to/project --config /path/to/project/repoforge.yml
 ```
 
-`init` records the explicit project type/profile in the config, so normal `apply` does not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md) and [`docs/APPLY.md`](docs/APPLY.md).
+`init` records the explicit project type/profile in the config, so normal `diff` and `apply` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), and [`docs/APPLY.md`](docs/APPLY.md).
 
 ## How rendering works
 
@@ -191,7 +192,7 @@ project type / profile
 
 The renderer uses Jinja2 `StrictUndefined`. A template that requires missing configuration fails instead of silently rendering an incomplete section.
 
-The current CLI implements `repoforge render`, explicit `repoforge init`, and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.
+The current CLI implements `repoforge render`, explicit `repoforge init`, review-first `repoforge diff`, and the safety-first `repoforge apply` workflow. Repository standards are selected from explicit project type/profile matrices; automatic project detection is intentionally not part of the design.
 
 ## Previews and golden outputs
 
@@ -226,7 +227,7 @@ Run the complete suite with:
 python -m pytest
 ```
 
-GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13**, performs CLI render smoke tests for all seven template families, and exercises `repoforge apply` against a temporary repository.
+GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13**, performs CLI render smoke tests for all seven template families, and exercises the full `init → diff → apply` workflow against a temporary repository.
 
 Renderer-backed stress suites live under:
 
@@ -303,6 +304,7 @@ Available now:
 
 - `repoforge render`;
 - `repoforge init` for one combined, explicitly typed `repoforge.yml`;
+- `repoforge diff` for unified, no-write review of the exact selected apply plan;
 - `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;
 - 7 project types × 3 independent profiles;
 - community, GitHub collaboration, citation, and changelog standards;
@@ -312,7 +314,7 @@ Available now:
 
 Not implemented yet:
 
-- `diff` and `check` repository workflows;
+- the `check` repository workflow;
 - managed partial updates or semantic merges inside an existing hand-edited README;
 - a published PyPI release.
 
@@ -322,14 +324,13 @@ So the current release is already useful as a **README and repository-standards 
 
 RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
 
-The repository standards packs, `init`, and the first safe `apply` workflow are now implemented. The next workflow layer is:
+The repository standards packs plus `init`, `diff`, and the first safe `apply` workflow are now implemented. The next workflow layer is:
 
 ```text
-repoforge diff .       # planned: show textual diffs for the apply plan
 repoforge check .      # planned: validate repository documentation contracts
 ```
 
-The currently supported CLI commands are `repoforge render`, `repoforge init`, and `repoforge apply`.
+The currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, and `repoforge apply`.
 
 ## Contributing
 
