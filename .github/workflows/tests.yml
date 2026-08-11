@@ -57,3 +57,29 @@ jobs:
           test -s /tmp/README.web-application.md
           test -s /tmp/README.frontend-library.md
           test -s /tmp/README.desktop-application.md
+
+      - name: Apply smoke
+        run: |
+          mkdir -p /tmp/repoforge-apply
+
+          repoforge apply /tmp/repoforge-apply \
+            --type scientific-python \
+            --profile standard \
+            --config examples/apply/scientific-python-standard.yml \
+            --dry-run
+
+          test ! -e /tmp/repoforge-apply/README.md
+
+          repoforge apply /tmp/repoforge-apply \
+            --type scientific-python \
+            --profile standard \
+            --config examples/apply/scientific-python-standard.yml
+
+          test -s /tmp/repoforge-apply/README.md
+          test -s /tmp/repoforge-apply/CODE_OF_CONDUCT.md
+          test -s /tmp/repoforge-apply/CONTRIBUTING.md
+          test -s /tmp/repoforge-apply/SECURITY.md
+          test -s /tmp/repoforge-apply/CITATION.cff
+          test -s /tmp/repoforge-apply/CHANGELOG.md
+          test -s /tmp/repoforge-apply/.github/ISSUE_TEMPLATE/01-bug-report.yml
+          test -s /tmp/repoforge-apply/.github/pull_request_template.md
