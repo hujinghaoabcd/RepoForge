@@ -32,11 +32,11 @@ features:
     description: desktop key bindings adapt to the host operating system.
 download_options:
   - platform: Windows
-    package: `.exe` installer
+    package: '`.exe` installer'
     notes: maintained stable build
     link: Releases
   - platform: macOS
-    package: `.dmg`
+    package: '`.dmg`'
     notes: notarized stable build
     link: Releases
   - platform: Linux
