@@ -1,0 +1,79 @@
+name: Feature request
+description: Propose a concrete improvement to RepoForge.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe the problem first, then the outcome you want. Concrete repository/documentation workflows are easier to evaluate than implementation-only requests.
+
+  - type: checkboxes
+    id: existing
+    attributes:
+      label: Existing request check
+      options:
+        - label: I searched existing issues and did not find the same request.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - README template family
+        - Repository standards
+        - CLI workflow
+        - GitHub integration
+        - Tests / previews / stress cases
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What repository or documentation problem are you trying to solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the behavior or result RepoForge should support.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe existing RepoForge features, manual workflows, or other approaches you considered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and compatibility
+      description: Note affected project types, profiles, generated files, CLI commands, or compatibility concerns.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add examples, references, mockups, or related issues when they clarify the request.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow the RepoForge Code of Conduct.
+          required: true

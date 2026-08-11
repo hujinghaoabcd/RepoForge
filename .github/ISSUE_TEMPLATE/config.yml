@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support guidance
+    url: https://github.com/hujinghaoabcd/RepoForge/blob/main/SUPPORT.md
+    about: Check where usage questions and support requests belong before opening an issue.
+  - name: Security policy
+    url: https://github.com/hujinghaoabcd/RepoForge/blob/main/SECURITY.md
+    about: Do not disclose vulnerabilities in a public issue; follow the private reporting instructions instead.

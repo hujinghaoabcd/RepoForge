@@ -1,0 +1,66 @@
+name: Feature request
+description: Propose a concrete improvement to {{ project_name }}.
+title: "{{ feature_title_prefix }}"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe the problem first, then the outcome you want. Concrete use cases are easier to evaluate than implementation-only requests.
+
+  - type: checkboxes
+    id: existing
+    attributes:
+      label: Existing request check
+      options:
+        - label: I searched existing issues and did not find the same request.
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What problem are you trying to solve, and who is affected by it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the behavior, workflow, or result you would like the project to support.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe workarounds, existing features, or alternative designs you considered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and compatibility
+      description: Note any APIs, platforms, file formats, data contracts, or workflows this may affect.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add examples, references, mockups, or related issues when they materially clarify the request.
+    validations:
+      required: false
+
+{% if require_code_of_conduct %}  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Code of Conduct
+      description: By submitting this request, you agree to follow the project's Code of Conduct.
+      options:
+        - label: I agree to follow the Code of Conduct.
+          required: true
+{% endif %}

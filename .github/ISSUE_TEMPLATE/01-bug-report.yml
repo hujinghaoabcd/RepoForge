@@ -1,0 +1,97 @@
+name: Bug report
+description: Report a reproducible problem in RepoForge.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please provide the smallest reproducible case you can.
+        Do not include secrets, private data, or undisclosed security vulnerabilities in this public form.
+
+  - type: checkboxes
+    id: existing
+    attributes:
+      label: Existing issue check
+      options:
+        - label: I searched existing issues and did not find the same problem.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - README renderer
+        - Repository standards
+        - Template contract
+        - Preview / stress test
+        - CLI
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: What happened?
+      description: Describe the current behavior and the impact of the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      description: Describe what you expected to happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include the project type/profile, YAML configuration, and command when relevant.
+      placeholder: |
+        Project type/profile:
+        Config:
+        Command:
+        Steps:
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: RepoForge version or commit
+      placeholder: e.g. 0.1.0.dev0 or abc1234
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        - OS:
+        - Python:
+        - Installation method:
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or output
+      description: Remove secrets and private information first.
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow the RepoForge Code of Conduct.
+          required: true
