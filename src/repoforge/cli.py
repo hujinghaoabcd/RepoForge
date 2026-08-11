@@ -4,8 +4,62 @@ import argparse
 from pathlib import Path
 
 from .apply import STANDARD_KEYS, apply_to_repository, build_apply_plan
+from .diff import build_repository_diff, format_repository_diff
 from .init_config import init_repository_config, resolve_project_selection
 from .renderer import SUPPORTED_TYPES, load_config, render_from_config
+
+
+def _add_plan_selection_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("target", help="Existing repository directory")
+    parser.add_argument(
+        "--type",
+        dest="project_type",
+        choices=tuple(sorted(SUPPORTED_TYPES)),
+        help="Explicit RepoForge project type; optional when stored in repoforge.yml",
+    )
+    parser.add_argument(
+        "--profile",
+        choices=("minimal", "standard", "full"),
+        help="README profile; optional when stored in repoforge.yml",
+    )
+    parser.add_argument(
+        "--config",
+        required=True,
+        help="Combined RepoForge YAML configuration",
+    )
+    parser.add_argument(
+        "--standards",
+        choices=("none", "default", "recommended"),
+        default="default",
+        help=(
+            "Base standards policy: none=README only, default=matrix defaults, "
+            "recommended=defaults plus recommendations"
+        ),
+    )
+    parser.add_argument(
+        "--include",
+        action="append",
+        choices=tuple(sorted(STANDARD_KEYS)),
+        default=[],
+        help="Explicitly include a repository standard, including an optional one",
+    )
+    parser.add_argument(
+        "--exclude",
+        action="append",
+        choices=tuple(sorted(STANDARD_KEYS)),
+        default=[],
+        help="Explicitly exclude a repository standard selected by the base policy",
+    )
+    parser.add_argument(
+        "--template-root",
+        default=None,
+        help="Optional path to RepoForge's templates directory",
+    )
+    parser.add_argument(
+        "--standards-root",
+        default=None,
+        help="Optional path to RepoForge's standards directory",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -72,50 +126,28 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optional path to RepoForge's standards directory",
     )
 
+    diff_parser = subparsers.add_parser(
+        "diff",
+        help="Show unified diffs for files selected by the RepoForge apply plan.",
+    )
+    _add_plan_selection_args(diff_parser)
+    diff_parser.add_argument(
+        "--context",
+        type=int,
+        default=3,
+        help="Number of unchanged context lines shown around each diff hunk",
+    )
+    diff_parser.add_argument(
+        "--show-unchanged",
+        action="store_true",
+        help="Also list selected files whose generated content already matches",
+    )
+
     apply_parser = subparsers.add_parser(
         "apply",
         help="Apply a README and selected repository standards to an existing repository.",
     )
-    apply_parser.add_argument("target", help="Existing repository directory")
-    apply_parser.add_argument(
-        "--type",
-        dest="project_type",
-        choices=tuple(sorted(SUPPORTED_TYPES)),
-        help="Explicit RepoForge project type; optional when stored in repoforge.yml",
-    )
-    apply_parser.add_argument(
-        "--profile",
-        choices=("minimal", "standard", "full"),
-        help="README profile; optional when stored in repoforge.yml",
-    )
-    apply_parser.add_argument(
-        "--config",
-        required=True,
-        help="Combined RepoForge YAML configuration",
-    )
-    apply_parser.add_argument(
-        "--standards",
-        choices=("none", "default", "recommended"),
-        default="default",
-        help=(
-            "Base standards policy: none=README only, default=matrix defaults, "
-            "recommended=defaults plus recommendations"
-        ),
-    )
-    apply_parser.add_argument(
-        "--include",
-        action="append",
-        choices=tuple(sorted(STANDARD_KEYS)),
-        default=[],
-        help="Explicitly include a repository standard, including an optional one",
-    )
-    apply_parser.add_argument(
-        "--exclude",
-        action="append",
-        choices=tuple(sorted(STANDARD_KEYS)),
-        default=[],
-        help="Explicitly exclude a repository standard selected by the base policy",
-    )
+    _add_plan_selection_args(apply_parser)
     apply_parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -126,17 +158,27 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Allow overwriting selected files whose content differs",
     )
-    apply_parser.add_argument(
-        "--template-root",
-        default=None,
-        help="Optional path to RepoForge's templates directory",
-    )
-    apply_parser.add_argument(
-        "--standards-root",
-        default=None,
-        help="Optional path to RepoForge's standards directory",
-    )
     return parser
+
+
+def _build_plan_from_args(args: argparse.Namespace):
+    config = load_config(args.config)
+    project_type, profile = resolve_project_selection(
+        config,
+        args.project_type,
+        args.profile,
+    )
+    plan = build_apply_plan(
+        project_type,
+        profile,
+        config,
+        standards_policy=args.standards,
+        include=set(args.include),
+        exclude=set(args.exclude),
+        template_root=args.template_root,
+        standards_root=args.standards_root,
+    )
+    return plan
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -171,23 +213,19 @@ def main(argv: list[str] | None = None) -> int:
         print("Review the generated config before running repoforge apply.")
         return 0
 
+    if args.command == "diff":
+        plan = _build_plan_from_args(args)
+        results = build_repository_diff(
+            args.target,
+            plan,
+            context=args.context,
+            include_unchanged=args.show_unchanged,
+        )
+        print(format_repository_diff(results), end="")
+        return 0
+
     if args.command == "apply":
-        config = load_config(args.config)
-        project_type, profile = resolve_project_selection(
-            config,
-            args.project_type,
-            args.profile,
-        )
-        plan = build_apply_plan(
-            project_type,
-            profile,
-            config,
-            standards_policy=args.standards,
-            include=set(args.include),
-            exclude=set(args.exclude),
-            template_root=args.template_root,
-            standards_root=args.standards_root,
-        )
+        plan = _build_plan_from_args(args)
         results = apply_to_repository(
             args.target,
             plan,
