@@ -1,19 +1,39 @@
-# map-widget
+<p align="center">
+  <img src="../../../assets/logo.svg" alt="MapWidget" width="280">
+</p>
 
-A lightweight frontend plugin for [feature].
+# MapWidget
+
+**A tiny TypeScript layer-control widget for browser maps.**
+
+[![npm](https://img.shields.io/badge/npm-package-red)](#install) [![TypeScript](https://img.shields.io/badge/TypeScript-ready-blue)](#quick-start) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
 ## Install
 
 ```bash
-npm install map-widget
+npm install @geo-ui/map-widget
 ```
 
-## Usage
+Import the package CSS once in the application entry point with `import "@geo-ui/map-widget/style.css"`.
+
+## Quick Start
 
 ```ts
-import { Widget } from "map-widget";
+import { MapWidget } from "@geo-ui/map-widget"
+import "@geo-ui/map-widget/style.css"
+
+const widget = new MapWidget({
+  target: document.querySelector("#layers")!,
+  layers: ["roads", "buildings", "water"],
+})
+
+widget.select("roads")
 ```
 
 ## Browser Support
 
+Current evergreen desktop and mobile browsers with ES2020 module support.
+
 ## License
+
+MapWidget is released under the MIT License.
