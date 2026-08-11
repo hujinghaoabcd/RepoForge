@@ -1,0 +1,43 @@
+project_name: EvalArchive
+tagline: Reproducible evaluation of a published model checkpoint without retraining the full study.
+overview_text: EvalArchive documents the evaluation path for a released checkpoint. It deliberately distinguishes checkpoint evaluation from full training reproduction.
+model_text: The repository loads a versioned model checkpoint, applies the documented preprocessing contract, and reproduces the reported evaluation metrics on the held-out benchmark split.
+datasets:
+  - name: Benchmark-A
+    role: published evaluation set
+    path: data/benchmark-a.npz
+    notes: checksum and preprocessing identity are recorded in the dataset guide
+hardware_note: Evaluation runs on CPU or GPU; the README does not claim published training time because this profile does not reproduce training.
+commands:
+  - name: Download the published checkpoint
+    description: Fetch the archived model artifact associated with the paper release.
+    command: python scripts/fetch_release.py --version paper-v1
+  - name: Evaluate the released model
+    description: Recompute the published held-out metrics without retraining.
+    command: python scripts/evaluate.py --checkpoint releases/paper-v1/model.pt --data data/benchmark-a.npz
+protocol:
+  split: use the immutable held-out test split identified by the released dataset manifest
+  preprocessing: apply the exact saved normalization statistics distributed with the checkpoint
+  seeds: evaluation is deterministic; the training seed is recorded as checkpoint provenance rather than rerun here
+  metrics: MAE and RMSE using the versioned evaluation implementation
+  model_selection: no checkpoint selection is performed; the released checkpoint identity is fixed before evaluation
+results_intro: These values are evaluation targets for the released artifact, not evidence that the original stochastic training run has been reproduced.
+results:
+  - setting: Benchmark-A / released checkpoint
+    metric: MAE
+    value: '12.40'
+  - setting: Benchmark-A / released checkpoint
+    metric: RMSE
+    value: '20.10'
+output_text: Evaluation writes the resolved artifact ID, dataset checksum, environment fingerprint, and metric JSON under `results/release-eval/`.
+structure_text: |-
+  data/          released evaluation fixture
+  releases/      published checkpoint and metadata
+  scripts/       artifact fetch and evaluation commands
+  results/       reproduced evaluation metrics
+  docs/          checkpoint, data, and metric identity
+citation:
+  intro: Cite the paper for the model result and the archived release when relying on the distributed checkpoint.
+  paper: docs/paper.md
+  cff: CITATION.cff
+license_text: EvalArchive is released under the MIT License.

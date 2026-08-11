@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="ForecastBench" width="420">
-</p>
-
 # ForecastBench
 
 **Minimal reproducible code for a short-horizon traffic forecasting study.**

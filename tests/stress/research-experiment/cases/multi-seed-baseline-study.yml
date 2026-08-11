@@ -1,0 +1,135 @@
+project_name: DeepBenchmark
+tagline: Full multi-dataset, multi-baseline, multi-seed experimental evidence with auditable artifact identity.
+highlights:
+  - four datasets share one split and metric contract
+  - eight comparison models use documented validation-only tuning budgets
+  - five fixed seeds support dispersion and paired significance analysis
+  - checkpoints, predictions, resolved configs, and logs remain linked to every reported result
+models:
+  - name: ProposedNet
+    role: proposed method
+    config: configs/main/{dataset}.yml
+    tuning: paper protocol with explicit dataset-specific overrides
+  - name: HA
+    role: historical baseline
+    config: configs/baselines/ha.yml
+    tuning: no learned hyperparameters
+  - name: GRU
+    role: temporal baseline
+    config: configs/baselines/gru.yml
+    tuning: shared hidden-size and dropout budget
+  - name: STGCN
+    role: graph baseline
+    config: configs/baselines/stgcn.yml
+    tuning: shared validation-only graph-model budget
+  - name: DCRNN
+    role: recurrent graph baseline
+    config: configs/baselines/dcrnn.yml
+    tuning: shared validation-only graph-model budget
+  - name: AGCRN
+    role: adaptive graph baseline
+    config: configs/baselines/agcrn.yml
+    tuning: shared validation-only adaptive-model budget
+  - name: GWNet
+    role: adaptive graph baseline
+    config: configs/baselines/gwnet.yml
+    tuning: shared validation-only adaptive-model budget
+  - name: MTGNN
+    role: learned graph baseline
+    config: configs/baselines/mtgnn.yml
+    tuning: shared validation-only learned-graph budget
+  - name: STNorm
+    role: normalization baseline
+    config: configs/baselines/stnorm.yml
+    tuning: shared validation-only architecture budget
+protocol:
+  window: 12 historical steps predict the next 12 steps
+  split: chronological 60% train / 20% validation / 20% test for all datasets
+  preprocessing: training-only Z-score statistics; identical target and metric implementation across models
+  seeds: 42, 43, 44, 45, 46 for the proposed model and significance-bearing comparisons
+  metrics: MAE, RMSE, and MAPE overall and by forecast horizon
+  model_selection: select one checkpoint per seed by validation MAE, then evaluate the test split once
+  baseline_tuning: every tunable baseline receives a declared search space and equalized search budget; test values are never tuning signals
+  training_controls: early stopping, gradient clipping, learning-rate schedule, maximum epochs, and batch size are stored in every resolved config
+main_commands:
+  - name: Run the proposed model matrix
+    description: Execute all dataset and five-seed jobs while preserving one immutable configuration identity per run.
+    command: python scripts/run_manifest.py manifests/proposed_5seeds.yml
+  - name: Run all approved baselines
+    description: Execute the fairness-controlled baseline manifest under the same dataset, split, target, metric, and seed contract.
+    command: python scripts/run_manifest.py manifests/baselines_5seeds.yml
+  - name: Rebuild the main comparison table
+    description: Aggregate only complete run identities and report mean, standard deviation, and per-seed evidence links.
+    command: python scripts/summarize.py manifests/main_table.yml --output reports/main_table.csv
+analysis_commands:
+  - name: Component ablation
+    description: Remove declared components without changing the data, seed, metric, or checkpoint-selection contract.
+    command: python scripts/run_manifest.py manifests/ablation_5seeds.yml
+  - name: Hyperparameter sensitivity
+    description: Evaluate a declared sensitivity grid without selecting values on the test split.
+    command: python scripts/run_manifest.py manifests/sensitivity.yml
+  - name: Horizon-wise error analysis
+    description: Reuse stored predictions to measure error growth across forecast horizons.
+    command: python scripts/analyze_horizons.py --manifest manifests/main_5seeds.yml
+  - name: Efficiency analysis
+    description: Summarize measured parameter counts, peak memory, and runtime under documented hardware.
+    command: python scripts/analyze_efficiency.py results/ --output reports/efficiency.csv
+statistical_testing:
+  text: Paired tests compare seed-matched runs sharing dataset, preprocessing, horizon, and metric identity. Reports include the test, alternative, correction policy, effect-size summary, and raw paired values.
+  command: python scripts/significance.py --manifest manifests/significance.yml --output reports/significance.csv
+artifacts:
+  - name: Resolved configuration
+    path: results/{dataset}/{model}/seed-{seed}/config.resolved.yml
+    purpose: immutable run parameters and data identity
+  - name: Best checkpoint
+    path: results/{dataset}/{model}/seed-{seed}/checkpoints/best.pt
+    purpose: validation-selected state used for the final test evaluation
+  - name: Per-seed metrics
+    path: results/{dataset}/{model}/seed-{seed}/metrics.json
+    purpose: auditable scalar and horizon-wise metrics
+  - name: Predictions
+    path: results/{dataset}/{model}/seed-{seed}/predictions.npz
+    purpose: significance, horizon analysis, and figure regeneration
+  - name: Training log
+    path: results/{dataset}/{model}/seed-{seed}/train.jsonl
+    purpose: optimization trace and checkpoint selection evidence
+  - name: Run manifest record
+    path: results/{dataset}/{model}/seed-{seed}/identity.json
+    purpose: binds commit, environment, dataset, model, and seed to the artifact family
+  - name: Aggregated report
+    path: reports/main_table.csv
+    purpose: generated summary derived from preserved per-run evidence
+results_intro: Example summaries demonstrate the reporting contract only; published values must be generated from the preserved five-seed metric records.
+results:
+  - dataset: Dataset-A
+    model: ProposedNet
+    seeds: '5'
+    metric: MAE
+    summary: 10.1 ± 0.1
+  - dataset: Dataset-A
+    model: STGCN
+    seeds: '5'
+    metric: MAE
+    summary: 10.8 ± 0.2
+  - dataset: Dataset-B
+    model: ProposedNet
+    seeds: '5'
+    metric: MAE
+    summary: 13.5 ± 0.2
+  - dataset: Dataset-C
+    model: ProposedNet
+    seeds: '5'
+    metric: MAE
+    summary: 17.9 ± 0.2
+boundaries:
+  - smoke tests validate plumbing and artifact production, not paper-level accuracy
+  - mean values without retained per-seed evidence are insufficient for significance-bearing claims
+  - baseline fairness depends on search budget, stopping rule, checkpoint selection, preprocessing, and metric identity
+  - checkpoint evaluation reproduces an evaluation result but does not by itself reproduce stochastic training
+  - hardware-dependent runtime comparisons require documented device, library build, precision, and batch-size contracts
+  - result tables are derived reports; resolved configs, metrics, predictions, checkpoints, and logs remain the auditable evidence layer
+citation:
+  intro: Cite the study for scientific claims and the archived software release when reproducing or extending the experimental evidence.
+  paper: docs/paper.md
+  cff: CITATION.cff
+license_text: DeepBenchmark is released under the MIT License.

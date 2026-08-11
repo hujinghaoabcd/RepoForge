@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="RepoForge" width="520">
+</p>
+
 # RepoForge
 
 **Reusable repository documentation and project standards.**
@@ -31,11 +35,20 @@ research-algorithm
 ├── minimal
 ├── standard
 └── full
+
+research-experiment
+├── minimal
+├── standard
+└── full
 ```
 
 The three profiles are **independent templates**, not conditional branches inside one large README template.
 
-`scientific-python` is the more mature family and includes profile contracts, templates, rendered examples, YAML configs, previews, and dedicated stress tests. `research-algorithm` now has its initial contract, reference notes, independent profile rules, templates, example configs, and renderer tests.
+- `scientific-python` — reusable scientific software packages;
+- `research-algorithm` — original scientific or technical methods;
+- `research-experiment` — paper code, benchmark studies, and reproducibility repositories.
+
+Each implemented family has independent profile contracts, Jinja templates, YAML example configs, rendered examples, previews, and renderer tests. Scientific software and research-method families also include deliberately difficult stress cases.
 
 ## Quick start
 
@@ -63,6 +76,14 @@ repoforge render research-algorithm standard \
   --output README.generated.md
 ```
 
+Render a reproducible paper-experiment README:
+
+```bash
+repoforge render research-experiment full \
+  --config templates/research-experiment/full/config.example.yml \
+  --output README.generated.md
+```
+
 The renderer uses strict configuration validation: a template variable that is not declared in the YAML configuration fails visibly instead of silently producing an incomplete README.
 
 ## Previewing profiles
@@ -73,6 +94,12 @@ Approved visual previews live under:
 tests/previews/<project-type>/<profile>.md
 ```
 
+RepoForge's own previews use the single repository brand source:
+
+```text
+assets/logo.svg
+```
+
 Regenerate previews for implemented template families with:
 
 ```bash
@@ -81,21 +108,15 @@ python scripts/generate_previews.py
 
 ## Stress tests
 
-Scientific Python profiles are also exercised against deliberately different package shapes:
+Renderer-backed stress suites live under:
 
 ```text
-tests/stress/scientific-python/
-├── README.md
-├── manifest.yml
-└── cases/
-    ├── tiny-numerical-utility.yml
-    ├── multi-method-geospatial.yml
-    ├── broad-model-library.yml
-    ├── theory-heavy-statistics.yml
-    └── pre1-experimental-package.yml
+tests/stress/
+├── scientific-python/
+└── research-algorithm/
 ```
 
-These are renderer-backed contract tests rather than hand-written showcase READMEs. They are intended to catch cases where a profile becomes too rigid, too verbose, or semantically inappropriate for a real scientific package shape.
+They exercise deliberately different scientific project shapes to catch cases where a profile becomes too rigid, too verbose, or semantically inappropriate. Stress output uses the same RepoForge preview logo, while user-generated project READMEs remain free to supply their own `logo_path`.
 
 ## Project types
 
@@ -123,6 +144,7 @@ Profiles control documentation depth, but each profile is a separate artifact.
 
 ```text
 RepoForge
+├── assets/                        # RepoForge brand assets
 ├── src/repoforge/                 # renderer and CLI
 ├── templates/                     # project-type/profile templates
 ├── profiles/                      # cross-project profile rules
@@ -142,6 +164,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the design.
 - **Minimal, Standard, and Full are independent templates.**
 - **Project type and documentation depth are separate decisions.**
 - **Scientific software treats validation, reproducibility, limitations, and citation as first-class concerns.**
+- **Experiment repositories make data identity, protocol, seeds, result identity, and reproduction commands explicit.**
 - **Generated output remains ordinary readable Markdown.**
 - **Incomplete configuration should fail explicitly rather than create misleading documentation.**
 
@@ -155,7 +178,7 @@ GitHub Actions runs the test suite on supported Python versions and performs a C
 
 ## Status
 
-RepoForge is in early development. `scientific-python` is the first mature renderer family; `research-algorithm` is now the second implemented family and is entering reference-case refinement and preview/snapshot hardening.
+RepoForge is in early development. Three template families are now executable: `scientific-python`, `research-algorithm`, and `research-experiment`. The next families will be implemented incrementally using the same independent-profile and preview-test contracts.
 
 ## License
 

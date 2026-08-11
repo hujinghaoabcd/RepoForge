@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../../assets/logo.svg" alt="LatentMap" width="420">
+</p>
+
 # LatentMap
 
 **A research method for learning task-aware latent geometry with explicit optimization, interpretation, and validation contracts.**

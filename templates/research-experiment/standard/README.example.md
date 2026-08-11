@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="ForecastBench" width="420">
-</p>
-
 # ForecastBench
 
 **Reproducible benchmark code for short-horizon traffic forecasting across standard sensor datasets.**

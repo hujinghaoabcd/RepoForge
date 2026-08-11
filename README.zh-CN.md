@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="RepoForge" width="520">
+</p>
+
 # RepoForge
 
 **可复用的代码仓库文档与项目规范体系。**
@@ -29,11 +33,20 @@ research-algorithm
 ├── minimal
 ├── standard
 └── full
+
+research-experiment
+├── minimal
+├── standard
+└── full
 ```
 
 三种 Profile 都是**独立模板**，不是一个大模板里的条件分支。
 
-`scientific-python` 目前更成熟，已经包含 Profile 合同、Jinja 模板、YAML 示例、预览和专门压力测试；`research-algorithm` 已建立第一版合同、参考分析、三档独立模板、配置和 renderer 测试。
+- `scientific-python` —— 可复用科研 Python 软件包；
+- `research-algorithm` —— 原创科学/技术方法与创新算法；
+- `research-experiment` —— 论文代码、基准实验与可复现实验仓库。
+
+每个已实现家族都具有独立 Profile 合同、Jinja 模板、YAML 示例配置、生成示例、预览和 renderer 测试。科研软件与原创算法家族还包含专门的压力测试。
 
 ## 快速开始
 
@@ -61,12 +74,28 @@ repoforge render research-algorithm standard \
   --output README.generated.md
 ```
 
+生成论文实验 Full README：
+
+```bash
+repoforge render research-experiment full \
+  --config templates/research-experiment/full/config.example.yml \
+  --output README.generated.md
+```
+
 渲染器使用严格变量检查：模板需要但 YAML 没有声明的字段会直接报错，不会静默生成残缺 README。
 
 ## 预览
 
+预览文件位于：
+
 ```text
 tests/previews/<project-type>/<profile>.md
+```
+
+RepoForge 自己的预览统一使用仓库中的唯一品牌源：
+
+```text
+assets/logo.svg
 ```
 
 重新生成已实现模板类型的预览：
@@ -75,21 +104,17 @@ tests/previews/<project-type>/<profile>.md
 python scripts/generate_previews.py
 ```
 
-## 科研 Python 压力测试
+## 压力测试
+
+Renderer-backed 压力测试位于：
 
 ```text
-tests/stress/scientific-python/
-├── README.md
-├── manifest.yml
-└── cases/
-    ├── tiny-numerical-utility.yml
-    ├── multi-method-geospatial.yml
-    ├── broad-model-library.yml
-    ├── theory-heavy-statistics.yml
-    └── pre1-experimental-package.yml
+tests/stress/
+├── scientific-python/
+└── research-algorithm/
 ```
 
-这 5 个案例不是手写展示 README，而是实际输入 renderer 的配置，用来检查不同 Profile 在真实极端形态下会不会过度膨胀、缺失关键内容或选错结构。
+它们会故意使用差异很大的科研项目形态，检查 Profile 是否过度僵化、过度膨胀或语义不合适。压力测试输出统一使用 RepoForge Logo，但用户真正生成自己的项目 README 时仍可自由提供 `logo_path`。
 
 ## 七类项目类型
 
@@ -113,6 +138,7 @@ tests/stress/scientific-python/
 
 ```text
 RepoForge
+├── assets/                        # RepoForge 品牌资产
 ├── src/repoforge/                 # renderer 与 CLI
 ├── templates/                     # 项目类型 / Profile 模板
 ├── profiles/                      # 跨项目 Profile 规则
@@ -126,6 +152,16 @@ RepoForge
 
 详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
+## 设计原则
+
+- **README 是项目入口，不是完整说明书。**
+- **Minimal、Standard、Full 必须保持独立模板。**
+- **项目类型和文档深度是两个不同维度。**
+- **科研软件把 Validation、Reproducibility、Limitations、Citation 作为一级需求。**
+- **实验仓库必须明确数据身份、实验协议、随机种子、结果身份和复现命令。**
+- **生成结果始终是普通可读 Markdown。**
+- **配置缺失时应明确失败，而不是生成误导性的文档。**
+
 ## 测试
 
 ```bash
@@ -136,7 +172,7 @@ GitHub Actions 会在支持的 Python 版本上运行测试，并执行 CLI 渲�
 
 ## 当前状态
 
-RepoForge 处于早期开发阶段。`scientific-python` 是第一套较成熟模板；`research-algorithm` 已成为第二套可执行模板，下一步将继续补充真实案例、预览与压力测试。
+RepoForge 目前已有三套可执行模板家族：`scientific-python`、`research-algorithm` 和 `research-experiment`。后续将继续按同一套独立 Profile + Preview/Stress Test 规则逐类实现。
 
 ## License
 

@@ -1,0 +1,161 @@
+logo_path: null
+figure_path: null
+project_name: ForecastBench
+tagline: A full reproducibility repository for multi-dataset, multi-seed traffic forecasting experiments.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#environment-and-hardware) [![Paper](https://img.shields.io/badge/paper-study-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#reproducibility-boundaries) [![Reproducibility](https://img.shields.io/badge/reproducibility-full-brightgreen)](#experiment-protocol) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Paper · Data · Protocol · Main Results · Ablations · Artifacts · Citation
+paper_link: docs/paper.md
+highlights:
+  - one command family reproduces the proposed model across four benchmark datasets
+  - baseline tuning uses a documented shared search policy rather than ad-hoc per-model choices
+  - main claims are reported over five fixed seeds with per-seed predictions retained
+  - ablation, sensitivity, and significance analyses use versioned experiment manifests
+model_text: ForecastBench evaluates a graph-based spatiotemporal forecasting model and a controlled set of temporal, graph, and adaptive-graph baselines under one shared data and evaluation contract.
+datasets:
+  - name: PeMSD3
+    role: benchmark
+    path: data/PeMSD3/data.npz
+    identity: 5-minute flow observations; chronological 60/20/20 split; train-only Z-score statistics
+  - name: PeMSD4
+    role: benchmark
+    path: data/PeMSD4/data.npz
+    identity: same preprocessing contract; dataset-specific graph metadata versioned with the input
+  - name: PeMSD7
+    role: benchmark
+    path: data/PeMSD7/data.npz
+    identity: same preprocessing contract; large-node benchmark used to expose scalability limits
+  - name: PeMSD8
+    role: benchmark
+    path: data/PeMSD8/data.npz
+    identity: same preprocessing contract; reference dataset for examples and smoke checks
+environment_text: Install the pinned experiment environment. Exact package versions and CUDA/PyTorch build information should be captured in the lock file or environment export used for published runs.
+environment_command: python -m pip install -r requirements-lock.txt
+hardware_text: Published main runs assume one CUDA-capable GPU per training process. Multi-GPU launchers may parallelize independent dataset/seed jobs, but they must not silently change per-run batch size or optimization semantics.
+fastest_start: python scripts/train.py --config configs/main/pemsd8.yml --seed 42 --epochs 2 --smoke-test
+fastest_start_result: A successful smoke run writes a resolved config, one checkpoint, and metric JSON under `results/smoke/pemsd8/` without claiming paper-level performance.
+models:
+  - name: ProposedModel
+    role: proposed method
+    config: configs/main/{dataset}.yml
+    tuning: primary hyperparameters fixed by the paper protocol; dataset-specific values must be declared in config
+  - name: STGCN
+    role: graph baseline
+    config: configs/baselines/stgcn.yml
+    tuning: shared baseline search budget with validation-only model selection
+  - name: DCRNN
+    role: recurrent graph baseline
+    config: configs/baselines/dcrnn.yml
+    tuning: shared baseline search budget with validation-only model selection
+  - name: AGCRN
+    role: adaptive graph baseline
+    config: configs/baselines/agcrn.yml
+    tuning: shared baseline search budget with validation-only model selection
+  - name: GRU
+    role: temporal baseline
+    config: configs/baselines/gru.yml
+    tuning: shared hidden-size/dropout search budget on the validation split
+protocol:
+  window: 12 historical 5-minute steps predict the next 12 steps
+  split: chronological 60% train / 20% validation / 20% test for every dataset
+  preprocessing: flow-only input; Z-score parameters fitted on training data and reused unchanged for validation/test
+  seeds: 42, 43, 44, 45, 46 for the main model and significance-bearing baseline comparisons
+  metrics: MAE, RMSE, and MAPE reported overall and by forecast horizon
+  model_selection: select the best validation MAE checkpoint per seed, then evaluate that checkpoint once on test data
+  baseline_tuning: each tunable baseline receives a documented equal search budget; test metrics are never used for hyperparameter selection
+  training_controls: gradient clipping, early stopping, learning-rate schedule, and maximum epochs are declared in resolved configs and saved with each run
+main_commands:
+  - name: Run the proposed model on all datasets and seeds
+    description: Execute the canonical experiment manifest. Independent jobs may be parallelized externally without changing the per-run configuration.
+    command: python scripts/run_manifest.py manifests/main_5seeds.yml
+  - name: Run the comparison baselines
+    description: Train and evaluate the approved baseline configurations under the same split, preprocessing, seed, and metric contract.
+    command: python scripts/run_manifest.py manifests/baselines_5seeds.yml
+  - name: Rebuild the main result table
+    description: Aggregate only completed, identity-checked result records into the paper-facing summary table.
+    command: python scripts/summarize.py manifests/main_table.yml --output reports/main_table.csv
+analysis_commands:
+  - name: Ablation study
+    description: Run the declared component-removal variants with the same seed and data protocol as the full model.
+    command: python scripts/run_manifest.py manifests/ablation_5seeds.yml
+  - name: Sensitivity analysis
+    description: Evaluate selected hierarchy, regularization, or architectural parameters without reusing the test split for selection.
+    command: python scripts/run_manifest.py manifests/sensitivity.yml
+  - name: Horizon-wise analysis
+    description: Aggregate saved predictions to compare error growth across the 12 forecast horizons.
+    command: python scripts/analyze_horizons.py results/ --manifest manifests/main_5seeds.yml
+statistical_testing:
+  text: Significance tests use paired per-seed metrics for runs that share the same dataset, split, target, horizon, and seed identity. The test name, alternative, correction policy, and effect-size summary belong in the generated report rather than being inferred from mean values alone.
+  command: python scripts/significance.py --manifest manifests/significance.yml --output reports/significance.csv
+artifacts:
+  - name: Resolved configuration
+    path: results/{dataset}/{model}/seed-{seed}/config.resolved.yml
+    purpose: exact parameters used by the run
+  - name: Best checkpoint
+    path: results/{dataset}/{model}/seed-{seed}/checkpoints/best.pt
+    purpose: validation-selected model evaluated on the test split
+  - name: Per-seed metrics
+    path: results/{dataset}/{model}/seed-{seed}/metrics.json
+    purpose: auditable MAE/RMSE/MAPE values and run identity
+  - name: Predictions
+    path: results/{dataset}/{model}/seed-{seed}/predictions.npz
+    purpose: horizon-wise analysis, significance checks, and paper-figure regeneration
+  - name: Training log
+    path: results/{dataset}/{model}/seed-{seed}/train.jsonl
+    purpose: optimization diagnostics and selected-checkpoint trace
+  - name: Aggregated report
+    path: reports/main_table.csv
+    purpose: generated paper-facing summary, never the sole source of raw evidence
+published_artifacts:
+  - name: Reference checkpoints
+    location: releases/<paper-version>/checkpoints/
+    description: selected published checkpoints for evaluation without retraining
+  - name: Reference predictions
+    location: releases/<paper-version>/predictions/
+    description: predictions used to regenerate reported horizon-wise and significance analyses
+  - name: Experiment manifests
+    location: manifests/
+    description: versioned definitions connecting dataset, model, seed, and analysis families
+results_intro: Example values below illustrate the table contract only. A real repository must populate them from identity-checked per-seed result files and should report dispersion when the paper makes stochastic-comparison claims.
+results:
+  - dataset: PeMSD8
+    model: ProposedModel
+    seeds: '5'
+    metric: MAE
+    summary: 15.2 ± 0.1
+  - dataset: PeMSD8
+    model: STGCN
+    seeds: '5'
+    metric: MAE
+    summary: 16.4 ± 0.2
+  - dataset: PeMSD4
+    model: ProposedModel
+    seeds: '5'
+    metric: MAE
+    summary: 19.1 ± 0.2
+documentation:
+  - name: Reproduction Guide
+    link: docs/REPRODUCIBILITY.md
+    description: end-to-end server and local workflows
+  - name: Dataset Guide
+    link: docs/DATASETS.md
+    description: source, preprocessing, graph metadata, and checksums
+  - name: Baseline Protocol
+    link: docs/BASELINES.md
+    description: tuning budgets, approved configurations, and fairness rules
+  - name: Experiment Manifests
+    link: manifests/
+    description: executable definitions of main, baseline, ablation, and sensitivity runs
+  - name: Result Identity
+    link: docs/RESULTS.md
+    description: run IDs, checkpoint selection, predictions, and report generation
+boundaries:
+  - exact floating-point values may vary across GPU architecture and library builds; published tolerances should be documented where bitwise equality is unrealistic
+  - a result is not considered paper-reproducible unless dataset identity, resolved config, checkpoint, seed, and metric implementation are all known
+  - smoke-test commands verify plumbing only and must not be compared with paper metrics
+  - aggregated means are insufficient for significance claims when per-seed or paired outputs are required
+  - baseline fairness depends on the declared tuning budget and model-selection rule, not only on using the same train/test split
+citation:
+  intro: Cite the study paper for the reported scientific results and cite the software release or archive when this codebase is used to reproduce or extend them.
+  paper: docs/paper.md
+  cff: CITATION.cff
+license_text: ForecastBench is released under the MIT License.

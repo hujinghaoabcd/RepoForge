@@ -1,0 +1,55 @@
+project_name: MultiBench
+tagline: A compact benchmark repository spanning several datasets under one fixed protocol.
+overview_text: MultiBench reproduces the main comparison path of a small benchmark paper across three datasets without introducing the full ablation and statistical-analysis machinery of a large study.
+model_text: One proposed model is trained independently on each dataset using the same input/output contract and validation-based checkpoint selection rule.
+datasets:
+  - name: Dataset-A
+    role: benchmark
+    path: data/a/data.npz
+    notes: chronological split; training-only normalization statistics
+  - name: Dataset-B
+    role: benchmark
+    path: data/b/data.npz
+    notes: same preprocessing contract with dataset-specific metadata
+  - name: Dataset-C
+    role: benchmark
+    path: data/c/data.npz
+    notes: held as the larger scalability-oriented benchmark
+commands:
+  - name: Run all benchmark datasets
+    description: Execute the approved dataset configurations sequentially or as independent jobs.
+    command: python scripts/run_matrix.py configs/main_matrix.yml --seed 42
+  - name: Rebuild the summary table
+    description: Aggregate completed identity-checked metric files into the paper-facing benchmark table.
+    command: python scripts/summarize.py results/ --output reports/main.csv
+protocol:
+  split: chronological 60% train / 20% validation / 20% test per dataset
+  preprocessing: dataset-specific normalization fitted on training observations only
+  seeds: one reference seed for the compact benchmark; use Full when stochastic inference or significance is a paper claim
+  metrics: MAE and RMSE for every dataset using one shared implementation
+  model_selection: best validation MAE checkpoint per dataset, followed by one test evaluation
+results_intro: The example table shows the shape of the benchmark summary; real repositories should generate it from preserved per-dataset result files.
+results:
+  - setting: Dataset-A / proposed
+    metric: MAE
+    value: '10.2'
+  - setting: Dataset-B / proposed
+    metric: MAE
+    value: '13.8'
+  - setting: Dataset-C / proposed
+    metric: MAE
+    value: '18.1'
+output_text: Each dataset run writes its resolved configuration, selected checkpoint, log, and metric JSON under `results/<dataset>/`.
+structure_text: |-
+  configs/       one configuration per benchmark dataset
+  data/          versioned benchmark inputs and metadata
+  models/        proposed model implementation
+  scripts/       run matrix and summary commands
+  results/       per-dataset artifacts and metrics
+  reports/       generated benchmark summaries
+  docs/          protocol and data identity notes
+citation:
+  intro: Cite the benchmark paper for the reported study and the software release when reusing the implementation.
+  paper: docs/paper.md
+  cff: CITATION.cff
+license_text: MultiBench is released under the MIT License.

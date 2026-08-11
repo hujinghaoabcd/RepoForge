@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../../assets/logo.svg" alt="SpatialTools" width="420">
+</p>
+
 # SpatialTools
 
 **A research-oriented Python library for spatial statistics, local modelling, diagnostics, and reproducible geospatial workflows.**

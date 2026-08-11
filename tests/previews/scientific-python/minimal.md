@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../../assets/logo.svg" alt="SpatialTools" width="420">
+</p>
+
 # SpatialTools
 
 **Compact spatial neighborhood analysis for Python.**

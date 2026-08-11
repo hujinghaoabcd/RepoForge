@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="ForecastBench" width="420">
-</p>
-
 # ForecastBench
 
 **A full reproducibility repository for multi-dataset, multi-seed traffic forecasting experiments.**

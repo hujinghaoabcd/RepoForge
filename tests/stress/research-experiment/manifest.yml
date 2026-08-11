@@ -1,0 +1,51 @@
+cases:
+  - name: one-command-reproduction
+    profile: minimal
+    overrides: cases/one-command-reproduction.yml
+    min_lines: 35
+    max_lines: 90
+    required_sections:
+      - '## Environment'
+      - '## Data'
+      - '## Run'
+      - '## Expected Output'
+    forbidden_sections:
+      - '## Experiment Protocol'
+      - '## Statistical Testing'
+
+  - name: checkpoint-first-evaluation
+    profile: standard
+    overrides: cases/checkpoint-first-evaluation.yml
+    min_lines: 80
+    max_lines: 180
+    required_sections:
+      - '## Quick Reproduction'
+      - '## Experiment Protocol'
+      - '## Main Results'
+    forbidden_sections:
+      - '## Ablation and Sensitivity Studies'
+      - '## Statistical Testing'
+
+  - name: compact-multidataset-benchmark
+    profile: standard
+    overrides: cases/compact-multidataset-benchmark.yml
+    min_lines: 90
+    max_lines: 200
+    required_sections:
+      - '## Datasets'
+      - '## Experiment Protocol'
+      - '## Repository Structure'
+    forbidden_sections:
+      - '## Result and Artifact Identity'
+
+  - name: multi-seed-baseline-study
+    profile: full
+    overrides: cases/multi-seed-baseline-study.yml
+    min_lines: 150
+    max_lines: 300
+    required_sections:
+      - '## Available Models and Baselines'
+      - '## Statistical Testing'
+      - '## Result and Artifact Identity'
+      - '## Reproducibility Boundaries'
+    forbidden_sections: []

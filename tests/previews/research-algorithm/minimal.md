@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../../assets/logo.svg" alt="LatentMap" width="420">
+</p>
+
 # LatentMap
 
 **A compact research method for learning task-aware latent distances.**
