@@ -17,6 +17,8 @@ def test_canonical_repoforge_assets_exist():
     assert (ROOT / "assets" / "logo.svg").is_file()
     assert (ROOT / "assets" / "placeholders" / "screenshot.svg").is_file()
     assert not (ROOT / "assets" / "repoforge-logo.png").exists()
+    assert not (ROOT / "assets" / "screenshots" / "repoforge-preview.webp").exists()
+    assert not (ROOT / "assets" / "screenshots" / "repoforge-workflow.webp").exists()
 
 
 def test_repository_readmes_use_compact_header_and_content_placeholder():
