@@ -1,0 +1,113 @@
+logo_path: null
+method_figure: null
+project_name: GeoMetricGWR
+tagline: A learned spatial metric for local regression with explicit geometry, prediction, and interpretation contracts.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Paper · Method · Validation · Examples · API · Citation
+problem_text: Local regression usually defines neighborhoods from a fixed geographic distance, even when predictive similarity varies with terrain, accessibility, network structure, or other task-relevant context. A fixed metric can therefore place scientifically dissimilar observations in the same local neighborhood.
+gap_text: Hand-designed distances remain interpretable but cannot adapt to observed task structure, while generic representation learning can create latent spaces with unclear geographic meaning. GeoMetricGWR makes the learned metric an explicit fitted component and keeps its role separate from the local regression coefficients.
+objective:
+  title: Objective / estimand
+  text: The method learns a positive semi-definite metric jointly with local predictive structure under regularization that keeps the learned geometry identifiable enough for sensitivity analysis.
+  equation: >-
+    $$A^*=\arg\min_{A\succeq0}\sum_i \mathcal{L}\bigl(y_i,\hat y_i(A)\bigr)+\lambda\,\mathcal{R}(A),\qquad
+    d_A(i,j)=\sqrt{(u_i-u_j)^T A (u_i-u_j)}.$$
+formulation:
+  text: Neighborhood weights are computed from the learned distance, while local regression coefficients remain outputs of the local model rather than coordinates of the metric-learning representation.
+  equation: >-
+    $$w_{ij}=K\!\left(d_A(i,j)/b_i\right),\qquad
+    \hat\beta_i=(X^TW_iX)^{-1}X^TW_i y.$$
+algorithm_steps:
+  - name: Validate spatial inputs
+    description: check coordinates, task covariates, scaling, target, and distance-unit contracts.
+  - name: Initialize metric
+    description: start from a documented geographic or identity metric rather than an opaque random geometry when possible.
+  - name: Alternate optimization
+    description: update local-model behavior and metric parameters under the documented objective and regularization.
+  - name: Construct neighborhoods
+    description: compute fitted task-aware distances and kernel weights from the learned metric.
+  - name: Diagnose stability
+    description: evaluate metric, bandwidth, coefficient, and prediction sensitivity before interpretation.
+contributions:
+  - turns spatial distance into an explicit learnable modelling component
+  - preserves a separate contract for learned geometry and local-regression coefficients
+  - supports out-of-sample distance construction under documented feature preprocessing
+  - exposes metric and bandwidth sensitivity as first-class diagnostics
+install_command: python -m pip install geometgwr
+development_install: |-
+  git clone https://github.com/example/geometgwr.git
+  cd geometgwr
+  python -m pip install -e ".[dev,docs]"
+quickstart_intro: Fit a small learned-metric local regression and inspect both local coefficients and the fitted metric.
+quickstart_code: |
+  import numpy as np
+  from geometgwr import GeoMetricGWR
+
+  rng = np.random.default_rng(42)
+  coords = rng.uniform(0, 1, size=(60, 2))
+  context = rng.normal(size=(60, 2))
+  X = rng.normal(size=(60, 2))
+  y = 1.0 + X[:, 0] - 0.5 * X[:, 1] + 0.3 * context[:, 0]
+
+  result = GeoMetricGWR(bandwidth=18, metric_rank=2, random_state=42).fit(
+      X, y, coords=coords, metric_features=context
+  )
+  print(result.local_params_[:3])
+  print(result.metric_matrix_)
+interpretation_contracts:
+  - name: metric_matrix_
+    meaning: fitted task-aware quadratic metric over declared metric features
+    boundary: it is not automatically a physical distance or causal geographic mechanism
+  - name: local_params_
+    meaning: local regression coefficients computed using neighborhoods induced by the fitted metric
+    boundary: coefficient interpretation remains conditional on model specification and local design stability
+  - name: transform_distances
+    meaning: distances for supported new observations using the fitted preprocessing and metric
+    boundary: out-of-distribution metric features require separate validation
+validation:
+  summary: GeoMetricGWR separates numerical correctness, metric recovery, local-model recovery, prediction utility, and scientific interpretation.
+  sections:
+    - name: Numerical checks
+      text: Fixed small matrices verify positive-semidefinite metric construction, kernel weights, and local weighted least-squares calculations.
+    - name: Synthetic recovery
+      text: Simulations with known anisotropic or context-dependent similarity test recovery of neighborhood ordering and local coefficients.
+    - name: Baseline context
+      text: Euclidean GWR, fixed Mahalanobis distance, and non-spatial local regression provide comparative context without defining validity by leaderboard rank.
+    - name: Sensitivity
+      text: Metric rank, regularization, bandwidth, scaling, and initialization are varied to identify unstable regimes.
+  link: docs/validation/index.md
+computational_text: Training combines repeated local-model evaluation with metric optimization. Pairwise distance construction can dominate memory at large n, so production implementations should support neighborhood-limited evaluation or batching; detailed benchmarks belong in the performance guide.
+reproducibility:
+  - all synthetic recovery cases use versioned generators and fixed seeds
+  - metric preprocessing and feature order are serialized with fitted results
+  - validation runs record bandwidth, regularization, rank, and optimizer configuration
+  - paper experiments are kept separate from unit and numerical-contract tests
+limitations:
+  - learned distance is conditional on the training task, metric features, scaling, and regularization
+  - a learned metric should not be described as geographic truth without independent evidence
+  - local coefficient instability can persist even when the learned metric improves prediction
+  - extrapolating the learned geometry beyond the training support requires separate evaluation
+documentation:
+  - name: Method Guide
+    link: docs/method/index.md
+    description: objective, metric semantics, and local-model formulation
+  - name: Interpretation Guide
+    link: docs/interpretation.md
+    description: metric versus coefficient meaning and scientific boundaries
+  - name: Validation Guide
+    link: docs/validation/index.md
+    description: numerical checks, recovery, baselines, and sensitivity
+  - name: Examples
+    link: examples/
+    description: synthetic and geospatial workflows
+  - name: API Reference
+    link: docs/api.md
+    description: estimator, fitted result, and distance interfaces
+citation:
+  intro: Cite the method paper for the learned spatial metric formulation and the software release when this implementation contributes materially to results.
+  paper: docs/paper.md
+  bibtex: null
+  cff: CITATION.cff
+support_text: Use the method and interpretation guides for scientific questions and the issue tracker for reproducible software defects.
+contributing_link: CONTRIBUTING.md
+license_text: GeoMetricGWR is released under the MIT License.
