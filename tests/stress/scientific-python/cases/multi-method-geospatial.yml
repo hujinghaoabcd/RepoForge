@@ -1,0 +1,67 @@
+logo_path: null
+language_switch: null
+project_name: GeoKernel
+tagline: Kernel-based spatial analysis utilities for points, networks, and local surfaces.
+badges: '[![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)'
+navigation: Documentation · Examples · API · Citation
+why_text: GeoKernel consolidates recurring kernel-weight, neighborhood, bandwidth, and geospatial result workflows while keeping spatial assumptions explicit.
+features:
+  - name: Spatial kernels
+    description: Gaussian, bisquare, exponential, and user-defined weighting functions.
+  - name: Bandwidth selection
+    description: Fixed and adaptive neighborhood selection workflows.
+  - name: Network support
+    description: Kernel operations over graph distances and prepared network workspaces.
+  - name: GeoDataFrame interoperability
+    description: Explicit geometry-aware inputs and exportable result tables.
+install_note: Install the stable package from PyPI.
+install_command: python -m pip install geokernel
+verify_command: python -c "import geokernel; print(geokernel.__version__)"
+optional_install_commands: []
+quickstart_intro: Estimate a kernel-weighted local mean from synthetic coordinates.
+quickstart_code: |
+  import numpy as np
+  from geokernel import LocalKernelMean
+
+  rng = np.random.default_rng(7)
+  coords = rng.uniform(0, 10, size=(30, 2))
+  values = rng.normal(size=30)
+
+  result = LocalKernelMean(bandwidth=4.0, kernel="gaussian").fit(coords, values)
+  print(result.local_mean[:5])
+methods:
+  - name: KernelWeights
+    purpose: Build kernel-weight matrices
+    notes: Fixed or adaptive bandwidths
+  - name: LocalKernelMean
+    purpose: Estimate local weighted summaries
+    notes: Point-based spatial workflows
+  - name: NetworkKernel
+    purpose: Evaluate kernels over graph distances
+    notes: Prepared network workspace required
+validation:
+  summary: Numerical and spatial contracts are tested against independent calculations and fixed fixtures.
+  items:
+    - distance and kernel calculations use deterministic reference fixtures
+    - selected bandwidth searches are checked against brute-force reference calculations
+    - invalid CRS or incompatible shape contracts fail explicitly
+  link: docs/validation.md
+documentation:
+  - name: Getting Started
+    link: docs/getting-started.md
+    description: installation and first workflows
+  - name: Examples
+    link: examples/
+    description: spatial and network examples
+  - name: API Reference
+    link: docs/api.md
+    description: public classes and functions
+citation:
+  intro: Cite the software release when GeoKernel is used in academic work.
+  cff: CITATION.cff
+  doi: null
+limitations:
+  - users remain responsible for scientifically appropriate CRS and distance units
+support_text: Use the issue tracker for reproducible bugs and the documentation for usage guidance.
+contributing_link: CONTRIBUTING.md
+license_text: GeoKernel is released under the BSD 3-Clause License.
