@@ -1,0 +1,107 @@
+logo_path: null
+method_figure: null
+project_name: LatentMap
+tagline: A research method for learning task-aware latent geometry with explicit optimization, interpretation, and validation contracts.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Paper · Method Guide · Validation · Examples · API · Citation
+problem_text: Many scientific workflows assume that observed-space Euclidean distance is the relevant notion of similarity. When the task depends on structure that is not aligned with that metric, neighborhoods and downstream local models can be poorly matched to the scientific target.
+gap_text: Fixed metrics cannot adapt to task-specific structure, while generic representation learning can produce embeddings whose scientific meaning is unclear. LatentMap treats the learned geometry itself as a documented model object with explicit training objective, distance semantics, and downstream-use boundaries.
+objective:
+  title: Objective / estimand
+  text: LatentMap learns a parameterized mapping whose latent distances improve a documented task objective while preserving an explicit regularization contract.
+  equation: '$$\theta^* = \arg\min_\theta \; \mathcal{L}_{task}(f_\theta(X), y) + \lambda\,\mathcal{R}(\theta).$$'
+formulation:
+  text: Each observation is mapped into a latent coordinate system. Downstream neighborhoods are defined from distances in that learned space rather than assumed directly from the original feature coordinates.
+  equation: '$$z_i=f_\theta(x_i), \qquad d_{ij}^{(z)}=\lVert z_i-z_j\rVert_2.$$'
+algorithm_steps:
+  - name: Prepare inputs
+    description: validate feature, target, scaling, and deterministic seed contracts.
+  - name: Learn the map
+    description: optimize the task objective and regularization terms.
+  - name: Construct latent geometry
+    description: expose fitted embeddings and latent-distance operations.
+  - name: Validate
+    description: evaluate recovery, stability, and downstream behavior under documented cases.
+  - name: Apply downstream
+    description: use latent distances only in workflows whose interpretation matches the trained objective.
+contributions:
+  - reframes distance selection as a learnable scientific modelling component
+  - exposes latent geometry as an inspectable fitted object rather than a hidden neural representation
+  - separates representation learning from downstream neighborhood construction
+  - documents validation and interpretation boundaries for the learned metric
+install_command: python -m pip install latentmap
+development_install: |-
+  git clone https://github.com/example/latentmap.git
+  cd latentmap
+  python -m pip install -e ".[dev,docs]"
+quickstart_intro: Learn a latent geometry from a small task and inspect the fitted coordinates.
+quickstart_code: |
+  import numpy as np
+  from latentmap import LatentMap
+
+  rng = np.random.default_rng(42)
+  X = rng.normal(size=(80, 4))
+  y = X[:, 0] - 0.5 * X[:, 1] + rng.normal(scale=0.1, size=80)
+
+  model = LatentMap(n_components=2, regularization=0.05, random_state=42)
+  result = model.fit(X, y)
+
+  print(result.embedding_.shape)
+  print(result.pairwise_distances()[:3, :3])
+interpretation_contracts:
+  - name: embedding_
+    meaning: learned coordinates for observations used during fitting
+    boundary: axes need not correspond to physical dimensions
+  - name: pairwise_distances
+    meaning: task-aware distances induced by the learned representation
+    boundary: valid only relative to the fitted objective and preprocessing contract
+  - name: transform
+    meaning: map supported new observations into the learned space
+    boundary: extrapolation outside the training distribution requires separate validation
+validation:
+  summary: LatentMap treats implementation validation, synthetic recovery, downstream utility, and sensitivity as separate evidence categories.
+  sections:
+    - name: Analytical and numerical checks
+      text: Small deterministic cases check distance calculations, regularization behavior, and fitted-object consistency.
+    - name: Synthetic recovery
+      text: Controlled simulations test whether known task-relevant structure is recovered under documented signal and noise settings.
+    - name: Reference comparisons
+      text: Fixed-metric and standard representation baselines provide context without being treated as proof of universal superiority.
+    - name: Sensitivity
+      text: Representation dimension, regularization, initialization, and scaling are varied to identify unstable regimes.
+  link: docs/validation/index.md
+computational_text: The dominant cost is representation optimization plus pairwise or neighborhood distance evaluation. The README should report order-of-growth or practical bottlenecks only when they are measured and relevant; detailed benchmarks belong in the performance documentation.
+reproducibility:
+  - documented examples use fixed random seeds
+  - synthetic generators and reference fixtures are versioned with the repository
+  - validation commands record package version and configuration
+  - paper-facing experiments are separated from unit tests and archived result artifacts
+limitations:
+  - learned geometry is conditional on the objective, training distribution, preprocessing, and model capacity
+  - latent axes are not automatically physical, causal, or geographically meaningful
+  - improved downstream prediction does not by itself validate scientific interpretation of the embedding
+  - out-of-distribution transformation requires separate evidence
+documentation:
+  - name: Method Guide
+    link: docs/method/index.md
+    description: formulation, assumptions, and interpretation
+  - name: Validation Guide
+    link: docs/validation/index.md
+    description: recovery, sensitivity, references, and claim boundaries
+  - name: Examples
+    link: examples/
+    description: complete runnable workflows
+  - name: API Reference
+    link: docs/api.md
+    description: fitted objects and public operations
+  - name: Reproducibility Guide
+    link: docs/reproducibility.md
+    description: commands, seeds, configs, and archived evidence
+citation:
+  intro: Cite the LatentMap method paper for the scientific contribution and the software release when this implementation contributes materially to the analysis.
+  paper: docs/paper.md
+  bibtex: null
+  cff: CITATION.cff
+support_text: Use the method and validation guides for scientific interpretation questions and the issue tracker for reproducible software defects.
+contributing_link: CONTRIBUTING.md
+license_text: LatentMap is released under the MIT License.
