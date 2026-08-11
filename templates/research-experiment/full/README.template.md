@@ -101,7 +101,7 @@
 ## Result and Artifact Identity
 
 | Artifact | Stable location / rule | Purpose |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 {% for artifact in artifacts %}| **{{ artifact.name }}** | `{{ artifact.path }}` | {{ artifact.purpose }} |
 {% endfor %}
 
