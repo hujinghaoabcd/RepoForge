@@ -123,6 +123,26 @@ changelog
 
 An item cannot be included and excluded at the same time.
 
+## README ownership modes
+
+RepoForge supports two README ownership modes:
+
+```yaml
+repoforge:
+  readme_management: managed-sections
+```
+
+and:
+
+```yaml
+repoforge:
+  readme_management: whole-file
+```
+
+New configs created by `repoforge init` use `managed-sections`. In v1, RepoForge owns only the stable centered-header regions `identity`, `badges`, and `navigation`. Project prose outside those markers remains user-owned and is preserved across apply runs.
+
+Older configs without `readme_management` retain the historical `whole-file` behavior. See [`MANAGED_SECTIONS.md`](MANAGED_SECTIONS.md) for the exact marker contract and migration rules.
+
 ## Safe overwrite behavior
 
 RepoForge builds and renders the complete plan before it writes any file.
@@ -135,7 +155,11 @@ unchanged
 overwrite
 ```
 
-If any selected destination already exists with different content, normal apply fails **before writing any selected file**.
+For whole-file-managed files, a differing existing destination remains a conflict: normal apply fails **before writing any selected file** unless `--force` is supplied.
+
+A README that already contains the complete RepoForge managed marker set is different. Changes inside its managed regions are safe section replacements, so `repoforge apply` can update those regions without `--force` while preserving all user-owned text outside the markers.
+
+An existing README with no RepoForge markers is **not** auto-merged. If a managed-section config targets an unmarked README, it remains a normal overwrite conflict and therefore requires an explicit reviewed migration with `--force`.
 
 Use `repoforge diff` to inspect the exact unified text changes before apply.
 
@@ -153,7 +177,7 @@ Use:
 --force
 ```
 
-only when you intentionally want RepoForge to replace differing selected files.
+only when you intentionally want RepoForge to replace a conflicting whole file or explicitly migrate an unmarked README.
 
 `--force` does not delete unrelated repository files.
 
@@ -168,6 +192,7 @@ repoforge:
   config_version: 1
   project_type: scientific-python
   profile: standard
+  readme_management: managed-sections
 ```
 
 README templates read the fields they need. Repository standards read their own sections such as:
@@ -187,12 +212,12 @@ Extra keys are harmless to a README template. This keeps one project-owned `repo
 
 Some standards intentionally require explicit project-owned information. In particular, Code of Conduct and Security templates require a private reporting contact/channel. RepoForge does not infer or invent those values. The `init` output is a maintained starter configuration and must be reviewed before apply.
 
-See [`INIT.md`](INIT.md) for initialization details and [`DIFF.md`](DIFF.md) for exact change review.
+See [`INIT.md`](INIT.md) for initialization details, [`DIFF.md`](DIFF.md) for exact change review, and [`MANAGED_SECTIONS.md`](MANAGED_SECTIONS.md) for README ownership rules.
 
 ## Current boundary
 
-`apply` manages only the files selected by the current plan. It does not yet perform managed-section updates inside an existing hand-written README, semantic merges, or automatic repository backups.
+Managed Sections v1 performs deterministic marker-based replacement only for `identity`, `badges`, and `navigation`. It does **not** semantically merge Overview, Features, Methods, Experiments, Installation prose, screenshots, API documentation, or other README body sections.
 
-For an existing repository with valuable hand-written standard files, run `repoforge diff`, review all `[overwrite]` sections, then use `--dry-run` to confirm the selected paths. Do not use `--force` until the generated output has been compared with the existing content.
+Other selected repository-standard files remain whole-file managed. For valuable hand-written `CONTRIBUTING.md`, `SECURITY.md`, `CITATION.cff`, or similar files, run `repoforge diff`, review all `[overwrite]` sections, then use `--dry-run` to confirm the selected paths. Do not use `--force` until the generated output has been compared with the existing content.
 
-`repoforge diff` uses the same rendered plan and does not change this safety model; it only makes the planned text replacement visible before writing.
+`repoforge diff`, `repoforge apply`, and `repoforge check` use the same target-aware managed-section materialization, so the reviewed diff represents the content apply would write and check would validate.
