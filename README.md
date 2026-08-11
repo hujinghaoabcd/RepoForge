@@ -172,9 +172,10 @@ Review `repoforge.yml`, inspect the exact text changes, then apply it:
 repoforge diff /path/to/project --config /path/to/project/repoforge.yml
 repoforge apply /path/to/project --config /path/to/project/repoforge.yml --dry-run
 repoforge apply /path/to/project --config /path/to/project/repoforge.yml
+repoforge check /path/to/project
 ```
 
-`init` records the explicit project type/profile in the config, so normal `diff` and `apply` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), and [`docs/APPLY.md`](docs/APPLY.md).
+`init` records the explicit project type/profile in the config, so normal `diff`, `apply`, and `check` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), [`docs/APPLY.md`](docs/APPLY.md), and [`docs/CHECK.md`](docs/CHECK.md).
 
 ## How rendering works
 
@@ -227,7 +228,7 @@ Run the complete suite with:
 python -m pytest
 ```
 
-GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13**, performs CLI render smoke tests for all seven template families, and exercises the full `init → diff → apply` workflow against a temporary repository.
+GitHub Actions runs the tests on Python **3.11, 3.12, and 3.13**, performs CLI render smoke tests for all seven template families, and exercises the full `init → diff → apply → check` workflow against a temporary repository, including an intentional drift failure.
 
 Renderer-backed stress suites live under:
 
@@ -306,6 +307,7 @@ Available now:
 - `repoforge init` for one combined, explicitly typed `repoforge.yml`;
 - `repoforge diff` for unified, no-write review of the exact selected apply plan;
 - `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;
+- `repoforge check` for CI-facing config, drift, CFF/Issue Form, and placeholder validation;
 - 7 project types × 3 independent profiles;
 - community, GitHub collaboration, citation, and changelog standards;
 - strict Jinja/YAML validation;
@@ -314,7 +316,6 @@ Available now:
 
 Not implemented yet:
 
-- the `check` repository workflow;
 - managed partial updates or semantic merges inside an existing hand-edited README;
 - a published PyPI release.
 
@@ -324,13 +325,9 @@ So the current release is already useful as a **README and repository-standards 
 
 RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
 
-The repository standards packs plus `init`, `diff`, and the first safe `apply` workflow are now implemented. The next workflow layer is:
+The repository standards packs plus `init`, `diff`, `apply`, and `check` are now implemented. The next productization layer is managed partial/semantic updates for hand-edited files and a published package.
 
-```text
-repoforge check .      # planned: validate repository documentation contracts
-```
-
-The currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, and `repoforge apply`.
+The currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, `repoforge apply`, and `repoforge check`.
 
 ## Contributing
 
