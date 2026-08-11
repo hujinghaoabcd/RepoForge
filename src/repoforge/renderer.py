@@ -25,6 +25,10 @@ def find_template_root(explicit: str | Path | None = None) -> Path:
             raise FileNotFoundError(f"Template root does not exist: {root}")
         return root
 
+    packaged_root = Path(__file__).resolve().parent / "_data" / "templates"
+    if packaged_root.is_dir():
+        return packaged_root
+
     candidates = [Path.cwd(), *Path(__file__).resolve().parents]
     for candidate in candidates:
         root = candidate / "templates"
@@ -32,7 +36,7 @@ def find_template_root(explicit: str | Path | None = None) -> Path:
             return root
 
     raise FileNotFoundError(
-        "Could not locate RepoForge templates. Run from a RepoForge checkout "
+        "Could not locate RepoForge templates. Reinstall repoforge-standards "
         "or pass --template-root."
     )
 
