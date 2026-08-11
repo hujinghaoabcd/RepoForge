@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/hujinghaoabcd/RepoForge/actions/workflows/tests.yml/badge.svg"></a>
-  <a href="pyproject.toml"><img alt="Version" src="https://img.shields.io/badge/version-0.1.0.dev0-174D5B.svg"></a>
+  <a href="pyproject.toml"><img alt="Version" src="https://img.shields.io/badge/version-0.1.0a1-174D5B.svg"></a>
   <a href="#template-matrix"><img alt="README templates" src="https://img.shields.io/badge/templates-21-139C5A.svg"></a>
   <a href="pyproject.toml"><img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-174D5B.svg"></a>
   <a href="#project-status"><img alt="Status" src="https://img.shields.io/badge/Status-Alpha-F4B942.svg"></a>
@@ -29,6 +29,7 @@
   <a href="#repository-standards">Standards</a> ·
   <a href="#preview">Previews</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
+  <a href="docs/RELEASE.md">Release</a> ·
   <a href="#tests-and-stress-suites">Tests</a>
 </p>
 
@@ -122,7 +123,14 @@ A Full project does **not** have to support every platform, framework, service, 
 
 ## Quick start
 
-Clone and install RepoForge from source:
+The Python distribution is named `repoforge-standards`; the import package and CLI remain `repoforge`. For a published release:
+
+```bash
+python -m pip install repoforge-standards
+repoforge --version
+```
+
+For unreleased development or contributing, install from source:
 
 ```bash
 git clone https://github.com/hujinghaoabcd/RepoForge.git
@@ -175,7 +183,7 @@ repoforge apply /path/to/project --config /path/to/project/repoforge.yml
 repoforge check /path/to/project
 ```
 
-`init` records the explicit project type/profile in the config, so normal `diff`, `apply`, and `check` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), [`docs/APPLY.md`](docs/APPLY.md), and [`docs/CHECK.md`](docs/CHECK.md).
+`init` records the explicit project type/profile in the config, so normal `diff`, `apply`, and `check` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), [`docs/APPLY.md`](docs/APPLY.md), [`docs/CHECK.md`](docs/CHECK.md), and [`docs/RELEASE.md`](docs/RELEASE.md).
 
 ## How rendering works
 
@@ -318,7 +326,7 @@ Available now:
 Not implemented yet:
 
 - semantic management/merging of README body sections beyond the v1 header regions;
-- a published PyPI release.
+- production PyPI publication; `0.1.0a1` packaging and Trusted Publishing automation are prepared under the `repoforge-standards` distribution name, but the index release has not been executed yet.
 
 So the current release is already useful as a **README and repository-standards application tool**, but it intentionally remains explicit rather than becoming a zero-configuration project detector.
 
@@ -326,7 +334,7 @@ So the current release is already useful as a **README and repository-standards 
 
 RepoForge is an **Alpha** project. The initial template layer is complete: all 21 project-type/profile combinations are represented, the renderer is executable, previews are committed, and each family has contract and stress coverage.
 
-The repository standards packs plus `init`, `diff`, `apply`, and `check` are implemented. Managed Sections v1 now preserves hand-edited README body prose while maintaining the stable header regions. The next productization layer is broader semantic body management and a published package.
+The repository standards packs plus `init`, `diff`, `apply`, and `check` are implemented. Managed Sections v1 preserves hand-edited README body prose while maintaining the stable header regions. Version `0.1.0a1` is package-ready with verified wheel/sdist builds and Trusted Publishing automation; the remaining release step is the first TestPyPI/PyPI publication after publisher setup.
 
 The currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, `repoforge apply`, and `repoforge check`. New `init` configs use `readme_management: managed-sections`; see [`docs/MANAGED_SECTIONS.md`](docs/MANAGED_SECTIONS.md).
 

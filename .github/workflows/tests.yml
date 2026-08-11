@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   pytest:
     runs-on: ubuntu-latest
@@ -13,9 +16,9 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -28,6 +31,9 @@ jobs:
 
       - name: CLI smoke
         run: |
+          repoforge --version
+          test "$(repoforge --version)" = "repoforge 0.1.0a1"
+
           repoforge render scientific-python minimal \
             --config templates/scientific-python/minimal/config.example.yml \
             --output /tmp/README.scientific-python.md
@@ -152,3 +158,76 @@ jobs:
             exit 1
           fi
           grep -q "FAIL  README.md" /tmp/repoforge-drift-check.txt
+
+  package:
+    name: build and install distributions
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install build tooling
+        run: python -m pip install -e ".[release]"
+
+      - name: Build sdist and wheel
+        run: |
+          rm -rf dist build
+          python -m build
+          python -m twine check dist/*
+          python scripts/verify_distribution.py dist --version 0.1.0a1
+
+      - name: Install wheel outside source checkout
+        run: |
+          python -m venv /tmp/repoforge-wheel-env
+          /tmp/repoforge-wheel-env/bin/python -m pip install dist/*.whl
+
+          rm -rf /tmp/repoforge-wheel-project
+          mkdir -p /tmp/repoforge-wheel-project
+          cd /tmp
+
+          test "$(/tmp/repoforge-wheel-env/bin/repoforge --version)" = "repoforge 0.1.0a1"
+          /tmp/repoforge-wheel-env/bin/repoforge init /tmp/repoforge-wheel-project \
+            --type scientific-python \
+            --profile standard \
+            --name WheelSmoke \
+            --repository-url https://github.com/example/wheel-smoke
+          /tmp/repoforge-wheel-env/bin/repoforge apply /tmp/repoforge-wheel-project \
+            --config /tmp/repoforge-wheel-project/repoforge.yml
+
+          if /tmp/repoforge-wheel-env/bin/repoforge check /tmp/repoforge-wheel-project > /tmp/repoforge-wheel-check.txt; then
+            echo "fresh init unexpectedly passed placeholder validation"
+            exit 1
+          fi
+          grep -q "PASS  README.md" /tmp/repoforge-wheel-check.txt
+          grep -q "Code of Conduct reporting_contact is still a generic placeholder" /tmp/repoforge-wheel-check.txt
+          grep -q "Security reporting_contact is still a generic placeholder" /tmp/repoforge-wheel-check.txt
+          test -s /tmp/repoforge-wheel-project/README.md
+          test -s /tmp/repoforge-wheel-project/CODE_OF_CONDUCT.md
+
+      - name: Install source distribution outside source checkout
+        run: |
+          python -m venv /tmp/repoforge-sdist-env
+          /tmp/repoforge-sdist-env/bin/python -m pip install dist/*.tar.gz
+
+          rm -rf /tmp/repoforge-sdist-project
+          mkdir -p /tmp/repoforge-sdist-project
+          cd /tmp
+
+          test "$(/tmp/repoforge-sdist-env/bin/repoforge --version)" = "repoforge 0.1.0a1"
+          /tmp/repoforge-sdist-env/bin/repoforge init /tmp/repoforge-sdist-project \
+            --type desktop-application \
+            --profile full \
+            --name SdistSmoke \
+            --repository-url https://github.com/example/sdist-smoke
+          test -s /tmp/repoforge-sdist-project/repoforge.yml
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: python-distributions
+          path: dist/
+          if-no-files-found: error
