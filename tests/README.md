@@ -33,6 +33,18 @@ tests/previews/research-algorithm/
 
 The same separation should be used for every project type.
 
+## Shared preview branding
+
+RepoForge's own visual previews and stress renders use one test-only brand source:
+
+```text
+assets/logo.svg
+        ↑
+tests/branding.yml
+```
+
+The preview-relative path is `../../../assets/logo.svg`. User-facing `README.example.md` files do **not** force this brand asset; normal project configs remain free to supply their own `logo_path`.
+
 ## Previews
 
 `tests/previews/` answers a visual question:
@@ -54,7 +66,10 @@ tests/stress/
 ├── scientific-python/
 │   ├── manifest.yml
 │   └── cases/
-└── research-algorithm/
+├── research-algorithm/
+│   ├── manifest.yml
+│   └── cases/
+└── research-experiment/
     ├── manifest.yml
     └── cases/
 ```
@@ -67,9 +82,13 @@ Stress cases deliberately cover edge shapes such as:
 - theory-heavy software;
 - estimand-heavy original methods;
 - learned scientific geometry;
-- nonlinear space-time formulations.
+- nonlinear space-time formulations;
+- one-command paper reproduction;
+- checkpoint-first evaluation without retraining claims;
+- compact multi-dataset benchmarks;
+- full multi-baseline, five-seed, ablation, significance, and artifact-identity studies.
 
-A stress case is a real YAML configuration passed through the normal renderer. Tests check section contracts, profile separation, unresolved Jinja, code-fence balance, and rough size limits.
+A stress case is passed through the normal renderer. Scientific-package and original-method suites use complete YAML cases; the experiment suite uses small override files merged onto the corresponding canonical profile config. Tests check section contracts, profile separation, unresolved Jinja, code-fence balance, branding, and rough size limits.
 
 ## Test layers
 
@@ -85,7 +104,7 @@ visible example / preview
 stress configurations
 ```
 
-The default example checks the normal design target. Stress suites check whether the same design survives edge cases without turning Minimal into Standard, Standard into Full, or Full into a paper manuscript.
+The default example checks the normal design target. Stress suites check whether the same design survives edge cases without turning Minimal into Standard, Standard into Full, or Full into a package manual or paper manuscript.
 
 ## Preview generation
 
@@ -95,4 +114,4 @@ For implemented template families, previews can be regenerated with:
 python scripts/generate_previews.py
 ```
 
-A future snapshot check can compare generated output byte-for-byte with the approved preview. Until then, profile tests and example/preview alignment protect the visible structure.
+The committed previews are also checked for the canonical RepoForge SVG path. Template-family tests keep examples and generated profile structure aligned.
