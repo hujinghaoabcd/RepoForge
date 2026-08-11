@@ -20,12 +20,17 @@ def test_repository_readmes_use_canonical_svg_logo():
     for path in (ROOT / "README.md", ROOT / "README.zh-CN.md"):
         text = path.read_text(encoding="utf-8")
         assert 'src="assets/logo.svg"' in text
+        assert 'width="280"' in text
         assert "repoforge-logo.png" not in text
 
 
 def test_all_implemented_previews_use_one_brand_source():
-    logo_path = load_config(BRANDING)["logo_path"]
+    branding = load_config(BRANDING)
+    logo_path = branding["logo_path"]
+    logo_width = branding["logo_width"]
+
     assert logo_path == "../../../assets/logo.svg"
+    assert logo_width == 280
 
     for project_type in SUPPORTED_TYPES:
         for profile in SUPPORTED_PROFILES:
@@ -33,6 +38,7 @@ def test_all_implemented_previews_use_one_brand_source():
             assert preview.is_file(), (project_type, profile)
             text = preview.read_text(encoding="utf-8")
             assert logo_path in text, (project_type, profile)
+            assert f'width="{logo_width}"' in text, (project_type, profile)
             assert "repoforge-logo.png" not in text, (project_type, profile)
 
 
