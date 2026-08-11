@@ -6,7 +6,12 @@ from typing import Any
 import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-SUPPORTED_TYPES = {"scientific-python", "research-algorithm", "research-experiment"}
+SUPPORTED_TYPES = {
+    "scientific-python",
+    "research-algorithm",
+    "research-experiment",
+    "django-package",
+}
 SUPPORTED_PROFILES = {"minimal", "standard", "full"}
 
 

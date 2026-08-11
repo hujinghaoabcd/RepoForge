@@ -1,0 +1,66 @@
+project_name: django-security-headers
+display_name: django-security-headers
+tagline: Security-response headers with explicit middleware and deployment boundaries.
+why_text: Security headers are operationally important and ordering-sensitive, but a reusable middleware package should not pretend to own host-project models, admin, or frontend code.
+features:
+  - name: Response policy headers
+    description: add configured browser security headers to eligible responses.
+  - name: Report-only mode
+    description: stage restrictive policies before enforcing them.
+  - name: Path scoping
+    description: let the host project choose which URL families receive a policy.
+install_command: python -m pip install django-security-headers
+optional_install_command: null
+quickstart_intro: Install the middleware and start from a report-only content-security policy.
+quickstart_language: python
+quickstart_code: "SECURITY_HEADERS_CSP_REPORT_ONLY = True\nSECURITY_HEADERS_CSP = {\"default-src\": [\"'self'\"]}"
+configuration_steps:
+  - name: Middleware ordering
+    description: Place the middleware before components that may return responses early.
+    language: python
+    code: "MIDDLEWARE = [\n    \"security_headers.middleware.SecurityHeadersMiddleware\",\n    ...\n]"
+settings:
+  - name: SECURITY_HEADERS_CSP_REPORT_ONLY
+    default: 'True'
+    required: 'No'
+    purpose: emit report-only rather than enforcing CSP.
+  - name: SECURITY_HEADERS_CSP
+    default: '{}'
+    required: 'Yes'
+    purpose: explicit host-project content-security policy.
+assets_text: null
+models_text: null
+migration_command: null
+admin_text: null
+admin_code: null
+public_api: []
+frontend_text: null
+security_notes:
+  - permissive wildcard policies can defeat the protection the package is intended to provide.
+  - CSP configuration must be tested against the host project's real templates, scripts, styles, and third-party origins.
+  - middleware ordering affects whether early responses receive headers.
+  - the package configures response headers; it does not replace Django CSRF, authentication, authorization, or TLS configuration.
+compatibility_intro: This package has no database schema; compatibility focuses on Django/Python and middleware behavior.
+compatibility:
+  - component: Django
+    range: 5.2–6.0
+    notes: middleware integration tested
+  - component: Python
+    range: 3.11–3.14
+    notes: CI matrix
+testing_text: Run middleware tests against representative response paths and supported Django versions.
+test_command: python -m pytest
+matrix_command: tox
+upgrade_notes:
+  - review policy-setting renames and changed browser-header defaults before upgrading.
+  - retest middleware ordering when the host project changes response-generating middleware.
+  - no database migration step is required because the package owns no models.
+documentation:
+  - name: Configuration
+    link: docs/configuration.md
+    description: header policies and middleware ordering
+  - name: Security Guide
+    link: docs/security.md
+    description: deployment boundaries and unsafe configurations
+contributing_text: Security behavior changes require focused regression tests and clear upgrade notes.
+license_text: BSD 3-Clause.

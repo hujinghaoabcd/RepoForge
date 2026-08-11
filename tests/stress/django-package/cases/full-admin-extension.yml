@@ -1,0 +1,86 @@
+project_name: django-admin-operations
+display_name: django-admin-operations
+tagline: Extensible, permission-aware long-running operations for Django admin.
+why_text: Complex admin actions need durable run records, permission checks, progress reporting, templates, and optional workers without turning each host project into a bespoke task framework.
+features:
+  - name: Durable operation runs
+    description: persist state and progress for long-running admin operations.
+  - name: Admin registry
+    description: register project operations through a public extension API.
+  - name: Permission-gated execution
+    description: reuse Django authorization before starting an operation.
+  - name: Optional workers
+    description: dispatch asynchronous work when the Celery extra is installed.
+install_command: python -m pip install django-admin-operations
+optional_install_command: python -m pip install "django-admin-operations[celery]"
+quickstart_intro: Register a simple operation and expose it from a ModelAdmin.
+quickstart_language: python
+quickstart_code: "from admin_operations import registry\n\n@registry.operation(\"rebuild-index\")\ndef rebuild_index(queryset, context):\n    ..."
+configuration_steps:
+  - name: Application Setup
+    description: Enable package models, templates, and admin integration.
+    language: python
+    code: "INSTALLED_APPS = [\n    ...\n    \"admin_operations\",\n]"
+  - name: URLs
+    description: Include progress and result views.
+    language: python
+    code: "path(\"admin/operations/\", include(\"admin_operations.urls\"))"
+settings:
+  - name: ADMIN_OPERATIONS_BACKEND
+    default: sync
+    required: 'No'
+    purpose: execution backend used by registered operations.
+  - name: ADMIN_OPERATIONS_MAX_RUNTIME
+    default: '3600'
+    required: 'No'
+    purpose: host-project execution limit.
+assets_text: Namespaced admin templates and static assets may be overridden through normal Django template precedence. Template overrides should be reviewed on upgrade.
+models_text: '`OperationRun` and related package models are migration-owned by the reusable application. Host projects should reference them through public APIs rather than editing package migrations.'
+migration_command: python manage.py migrate
+admin_text: The package adds operation controls to registered ModelAdmin classes while leaving queryset and object permission decisions with the host project.
+admin_code: "from admin_operations.admin import OperationsMixin\n\nclass ProductAdmin(OperationsMixin, admin.ModelAdmin):\n    operations = (\"rebuild-index\",)"
+public_api:
+  - name: registry.operation(...)
+    purpose: register a host-project operation.
+    stability: public
+  - name: OperationRun
+    purpose: inspect durable execution state.
+    stability: public read surface
+frontend_text: Admin templates render progress and result views. The package does not replace Django admin or require a standalone frontend framework.
+security_notes:
+  - operation registration does not bypass Django model or custom permissions.
+  - never place secrets in persisted progress payloads or user-visible logs.
+  - asynchronous workers must run with the same tenant and authorization assumptions documented by the host project.
+compatibility_intro: Admin, database, and optional worker integrations are tested separately.
+compatibility:
+  - component: Django
+    range: 5.2–6.0
+    notes: admin integration matrix
+  - component: Python
+    range: 3.11–3.14
+    notes: CI matrix
+  - component: PostgreSQL
+    range: supported Django versions
+    notes: durable run storage
+  - component: Celery
+    range: optional
+    notes: installed with the celery extra
+testing_text: Run unit/integration tests and the supported Django matrix.
+test_command: python -m pytest
+matrix_command: tox
+upgrade_notes:
+  - apply package migrations before serving requests after an upgrade that changes the run schema.
+  - review template overrides and registered-operation deprecations in release notes.
+  - worker deployments must upgrade code and database schema coherently.
+documentation:
+  - name: Admin Integration
+    link: docs/admin.md
+    description: registration and permissions
+  - name: Worker Integration
+    link: docs/workers.md
+    description: optional asynchronous execution
+  - name: Upgrade Guide
+    link: docs/upgrading.md
+    description: migrations and template overrides
+contributing_text: New integration surfaces require permission, migration, and compatibility tests.
+license_text: BSD 3-Clause.

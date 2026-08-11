@@ -16,7 +16,7 @@ That gives **21 independent preview combinations**.
 For example:
 
 ```text
-templates/research-algorithm/
+templates/django-package/
 ├── minimal/
 │   ├── PROFILE.md
 │   ├── README.template.md
@@ -25,13 +25,13 @@ templates/research-algorithm/
 ├── standard/
 └── full/
 
-tests/previews/research-algorithm/
+tests/previews/django-package/
 ├── minimal.md
 ├── standard.md
 └── full.md
 ```
 
-The same separation should be used for every project type.
+The same separation is required for every project type.
 
 ## Shared preview branding
 
@@ -47,15 +47,15 @@ The preview-relative path is `../../../assets/logo.svg`. User-facing `README.exa
 
 ## Previews
 
-`tests/previews/` answers a visual question:
+`tests/previews/` answers:
 
 > What does an approved README for this project type and profile look like?
 
-These files are intentionally readable as finished README examples rather than test fixtures full of placeholders.
+These files are readable finished examples rather than placeholder-heavy fixtures.
 
 ## Stress suites
 
-`tests/stress/` answers a different question:
+`tests/stress/` answers:
 
 > Does the template remain coherent when the project shape becomes difficult?
 
@@ -69,26 +69,30 @@ tests/stress/
 ├── research-algorithm/
 │   ├── manifest.yml
 │   └── cases/
-└── research-experiment/
+├── research-experiment/
+│   ├── manifest.yml
+│   └── cases/
+└── django-package/
     ├── manifest.yml
     └── cases/
 ```
 
 Stress cases deliberately cover edge shapes such as:
 
-- extremely small but complete packages;
-- broad method catalogues;
-- pre-1.0 projects;
-- theory-heavy software;
-- estimand-heavy original methods;
-- learned scientific geometry;
-- nonlinear space-time formulations;
-- one-command paper reproduction;
-- checkpoint-first evaluation without retraining claims;
-- compact multi-dataset benchmarks;
-- full multi-baseline, five-seed, ablation, significance, and artifact-identity studies.
+- extremely small but complete scientific packages;
+- broad method catalogues and theory-heavy software;
+- estimand-heavy original methods and learned scientific geometry;
+- one-command paper reproduction and checkpoint-first evaluation;
+- multi-dataset, multi-baseline, multi-seed experiment repositories;
+- tiny Django template-tag applications;
+- Django middleware where ordering changes correctness;
+- authorization backends requiring multiple host-project hooks;
+- broad Admin extensions with models, migrations, APIs, templates, and permissions;
+- Full-profile Django middleware packages with **no models, migrations, admin, or frontend surface**.
 
-A stress case is passed through the normal renderer. Scientific-package and original-method suites use complete YAML cases; the experiment suite uses small override files merged onto the corresponding canonical profile config. Tests check section contracts, profile separation, unresolved Jinja, code-fence balance, branding, and rough size limits.
+The last case protects an important RepoForge rule: **Full means deeper documentation, not fabricated capabilities.**
+
+A stress case is passed through the normal renderer. Tests check section contracts, profile separation, unresolved Jinja, code-fence balance, canonical preview branding, rough size limits, and project-type-specific semantic boundaries.
 
 ## Test layers
 
@@ -104,14 +108,14 @@ visible example / preview
 stress configurations
 ```
 
-The default example checks the normal design target. Stress suites check whether the same design survives edge cases without turning Minimal into Standard, Standard into Full, or Full into a package manual or paper manuscript.
+The default example checks the normal design target. Stress suites check whether the same design survives edge cases without turning Minimal into Standard, Standard into Full, or Full into a manual that invents project features.
 
 ## Preview generation
 
-For implemented template families, previews can be regenerated with:
+For implemented template families, regenerate previews with:
 
 ```bash
 python scripts/generate_previews.py
 ```
 
-The committed previews are also checked for the canonical RepoForge SVG path. Template-family tests keep examples and generated profile structure aligned.
+Committed previews are checked for the canonical RepoForge SVG path, while template-family tests keep examples aligned with actual renderer output.

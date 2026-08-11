@@ -1,0 +1,16 @@
+project_name: django-human-time
+tagline: Tiny template tags for readable relative timestamps.
+badges: '[![Django](https://img.shields.io/badge/Django-package-green)](#compatibility)'
+navigation: Installation · Setup · Quick Start · Compatibility
+intro_text: django-human-time is a deliberately small reusable Django app that provides one namespaced template-tag library.
+install_command: python -m pip install django-human-time
+setup_steps:
+  - name: Enable the app
+    description: Add the tag library package to installed applications.
+    language: python
+    code: "INSTALLED_APPS = [\n    ...\n    \"human_time\",\n]"
+quickstart_intro: Load the library and format a timestamp in a Django template.
+quickstart_language: django
+quickstart_code: "{% load human_time %}\n{{ object.created_at|relative_time }}"
+compatibility_text: Tested against the package's documented supported Django and Python versions; it has no models or migrations.
+license_text: MIT.

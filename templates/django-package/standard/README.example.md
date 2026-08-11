@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../../assets/logo.svg" alt="django-audit-panel" width="420">
-</p>
-
 # django-audit-panel
 
 **Reusable model-change auditing with explicit Django integration and query APIs.**

@@ -1,0 +1,120 @@
+logo_path: null
+screenshot_path: null
+project_name: django-audit-panel
+display_name: django-audit-panel
+tagline: A production-oriented reusable Django auditing application with admin, API, retention, and integration contracts.
+badges: '[![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Django](https://img.shields.io/badge/Django-tested-green)](#compatibility-matrix) [![Python](https://img.shields.io/badge/Python-tested-blue)](#compatibility-matrix) [![Tests](https://img.shields.io/badge/tests-matrix-brightgreen)](#testing) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)'
+navigation: Why · Features · Setup · API · Security · Compatibility · Upgrade
+why_text: Auditing is deceptively cross-cutting. A reusable package must coordinate model registration, migrations, admin visibility, request/user attribution, retention, templates, permissions, and stable query APIs without taking ownership of the host project's authentication or authorization policy. django-audit-panel exposes those boundaries explicitly.
+features:
+- name: Selective audit registration
+  description: opt models and fields into tracking instead of globally recording every change.
+- name: Actor-aware events
+  description: attach authenticated users or explicit service actors when the host project supplies them.
+- name: Admin history views
+  description: inspect object events using Django admin permissions.
+- name: Stable query surface
+  description: consume audit records through documented managers and helper functions.
+- name: Retention controls
+  description: prune old records with a management command and project-owned scheduling.
+- name: Optional frontend assets
+  description: provide a small timeline component without replacing the host design system.
+install_command: python -m pip install django-audit-panel
+optional_install_command: python -m pip install "django-audit-panel[drf]"
+quickstart_intro: Install the app, migrate its database tables, register a model, and use the supplied manager to inspect history.
+quickstart_language: python
+quickstart_code: "from audit_panel import audit\nfrom audit_panel.models import AuditEntry\n\naudit.register(\"inventory.Product\", fields=[\"name\", \"price\"])\nhistory = AuditEntry.objects.for_object(product)"
+configuration_steps:
+- name: Application Setup
+  description: Enable the reusable app.
+  language: python
+  code: "INSTALLED_APPS = [\n    ...\n    \"audit_panel\",\n]"
+- name: URLs
+  description: Include the package views only when the host project exposes them.
+  language: python
+  code: "from django.urls import include, path\n\nurlpatterns = [\n    path(\"audit/\", include(\"audit_panel.urls\")),\n]"
+settings:
+- name: AUDIT_PANEL_RETENTION_DAYS
+  default: '365'
+  required: 'No'
+  purpose: retention window used by the cleanup command.
+- name: AUDIT_PANEL_TRACK_M2M
+  default: 'False'
+  required: 'No'
+  purpose: enable many-to-many event tracking for registered models.
+- name: AUDIT_PANEL_ACTOR_RESOLVER
+  default: request.user
+  required: 'No'
+  purpose: dotted path used to resolve an actor from request context.
+- name: AUDIT_PANEL_REDACT_FIELDS
+  default: '[]'
+  required: 'No'
+  purpose: field names that must never be persisted in change payloads.
+assets_text: The package ships namespaced templates and static files under `audit_panel/`. Override templates through Django's normal template-loader precedence. Projects that do not expose the bundled views do not need the frontend assets.
+models_text: '`AuditEntry` is package-owned schema and migrations are shipped with the application. Host projects should not edit package migrations. Integrations that require extra domain data should use their own models and references rather than adding columns to `AuditEntry`.'
+migration_command: python manage.py migrate
+admin_text: Register the supplied mixin only on models whose history should be visible in Django admin. Normal Django model permissions remain the first authorization layer.
+admin_code: "from django.contrib import admin\nfrom audit_panel.admin import AuditAdminMixin\n\n@admin.register(Product)\nclass ProductAdmin(AuditAdminMixin, admin.ModelAdmin):\n    audit_fields = (\"name\", \"price\")"
+public_api:
+- name: audit.register(...)
+  purpose: register a model and tracked fields.
+  stability: public
+- name: AuditEntry.objects.for_object(...)
+  purpose: return events for a model instance.
+  stability: public
+- name: record_event(...)
+  purpose: create an explicit application/service event.
+  stability: public
+- name: audit_panel.signals.*
+  purpose: extension hooks for advanced integrations.
+  stability: advanced / documented
+frontend_text: The optional timeline view uses namespaced templates and static assets. It does not bundle a frontend framework. SPA or API-first projects should use the optional DRF serializer/view integration and render events in their own frontend.
+security_notes:
+- audit history can contain sensitive values; use `AUDIT_PANEL_REDACT_FIELDS` and avoid tracking secrets, tokens, or password-equivalent material.
+- exposing audit views requires explicit host-project authorization; installation alone must not make history public.
+- actor attribution is evidence about application context, not proof of real-world identity.
+- retention and deletion obligations remain the responsibility of the host project.
+- package templates and API endpoints should be reviewed when deploying behind custom authentication middleware or tenant boundaries.
+compatibility_intro: Full-profile Django packages should publish a matrix for Django, Python, database, and optional integrations that materially affect behavior.
+compatibility:
+- component: Django
+  range: 5.2, 6.0
+  notes: exercised in CI
+- component: Python
+  range: 3.11–3.14
+  notes: version support follows the release policy
+- component: PostgreSQL
+  range: supported Django versions
+  notes: primary integration database
+- component: SQLite
+  range: supported Django versions
+  notes: tests and local development
+- component: Django REST Framework
+  range: optional
+  notes: installed only with the `drf` extra
+testing_text: Run the fast package suite locally, then use the declared matrix runner before release.
+test_command: python -m pytest
+matrix_command: tox
+upgrade_notes:
+- run `python manage.py migrate` after upgrading whenever the release contains package migrations.
+- review release notes for setting renames, deprecated public APIs, and compatibility-window changes.
+- template overrides may require review when package markup changes.
+- never copy new package migrations into the host project; depend on the released application migrations.
+documentation:
+- name: Installation
+  link: docs/installation.md
+  description: package and host-project setup
+- name: Configuration Reference
+  link: docs/configuration.md
+  description: settings, URLs, templates, and integrations
+- name: Public API
+  link: docs/api.md
+  description: supported Python interfaces and extension points
+- name: Security
+  link: docs/security.md
+  description: sensitive fields, authorization, and deployment boundaries
+- name: Upgrade Guide
+  link: docs/upgrading.md
+  description: migrations, deprecations, and template changes
+contributing_text: Report reproducible integration bugs with Django/Python versions and the smallest host-project setup that demonstrates the problem. Contributions should add tests to the relevant compatibility matrix and document any new public setting or API.
+license_text: django-audit-panel is released under the BSD 3-Clause License.

@@ -30,5 +30,18 @@ jobs:
         run: |
           repoforge render scientific-python minimal \
             --config templates/scientific-python/minimal/config.example.yml \
-            --output /tmp/README.minimal.md
-          test -s /tmp/README.minimal.md
+            --output /tmp/README.scientific-python.md
+          repoforge render research-algorithm minimal \
+            --config templates/research-algorithm/minimal/config.example.yml \
+            --output /tmp/README.research-algorithm.md
+          repoforge render research-experiment minimal \
+            --config templates/research-experiment/minimal/config.example.yml \
+            --output /tmp/README.research-experiment.md
+          repoforge render django-package minimal \
+            --config templates/django-package/minimal/config.example.yml \
+            --output /tmp/README.django-package.md
+
+          test -s /tmp/README.scientific-python.md
+          test -s /tmp/README.research-algorithm.md
+          test -s /tmp/README.research-experiment.md
+          test -s /tmp/README.django-package.md
