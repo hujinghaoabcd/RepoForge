@@ -1,0 +1,179 @@
+logo_path: null
+logo_width: 180
+screenshot_path: docs/images/geodesk-workspace.png
+screenshot_width: 940
+project_name: GeoDesk
+display_name: GeoDesk
+tagline: A production-oriented cross-platform GIS workstation with local projects, optional Python plugins, and explicit release compatibility.
+badges:
+  - alt: Latest release
+    image: https://img.shields.io/badge/release-v2.0.0-blue
+    link: https://github.com/example/geodesk/releases
+  - alt: Windows build
+    image: https://img.shields.io/badge/Windows-passing-brightgreen
+    link: '#platform-compatibility'
+  - alt: macOS build
+    image: https://img.shields.io/badge/macOS-passing-brightgreen
+    link: '#platform-compatibility'
+  - alt: Linux build
+    image: https://img.shields.io/badge/Linux-passing-brightgreen
+    link: '#platform-compatibility'
+  - alt: Tests
+    image: https://img.shields.io/badge/tests-passing-brightgreen
+    link: '#development-and-testing'
+  - alt: License
+    image: https://img.shields.io/badge/license-MIT-green
+    link: '#license'
+navigation:
+  - label: Download
+    link: '#downloads-and-release-channels'
+  - label: User Guide
+    link: docs/user-guide.md
+  - label: Plugins
+    link: docs/plugins.md
+  - label: Build
+    link: docs/building.md
+  - label: Issues
+    link: https://github.com/example/geodesk/issues
+why_text: Desktop GIS projects become difficult to maintain when project files, native geospatial dependencies, user configuration, plugins, and release packaging evolve independently. GeoDesk keeps those contracts explicit while remaining local-first and usable without a service account.
+features:
+  - name: Local GIS workspace
+    description: compose vector and raster layers, inspect attributes, style maps, and save portable project metadata.
+  - name: Stable project schema
+    description: project metadata uses an explicit schema version with documented migration rules.
+  - name: Optional Python plugins
+    description: trusted user-installed plugins extend importers and tools through a versioned plugin API.
+  - name: Cross-platform releases
+    description: Windows installers, notarized macOS bundles, and Linux AppImages are built from one release tag.
+  - name: Transparent network behavior
+    description: core project editing is offline; optional update checks and online basemap requests are documented separately.
+download_options:
+  - platform: Windows stable
+    package: signed x64 installer
+    support: maintained
+    link: https://github.com/example/geodesk/releases
+  - platform: macOS stable
+    package: signed and notarized universal DMG
+    support: maintained
+    link: https://github.com/example/geodesk/releases
+  - platform: Linux stable
+    package: x86_64 AppImage
+    support: maintained
+    link: https://github.com/example/geodesk/releases
+  - platform: Nightly
+    package: CI artifacts
+    support: testing only; no migration guarantee
+    link: docs/nightly-builds.md
+compatibility:
+  - target: Windows
+    range: Windows 11 x64
+    notes: signed installer; GPU driver requirements follow Qt support
+  - target: macOS
+    range: macOS 13+
+    notes: universal bundle for Apple Silicon and Intel
+  - target: Linux
+    range: glibc-based x86_64 desktop systems
+    notes: maintained AppImage; distro packages may have separate support policies
+  - target: Project schema
+    range: v2 reads current v2 and migrates documented v1 projects
+    notes: save-after-migration upgrades the project metadata version
+architecture_intro: GeoDesk separates UI state, domain/project state, geospatial I/O, and optional extension loading so platform packaging does not become part of the project-file contract.
+architecture:
+  - component: Desktop UI
+    technology: PySide6 / Qt
+    responsibility: windows, docks, map canvas, dialogs, shortcuts, and native desktop integration
+  - component: Project core
+    technology: Python dataclasses + versioned schema
+    responsibility: project state, layer registry, serialization, and migration
+  - component: Geospatial I/O
+    technology: GDAL / Rasterio / GeoPandas-compatible adapters
+    responsibility: local vector/raster access and metadata translation
+  - component: Plugin host
+    technology: Python entry-point loader
+    responsibility: optional trusted tool/importer extensions behind a versioned API
+data_locations:
+  - name: Preferences
+    location: platform user-config directory / `GeoDesk`
+    purpose: back up only when preserving application preferences
+  - name: Cache
+    location: platform cache directory / `GeoDesk`
+    purpose: disposable thumbnails, indexes, and network tile cache
+  - name: Plugin directory
+    location: platform user-data directory / `GeoDesk/plugins`
+    purpose: user-installed code; restore only from trusted sources
+  - name: Projects
+    location: user-selected `.geodesk` files
+    purpose: versioned metadata; back up together with externally referenced datasets when required
+file_formats:
+  - name: `.geodesk`
+    description: JSON-based project metadata containing layer references, style state, view state, and schema version.
+    compatibility: backward migration is documented between supported major schema versions.
+  - name: Imported datasets
+    description: source geospatial files remain external rather than being silently copied into the project.
+    compatibility: supported formats depend on the packaged GDAL stack.
+extensions_text: GeoDesk can load trusted Python plugins from its user plugin directory. The plugin API is versioned separately from internal modules. Plugins run with the user's application permissions, so users should install them only from sources they trust.
+update_text: Stable releases may perform a version-check request when update checks are enabled. Nightly builds are separate testing artifacts. Project schema migrations are documented in release notes; a nightly build must not be treated as a safe upgrade path for irreplaceable projects.
+portable_text: A portable launch mode can redirect configuration and cache paths beneath the application directory for USB/lab deployments. Portable mode does not make externally referenced project datasets portable by itself.
+privacy_text: Core local project editing does not require an account. Network access occurs only for user-configured online layers, explicit update checks, or plugins that implement network features. The application does not upload local project files as part of normal operation.
+telemetry_text: GeoDesk does not send product-usage telemetry. Crash reports are not uploaded automatically; diagnostic bundles are generated locally and attached by the user when reporting an issue.
+security_notes:
+  - Release installers and application bundles are signed where the target platform supports project-maintained signing.
+  - User-installed plugins execute trusted code with the same filesystem permissions as the application.
+  - Project files are data, but external file references and plugin settings must still be treated cautiously when opening projects from unknown sources.
+  - Security reports should follow `SECURITY.md` instead of public issue disclosure.
+build_text: Full source builds require Python 3.12+, Qt/PySide6, a compatible GDAL runtime, and platform packaging prerequisites when producing distributable artifacts. Development builds do not require signing credentials.
+build_command: |-
+  python -m venv .venv
+  . .venv/bin/activate
+  python -m pip install -e '.[dev]'
+  python -m geodesk
+packaging_text: Release artifacts are produced from an annotated release tag. Packaging jobs pin the native geospatial runtime, run tests before packaging, and keep signing credentials outside repository configuration.
+packaging_steps:
+  - name: Validate release tree
+    description: run unit, UI smoke, schema-migration, and package metadata checks before creating installers.
+    command: python -m pytest
+  - name: Build platform package
+    description: invoke the platform packaging recipe without embedding developer-local paths.
+    command: python tools/package.py --platform current
+  - name: Sign and publish
+    description: signing/notarization occurs only in protected release jobs; checksums accompany published artifacts.
+    command: null
+development_text: Unit tests protect project serialization and migrations, UI tests cover critical desktop workflows, and packaging smoke tests start the produced application on each maintained platform.
+development_command: |-
+  python -m pip install -e '.[dev]'
+  python -m geodesk --debug
+test_command: |-
+  python -m pytest
+  python -m ruff check .
+  python tools/check_project_migrations.py
+backup_text: Back up `.geodesk` project files and any external datasets they reference. Preferences are optional; cache is disposable. Before major-version upgrades, copy irreplaceable projects and read the migration notes. Plugin directories should be restored from trusted package sources rather than blindly copied between major versions.
+troubleshooting:
+  - problem: Application fails to start
+    guidance: launch with `--debug`, inspect the local log directory, and verify packaged Qt/GDAL libraries are present before deleting user settings.
+  - problem: Project opens with missing layers
+    guidance: check whether external dataset paths moved; project migration does not copy source data.
+  - problem: Plugin causes startup errors
+    guidance: start with plugins disabled, remove or upgrade the incompatible plugin, then re-enable plugins individually.
+  - problem: Rendering differs across machines
+    guidance: compare GeoDesk version, packaged GDAL/Qt versions, GPU driver, fonts, and project style resources.
+documentation:
+  - name: User Guide
+    link: docs/user-guide.md
+    description: projects, layers, styles, preferences, and shortcuts
+  - name: Project Format
+    link: docs/project-format.md
+    description: schema versions and migration policy
+  - name: Plugin Guide
+    link: docs/plugins.md
+    description: trusted plugin installation and public extension API
+  - name: Build Guide
+    link: docs/building.md
+    description: platform prerequisites and developer builds
+  - name: Release Engineering
+    link: docs/releasing.md
+    description: packaging, signing, checksums, and release channels
+  - name: Privacy
+    link: docs/privacy.md
+    description: network requests, update checks, and diagnostic data
+contributing_text: Changes to project schema, plugin API, platform support, packaging, data locations, or network behavior require corresponding tests and documentation. See `CONTRIBUTING.md` for the development workflow.
+license_text: GeoDesk is released under the MIT License.

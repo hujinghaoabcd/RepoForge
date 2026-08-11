@@ -1,0 +1,55 @@
+logo_path: null
+logo_width: 180
+screenshot_path: docs/images/geodesk-main.png
+screenshot_width: 880
+project_name: GeoDesk
+tagline: A lightweight cross-platform desktop viewer for local geospatial datasets.
+badges:
+  - alt: Release
+    image: https://img.shields.io/badge/release-v0.4.0-blue
+    link: https://github.com/example/geodesk/releases
+  - alt: Platforms
+    image: https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey
+    link: '#supported-platforms'
+  - alt: Build
+    image: https://img.shields.io/badge/build-passing-brightgreen
+    link: '#run-from-source'
+  - alt: License
+    image: https://img.shields.io/badge/license-MIT-green
+    link: '#license'
+navigation:
+  - label: Download
+    link: '#download-and-install'
+  - label: Docs
+    link: docs/
+  - label: Issues
+    link: https://github.com/example/geodesk/issues
+features:
+  - name: Local-first maps
+    description: open GeoPackage, GeoJSON, Shapefile, and GeoTIFF datasets without a server.
+  - name: Layer inspection
+    description: toggle layers, inspect attributes, and view basic metadata.
+  - name: Cross-platform desktop UI
+    description: the same project format works on Windows, macOS, and Linux.
+download_text: Download the latest signed or packaged build from the Releases page. Choose the package that matches your operating system.
+download_options:
+  - platform: Windows
+    package: x64 installer
+    link: Releases / `GeoDesk-Setup-x64.exe`
+  - platform: macOS
+    package: universal DMG
+    link: Releases / `GeoDesk-universal.dmg`
+  - platform: Linux
+    package: AppImage
+    link: Releases / `GeoDesk-x86_64.AppImage`
+platforms:
+  - name: Windows
+    support: Windows 11 x64
+  - name: macOS
+    support: macOS 13+ on Apple Silicon or Intel
+  - name: Linux
+    support: recent x86_64 desktop distributions with FUSE support for AppImage
+run_from_source: |-
+  python -m pip install -e .
+  python -m geodesk
+license_text: GeoDesk is released under the MIT License.
