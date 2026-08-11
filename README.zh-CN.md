@@ -8,40 +8,36 @@ RepoForge 用于把统一、可复用的 README 与仓库文档规范应用到�
 
 ## 为什么需要 RepoForge？
 
-项目脚手架擅长生成代码结构，但仓库还需要清晰的公开文档入口。RepoForge 将这两类工作分开：
+项目脚手架负责代码结构，RepoForge 负责仓库对外呈现和文档规范：
 
-1. 先用最适合技术栈的工具生成项目结构；
-2. 选择 RepoForge 的项目类型和一套独立 Profile；
-3. 用显式 YAML 配置渲染普通 Markdown README；
-4. 把完整理论、API、实验细节和部署手册继续放在 `docs/` 中，而不是全部塞进 README。
+1. 先用最合适的脚手架生成项目；
+2. 选择 RepoForge 项目类型和独立 Profile；
+3. 用 YAML 配置渲染普通 Markdown README；
+4. 详细理论、API、实验和部署内容继续下沉到 `docs/`。
 
-目标不是让所有 README 完全相同，而是形成统一的家族风格，同时保留不同项目真正需要的信息。
+目标不是让所有 README 完全相同，而是形成统一家族风格，同时保留不同项目真正需要的信息。
 
-## 当前已实现
-
-第一套已经可以实际渲染的模板是：
+## 当前已实现的模板类型
 
 ```text
 scientific-python
 ├── minimal
 ├── standard
 └── full
+
+research-algorithm
+├── minimal
+├── standard
+└── full
 ```
 
-三种 Profile 是 **三套独立模板**，不是一个大模板里的条件分支。
+三种 Profile 都是**独立模板**，不是一个大模板里的条件分支。
 
-每个 Profile 都包含：
-
-```text
-PROFILE.md
-README.template.md
-README.example.md
-config.example.yml
-```
+`scientific-python` 目前更成熟，已经包含 Profile 合同、Jinja 模板、YAML 示例、预览和专门压力测试；`research-algorithm` 已建立第一版合同、参考分析、三档独立模板、配置和 renderer 测试。
 
 ## 快速开始
 
-从源码安装：
+安装：
 
 ```bash
 git clone https://github.com/hujinghaoabcd/RepoForge.git
@@ -49,15 +45,7 @@ cd RepoForge
 python -m pip install -e ".[test]"
 ```
 
-生成 Minimal：
-
-```bash
-repoforge render scientific-python minimal \
-  --config templates/scientific-python/minimal/config.example.yml \
-  --output README.generated.md
-```
-
-生成 Standard：
+生成科研 Python Standard README：
 
 ```bash
 repoforge render scientific-python standard \
@@ -65,42 +53,45 @@ repoforge render scientific-python standard \
   --output README.generated.md
 ```
 
-生成 Full：
+生成原创算法 Standard README：
 
 ```bash
-repoforge render scientific-python full \
-  --config templates/scientific-python/full/config.example.yml \
+repoforge render research-algorithm standard \
+  --config templates/research-algorithm/standard/config.example.yml \
   --output README.generated.md
 ```
 
 渲染器使用严格变量检查：模板需要但 YAML 没有声明的字段会直接报错，不会静默生成残缺 README。
 
-## 查看生成效果
-
-预览文件位于：
+## 预览
 
 ```text
 tests/previews/<project-type>/<profile>.md
 ```
 
-当前科研 Python 预览为：
-
-```text
-tests/previews/scientific-python/
-├── minimal.md
-├── standard.md
-└── full.md
-```
-
-重新生成科研 Python 三档预览：
+重新生成已实现模板类型的预览：
 
 ```bash
 python scripts/generate_previews.py
 ```
 
-## 计划支持的项目类型
+## 科研 Python 压力测试
 
-RepoForge 按七类项目组织模板：
+```text
+tests/stress/scientific-python/
+├── README.md
+├── manifest.yml
+└── cases/
+    ├── tiny-numerical-utility.yml
+    ├── multi-method-geospatial.yml
+    ├── broad-model-library.yml
+    ├── theory-heavy-statistics.yml
+    └── pre1-experimental-package.yml
+```
+
+这 5 个案例不是手写展示 README，而是实际输入 renderer 的配置，用来检查不同 Profile 在真实极端形态下会不会过度膨胀、缺失关键内容或选错结构。
+
+## 七类项目类型
 
 - `scientific-python` —— 可复用科研 Python 包；
 - `research-algorithm` —— 原创方法与创新算法实现；
@@ -110,11 +101,9 @@ RepoForge 按七类项目组织模板：
 - `frontend-library` —— 前端库、插件与组件；
 - `desktop-application` —— 桌面端与跨平台软件。
 
-目前只有 `scientific-python` 已具备完整可执行渲染合同；其他类型目前已经拆分出独立的 Minimal / Standard / Full 视觉预览，后续逐类实现。
+其余类型目前保留三档视觉预览，后续逐类升级为可执行模板。
 
 ## Profiles
-
-Profile 控制文档深度，但每一档都是独立模板：
 
 - **Minimal** —— 小型、聚焦项目，最短但完整；
 - **Standard** —— 大多数正式维护开源项目的默认选择；
@@ -129,21 +118,13 @@ RepoForge
 ├── profiles/                      # 跨项目 Profile 规则
 ├── partials/                      # 可复用文档模块
 ├── tests/
-│   └── previews/                  # 可视化预览
+│   ├── previews/                  # 可视化预览
+│   └── stress/                    # 压力测试配置
 ├── scripts/                       # 维护脚本
 └── docs/                          # 架构与规范
 ```
 
 详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
-
-## 设计原则
-
-- **README 是项目入口，不是完整说明书。**
-- **Minimal、Standard、Full 必须保持独立模板。**
-- **项目类型和文档深度是两个不同维度。**
-- **科研软件把 Validation、Reproducibility、Limitations、Citation 作为一级需求。**
-- **生成结果始终是普通可读 Markdown。**
-- **配置缺失时应明确失败，而不是生成误导性的文档。**
 
 ## 测试
 
@@ -155,7 +136,7 @@ GitHub Actions 会在支持的 Python 版本上运行测试，并执行 CLI 渲�
 
 ## 当前状态
 
-RepoForge 处于早期开发阶段。`scientific-python` 是第一套正式实现的渲染模板，下一步将继续完善预览同步并实现其他项目类型。
+RepoForge 处于早期开发阶段。`scientific-python` 是第一套较成熟模板；`research-algorithm` 已成为第二套可执行模板，下一步将继续补充真实案例、预览与压力测试。
 
 ## License
 
