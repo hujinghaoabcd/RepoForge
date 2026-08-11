@@ -7,7 +7,7 @@ Thank you for improving {{ project_name }}. This guide describes the expected co
 - Search existing issues and pull requests before opening a duplicate.
 - For substantial changes, open an issue first so scope and design can be discussed.
 - Keep one pull request focused on one coherent change whenever practical.
-- Follow the project's Code of Conduct in all project spaces.
+- Follow the project's participation policies in all project spaces.
 
 ## Development setup
 
@@ -63,10 +63,8 @@ Before requesting review:
 
 Review may request changes to correctness, tests, compatibility, documentation, maintainability, security, or project scope. A review request is not a guarantee that a contribution will be merged.
 
-## Community and security
+{% if related_policies %}## Related project policies
 
-- Code of Conduct: `CODE_OF_CONDUCT.md`
-- Security policy: `SECURITY.md`
-- Support guidance: `SUPPORT.md`
-
-Thank you for contributing to {{ project_name }}.
+{% for policy in related_policies %}- {{ policy.name }}: `{{ policy.path }}`
+{% endfor %}
+{% endif %}Thank you for contributing to {{ project_name }}.
