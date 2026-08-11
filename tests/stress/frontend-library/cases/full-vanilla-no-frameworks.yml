@@ -1,0 +1,76 @@
+project_name: CanvasSelect
+display_name: CanvasSelect
+tagline: A mature vanilla TypeScript canvas-selection library with a deep API contract but no framework adapters.
+why_text: Canvas interaction libraries need careful event, lifecycle, styling, typing, compatibility, accessibility, and versioning documentation even when they remain intentionally framework-neutral.
+features:
+  - name: Selection engine
+    description: click, drag-box, and polygon selection over canvas-backed renderers.
+  - name: Typed lifecycle
+    description: explicit events for start, update, finish, cancel, and destroy.
+  - name: Framework-neutral design
+    description: no React or Vue package is maintained by the project.
+packages:
+  - name: canvas-select
+    purpose: the complete vanilla TypeScript library
+    install: npm install canvas-select
+setup_text: The package has no required framework peer dependencies. Import the optional stylesheet only when using the bundled toolbar.
+api_items:
+  - name: CanvasSelect
+    purpose: create and manage the selection controller.
+    stability: public
+  - name: SelectionEventMap
+    purpose: typed lifecycle payloads.
+    stability: public
+  - name: destroy()
+    purpose: release listeners and DOM references.
+    stability: public
+events:
+  - name: start
+    when: a selection gesture begins
+    use: prepare host UI state
+  - name: finish
+    when: a valid selection completes
+    use: consume selected geometry
+  - name: cancel
+    when: selection is aborted
+    use: restore host UI state
+styling_text: The optional toolbar exposes documented CSS custom properties. Core selection logic does not require package CSS.
+adapters: []
+typescript_text: Public options and event payloads ship as declaration files and are covered by type tests.
+bundle_text: The ESM entry is tree-shakeable; the optional toolbar is a separate export so algorithm-only consumers do not include its DOM code.
+ssr_text: null
+compatibility:
+  - target: Browsers
+    range: current and previous evergreen releases
+    notes: Pointer Events and Canvas APIs required
+  - target: TypeScript
+    range: 5.4+
+    notes: declarations and type tests included
+accessibility_text: Pointer-only canvas interaction is not sufficient by itself. The optional toolbar supports keyboard activation, and host applications must provide an equivalent non-pointer path for selection-dependent workflows.
+examples:
+  - name: Canvas basics
+    link: examples/basic/
+    description: click and drag-box selection
+  - name: Custom renderer
+    link: examples/custom-renderer/
+    description: integrate with a host canvas engine
+development_text: Unit tests cover geometry/state transitions and browser tests cover pointer/lifecycle behavior.
+development_command: |-
+  pnpm install
+  pnpm dev
+test_command: |-
+  pnpm test
+  pnpm test:e2e
+versioning_text: Public JavaScript/TypeScript APIs and documented CSS variables follow Semantic Versioning. No framework adapter compatibility is claimed.
+documentation:
+  - name: API
+    link: docs/api.md
+    description: controller, options, and lifecycle events
+  - name: Accessibility
+    link: docs/accessibility.md
+    description: keyboard alternatives and host responsibilities
+  - name: Migration Guide
+    link: docs/migrations.md
+    description: breaking changes
+contributing_text: Contributions should preserve the framework-neutral core and add tests for public lifecycle changes.
+license_text: CanvasSelect is released under the MIT License.
