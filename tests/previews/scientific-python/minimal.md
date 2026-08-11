@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="SpatialTools" width="420">
+  <img src="../../../assets/logo.svg" alt="SpatialTools" width="280">
 </p>
 
 # SpatialTools
