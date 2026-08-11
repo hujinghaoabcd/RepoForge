@@ -61,7 +61,9 @@ def test_web_application_profiles_render(profile, required, forbidden):
         template_root=TEMPLATES,
     )
 
-    assert rendered.startswith("# GeoBoard")
+    # Web-product READMEs may put a screenshot/hero before the H1, as long as
+    # the project identity remains explicit and unique.
+    assert rendered.count("# GeoBoard\n") == 1
     assert rendered.endswith("\n")
     assert rendered.count("```") % 2 == 0
 
