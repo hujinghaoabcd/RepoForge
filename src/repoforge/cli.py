@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .apply import apply_to_repository, build_apply_plan
+from .apply import STANDARD_KEYS, apply_to_repository, build_apply_plan
 from .renderer import SUPPORTED_TYPES, load_config, render_from_config
 
 
@@ -50,9 +50,23 @@ def build_parser() -> argparse.ArgumentParser:
         choices=("none", "default", "recommended"),
         default="default",
         help=(
-            "Repository standards policy: none=README only, "
-            "default=matrix defaults, recommended=defaults plus recommendations"
+            "Base standards policy: none=README only, default=matrix defaults, "
+            "recommended=defaults plus recommendations"
         ),
+    )
+    apply_parser.add_argument(
+        "--include",
+        action="append",
+        choices=tuple(sorted(STANDARD_KEYS)),
+        default=[],
+        help="Explicitly include a repository standard, including an optional one",
+    )
+    apply_parser.add_argument(
+        "--exclude",
+        action="append",
+        choices=tuple(sorted(STANDARD_KEYS)),
+        default=[],
+        help="Explicitly exclude a repository standard selected by the base policy",
     )
     apply_parser.add_argument(
         "--dry-run",
@@ -100,6 +114,8 @@ def main(argv: list[str] | None = None) -> int:
             args.profile,
             config,
             standards_policy=args.standards,
+            include=set(args.include),
+            exclude=set(args.exclude),
             template_root=args.template_root,
             standards_root=args.standards_root,
         )
