@@ -82,5 +82,5 @@ def test_framework_adapter_keeps_peer_dependency_boundary_visible():
     rendered = _render_case(case)
 
     assert "peer dependencies" in rendered
-    assert "Vue 3.4+" in rendered
+    assert "| **Vue** | 3.4+ |" in rendered
     assert "## Framework Integration" in rendered
