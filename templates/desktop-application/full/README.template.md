@@ -12,7 +12,6 @@
 {% endif %}{% if screenshot_path %}<p align="center">
   <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(900) }}">
 </p>
-
 {% endif %}{{ "\n" }}## Why {{ display_name }}?
 
 {{ why_text }}
