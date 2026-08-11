@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/repoforge-logo.png" alt="RepoForge" width="520">
+</p>
+
 # RepoForge
 
 **可复用的代码仓库文档与项目规范体系。**
