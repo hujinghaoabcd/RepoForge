@@ -10,13 +10,14 @@ from .apply import PlannedFile, inspect_apply_plan
 
 CheckLevel = Literal["PASS", "WARN", "FAIL"]
 
-CODE_OF_CONDUCT_PLACEHOLDER = (
-    "Use a private contact method published by the project maintainers."
-)
-SECURITY_PLACEHOLDER = (
-    "Use the project's documented private security contact or GitHub private "
-    "vulnerability reporting when available."
-)
+CODE_OF_CONDUCT_PLACEHOLDERS = {
+    "Use a private contact method published by the project maintainers.",
+    "Replace this value with a private contact channel maintained by the project.",
+}
+SECURITY_PLACEHOLDERS = {
+    "Use the project's documented private security contact or GitHub private vulnerability reporting when available.",
+    "Replace this value with the project's private security contact or GitHub private vulnerability reporting channel.",
+}
 
 
 @dataclass(frozen=True)
@@ -61,13 +62,12 @@ def _validate_citation(path: Path) -> list[CheckResult]:
 
     if problems:
         return [_result("FAIL", "CITATION.cff", "; ".join(problems))]
-    return [_result("PASS", "CITATION.cff", "CFF structure is valid")]
+    return []
 
 
-def _validate_issue_form(path: Path) -> list[CheckResult]:
+def _validate_issue_form(path: Path, subject: str) -> list[CheckResult]:
     if not path.is_file():
         return []
-    subject = path.as_posix()
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
     except yaml.YAMLError as exc:
@@ -90,13 +90,12 @@ def _validate_issue_form(path: Path) -> list[CheckResult]:
 
     if problems:
         return [_result("FAIL", subject, "; ".join(problems))]
-    return [_result("PASS", subject, "Issue Form structure is valid")]
+    return []
 
 
-def _validate_issue_config(path: Path) -> list[CheckResult]:
+def _validate_issue_config(path: Path, subject: str) -> list[CheckResult]:
     if not path.is_file():
         return []
-    subject = path.as_posix()
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
     except yaml.YAMLError as exc:
@@ -109,7 +108,24 @@ def _validate_issue_config(path: Path) -> list[CheckResult]:
     contacts = data.get("contact_links")
     if contacts is not None and not isinstance(contacts, list):
         return [_result("FAIL", subject, "contact_links must be a list")]
-    return [_result("PASS", subject, "Issue chooser structure is valid")]
+    return []
+
+
+def _config_check(config: dict[str, Any]) -> list[CheckResult]:
+    repoforge = config.get("repoforge")
+    if repoforge is None:
+        return [
+            _result(
+                "WARN",
+                "repoforge.yml",
+                "no repoforge selection block; command-line type/profile overrides are required",
+            )
+        ]
+    if not isinstance(repoforge, dict):
+        return [_result("FAIL", "repoforge.yml", "repoforge section must be a mapping")]
+    if repoforge.get("config_version") != 1:
+        return [_result("FAIL", "repoforge.yml", "unsupported or missing config_version")]
+    return [_result("PASS", "repoforge.yml", "configuration and explicit selection are valid")]
 
 
 def _placeholder_checks(config: dict[str, Any], plan: list[PlannedFile]) -> list[CheckResult]:
@@ -128,23 +144,23 @@ def _placeholder_checks(config: dict[str, Any], plan: list[PlannedFile]) -> list
 
     if "community:code_of_conduct" in selected_sources:
         section = config.get("code_of_conduct")
-        if isinstance(section, dict) and section.get("reporting_contact") == CODE_OF_CONDUCT_PLACEHOLDER:
+        if isinstance(section, dict) and section.get("reporting_contact") in CODE_OF_CONDUCT_PLACEHOLDERS:
             results.append(
                 _result(
                     "FAIL",
                     "repoforge.yml",
-                    "Code of Conduct reporting_contact is still the generic placeholder",
+                    "Code of Conduct reporting_contact is still a generic placeholder",
                 )
             )
 
     if "community:security" in selected_sources:
         section = config.get("security")
-        if isinstance(section, dict) and section.get("reporting_contact") == SECURITY_PLACEHOLDER:
+        if isinstance(section, dict) and section.get("reporting_contact") in SECURITY_PLACEHOLDERS:
             results.append(
                 _result(
                     "FAIL",
                     "repoforge.yml",
-                    "Security reporting_contact is still the generic placeholder",
+                    "Security reporting_contact is still a generic placeholder",
                 )
             )
 
@@ -169,17 +185,18 @@ def _placeholder_checks(config: dict[str, Any], plan: list[PlannedFile]) -> list
                         )
                         break
 
-    contributing = config.get("contributing")
-    if isinstance(contributing, dict):
-        setup = contributing.get("setup_command")
-        if isinstance(setup, str) and "github.com/example/example-project" in setup:
-            results.append(
-                _result(
-                    "WARN",
-                    "repoforge.yml",
-                    "contributing.setup_command still uses the example repository URL",
+    if "community:contributing" in selected_sources:
+        contributing = config.get("contributing")
+        if isinstance(contributing, dict):
+            setup = contributing.get("setup_command")
+            if isinstance(setup, str) and "github.com/example/example-project" in setup:
+                results.append(
+                    _result(
+                        "WARN",
+                        "repoforge.yml",
+                        "contributing.setup_command still uses the example repository URL",
+                    )
                 )
-            )
 
     return results
 
@@ -194,6 +211,8 @@ def check_repository(
         raise FileNotFoundError(f"Target repository does not exist: {root}")
 
     results: list[CheckResult] = []
+    results.extend(_config_check(config))
+
     for state in inspect_apply_plan(root, plan):
         subject = state.path.as_posix()
         if state.status == "unchanged":
@@ -210,18 +229,19 @@ def check_repository(
             )
 
     selected_paths = {item.path.as_posix() for item in plan}
-    if "CITATION.cff" in selected_paths:
-        results.extend(_validate_citation(root / "CITATION.cff"))
-    if ".github/ISSUE_TEMPLATE/01-bug-report.yml" in selected_paths:
-        results.extend(
-            _validate_issue_form(root / ".github/ISSUE_TEMPLATE/01-bug-report.yml")
-        )
-    if ".github/ISSUE_TEMPLATE/02-feature-request.yml" in selected_paths:
-        results.extend(
-            _validate_issue_form(root / ".github/ISSUE_TEMPLATE/02-feature-request.yml")
-        )
-    if ".github/ISSUE_TEMPLATE/config.yml" in selected_paths:
-        results.extend(_validate_issue_config(root / ".github/ISSUE_TEMPLATE/config.yml"))
+    citation = "CITATION.cff"
+    bug_form = ".github/ISSUE_TEMPLATE/01-bug-report.yml"
+    feature_form = ".github/ISSUE_TEMPLATE/02-feature-request.yml"
+    issue_config = ".github/ISSUE_TEMPLATE/config.yml"
+
+    if citation in selected_paths:
+        results.extend(_validate_citation(root / citation))
+    if bug_form in selected_paths:
+        results.extend(_validate_issue_form(root / bug_form, bug_form))
+    if feature_form in selected_paths:
+        results.extend(_validate_issue_form(root / feature_form, feature_form))
+    if issue_config in selected_paths:
+        results.extend(_validate_issue_config(root / issue_config, issue_config))
 
     results.extend(_placeholder_checks(config, plan))
     return results
