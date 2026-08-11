@@ -18,9 +18,10 @@ RepoForge is currently in `0.1.0.dev0` Alpha development; no stable release has 
 - Explicit `repoforge init` generation of one combined, project-owned `repoforge.yml` across all 21 project type/profile combinations.
 - Safety-first `repoforge apply` with complete-plan rendering, conflict preflight, `--dry-run`, `--force`, and standards policy overrides.
 - Review-first `repoforge diff` with unified create/overwrite diffs, configurable context, unchanged-file reporting, and no target-repository writes.
+- CI-facing `repoforge check` with managed-file drift detection, repository config validation, CFF/Issue Form checks, placeholder diagnostics, and strict warning handling.
 
 ### Changed
 
 - Removed automatic project-type detection from the planned RepoForge workflow; project type and profile are selected explicitly.
 - Replaced preview-specific illustrative screenshots with a neutral empty placeholder.
-- Consolidated `init`, `diff`, and `apply` around the same explicit project selection and repository standards plan.
+- Consolidated `init`, `diff`, `apply`, and `check` around the same explicit project selection and repository standards plan.
