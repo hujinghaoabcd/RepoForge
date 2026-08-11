@@ -1,0 +1,13 @@
+project_name: ExampleProject
+repository_url: https://github.com/example/example-project
+
+issue_forms:
+  bug_title_prefix: "[Bug]: "
+  feature_title_prefix: "[Feature]: "
+  require_code_of_conduct: true
+  blank_issues_enabled: false
+
+pull_request:
+  require_tests: true
+  require_docs: true
+  require_changelog: false
