@@ -1,17 +1,48 @@
-# MethodX
+# LatentMap
 
-A research implementation of a new algorithm for [problem].
+**A compact research method for learning task-aware latent distances.**
 
-## Method
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
-Short description of the idea and its intended use.
+Paper: docs/paper.md
+
+LatentMap learns a low-dimensional representation in which pairwise distances are optimized for a documented prediction or similarity objective.
+
+## Installation
+
+```bash
+python -m pip install latentmap
+```
 
 ## Quick Start
 
+Learn a two-dimensional latent representation from a tiny feature matrix.
+
+```python
+import numpy as np
+from latentmap import LatentMap
+
+X = np.array([[0.0, 1.0], [1.0, 1.2], [2.0, 2.1], [3.0, 2.8]])
+y = np.array([0.0, 0.2, 0.9, 1.1])
+result = LatentMap(n_components=2, random_state=42).fit(X, y)
+print(result.embedding_)
+```
+
 ## Validation
 
-State what has been checked.
+The implementation is checked on deterministic synthetic recovery cases and fixed numerical fixtures.
+
+- documented seeds reproduce the reference embedding within tolerance
+- degenerate inputs fail explicitly instead of producing silent coordinates
 
 ## Citation
 
+Cite the method paper when using LatentMap in research and cite the software release when the implementation matters.
+
+Method paper: docs/paper.md
+
+Software citation metadata: [`CITATION.cff`](CITATION.cff).
+
 ## License
+
+LatentMap is released under the MIT License.
