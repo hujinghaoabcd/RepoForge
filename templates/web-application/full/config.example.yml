@@ -93,8 +93,8 @@ environment:
 database_text: >-
   Django migrations define application schema changes. Deployments must run
   migrations once per release before all application replicas are moved to code
-  that requires the new schema. Large data backfills should be explicit
-  operational jobs rather than hidden inside request startup.
+  that requires the new schema. Large data backfills should be implemented as
+  explicit operational jobs rather than hidden inside request startup.
 migration_command: |-
   python manage.py migrate --check
   python manage.py migrate
