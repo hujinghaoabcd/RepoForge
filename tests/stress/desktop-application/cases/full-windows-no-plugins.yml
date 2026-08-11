@@ -48,7 +48,7 @@ compatibility:
 architecture: []
 data_locations:
   - name: Preferences
-    location: `%APPDATA%/LabArchive`
+    location: '`%APPDATA%/LabArchive`'
     purpose: application settings
   - name: Archives
     location: user-selected directories
