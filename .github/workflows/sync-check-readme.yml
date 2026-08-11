@@ -1,0 +1,90 @@
+name: sync-check-readme
+
+on:
+  push:
+    branches: [feature/check-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/check-v1
+
+      - name: Update README status
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_all(path, pairs):
+              p = Path(path)
+              text = p.read_text(encoding="utf-8")
+              for old, new in pairs:
+                  if old not in text:
+                      raise SystemExit(f"Expected text not found in {path}: {old[:80]!r}")
+                  text = text.replace(old, new, 1)
+              p.write_text(text, encoding="utf-8")
+
+          replace_all("README.md", [
+              (
+                  "exercises the full `init → diff → apply` workflow against a temporary repository.",
+                  "exercises the full `init → diff → apply → check` workflow against a temporary repository, including an intentional drift failure.",
+              ),
+              (
+                  "repoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```",
+                  "repoforge apply /path/to/project --config /path/to/project/repoforge.yml\nrepoforge check /path/to/project\n```",
+              ),
+              (
+                  "normal `diff` and `apply` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), and [`docs/APPLY.md`](docs/APPLY.md).",
+                  "normal `diff`, `apply`, and `check` do not need to repeat them. RepoForge refuses to overwrite differing selected files unless `--force` is supplied. See [`docs/INIT.md`](docs/INIT.md), [`docs/DIFF.md`](docs/DIFF.md), [`docs/APPLY.md`](docs/APPLY.md), and [`docs/CHECK.md`](docs/CHECK.md).",
+              ),
+              (
+                  "- `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;",
+                  "- `repoforge apply` with `--dry-run`, safe conflict preflight, `--force`, and standards policy overrides;\n- `repoforge check` for CI-facing config, drift, CFF/Issue Form, and placeholder validation;",
+              ),
+              (
+                  "- the `check` repository workflow;\n",
+                  "",
+              ),
+              (
+                  "The repository standards packs plus `init`, `diff`, and the first safe `apply` workflow are now implemented. The next workflow layer is:\n\n```text\nrepoforge check .      # planned: validate repository documentation contracts\n```\n\nThe currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, and `repoforge apply`.",
+                  "The repository standards packs plus `init`, `diff`, `apply`, and `check` are now implemented. The next productization layer is managed partial/semantic updates for hand-edited files and a published package.\n\nThe currently supported CLI commands are `repoforge render`, `repoforge init`, `repoforge diff`, `repoforge apply`, and `repoforge check`.",
+              ),
+          ])
+
+          replace_all("README.zh-CN.md", [
+              (
+                  "在临时仓库上真实执行完整的 `init → diff → apply` 流程。",
+                  "在临时仓库上真实执行完整的 `init → diff → apply → check` 流程，并验证人为制造的文档漂移必须失败。",
+              ),
+              (
+                  "repoforge apply /path/to/project --config /path/to/project/repoforge.yml\n```",
+                  "repoforge apply /path/to/project --config /path/to/project/repoforge.yml\nrepoforge check /path/to/project\n```",
+              ),
+              (
+                  "- `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；",
+                  "- `repoforge apply`，包含 `--dry-run`、冲突预检查、`--force` 和标准选择覆盖；\n- `repoforge check`，用于 CI 中检查配置、漂移、CFF/Issue Form 结构以及关键占位符；",
+              ),
+              (
+                  "- `check` 仓库工作流；\n",
+                  "",
+              ),
+              (
+                  "仓库标准层以及 `init`、`diff` 和第一版安全 Apply 工作流已经实现。下一阶段是：\n\n```text\nrepoforge check .      # 计划：检查仓库文档合同\n```\n\n当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init`、`repoforge diff` 和 `repoforge apply`。",
+                  "仓库标准层以及 `init`、`diff`、`apply`、`check` 工作流已经实现。下一阶段重点转向对人工维护文件的受控局部/语义更新，以及正式包发布。\n\n当前正式支持的 CLI 命令是 `repoforge render`、`repoforge init`、`repoforge diff`、`repoforge apply` 和 `repoforge check`。",
+              ),
+          ])
+          PY
+
+      - name: Commit synchronized README
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/sync-check-readme.yml
+          git add README.md README.zh-CN.md
+          git commit -m "docs: mark repository check workflow available"
+          git push
