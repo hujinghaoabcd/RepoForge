@@ -13,6 +13,7 @@ SUPPORTED_TYPES = {
     "django-package",
     "web-application",
     "frontend-library",
+    "desktop-application",
 }
 SUPPORTED_PROFILES = {"minimal", "standard", "full"}
 
