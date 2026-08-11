@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="LatentMap" width="420">
+  <img src="../../../assets/logo.svg" alt="LatentMap" width="280">
 </p>
 
 # LatentMap

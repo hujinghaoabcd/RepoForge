@@ -1,0 +1,175 @@
+logo_path: null
+screenshot_path: docs/assets/geoboard-overview.png
+project_name: GeoBoard
+tagline: A production-oriented geospatial collaboration platform for publishing, reviewing, and operating spatial dashboards.
+badges: '[![Build](https://img.shields.io/badge/build-passing-brightgreen)](#testing) [![Docker](https://img.shields.io/badge/docker-supported-blue)](#deployment) [![Security](https://img.shields.io/badge/security-policy-blue)](#security) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Demo · Architecture · Development · Deployment · Operations · Security · Docs
+overview_text: GeoBoard is a complete browser application for teams that publish spatial indicators and maintain shared geospatial workspaces. It combines a React client, Django API, spatial database, background processing, object storage, and operational controls while keeping deployment contracts explicit.
+demo_link: https://demo.example.org
+screenshot_text: The main workspace combines the map, dataset catalogue, saved dashboards, review status, and publishing controls.
+features:
+- name: Workspace-based publishing
+  description: organize datasets and dashboards by team workspace.
+- name: Spatial dataset lifecycle
+  description: upload, validate, version, and retire geospatial layers.
+- name: Saved analytical views
+  description: persist filters, map state, indicators, and sharing rules.
+- name: Role-based access
+  description: separate viewers, editors, publishers, and administrators.
+- name: Background imports
+  description: move expensive validation and ingestion outside request/response execution.
+- name: Auditable releases
+  description: record who published a dashboard or replaced a dataset version.
+architecture_intro: The production system is split by operational responsibility rather than by repository folder alone.
+architecture:
+- component: Web client
+  technology: React + TypeScript
+  responsibility: interactive map, dashboards, and administration UI
+- component: Application API
+  technology: Django + DRF
+  responsibility: domain logic, permissions, APIs, and orchestration
+- component: Primary database
+  technology: PostgreSQL + PostGIS
+  responsibility: application state and spatial queryable data
+- component: Task workers
+  technology: Celery + Redis
+  responsibility: imports, validation, exports, and notifications
+- component: Object storage
+  technology: S3-compatible storage
+  responsibility: uploaded source files and generated exports
+- component: Edge
+  technology: reverse proxy / ingress
+  responsibility: TLS termination, routing, and request limits
+stack:
+- name: Python / Django
+  description: backend application and REST API.
+- name: React / TypeScript
+  description: browser client.
+- name: PostgreSQL / PostGIS
+  description: transactional and spatial persistence.
+- name: Celery / Redis
+  description: asynchronous task execution.
+- name: S3-compatible object storage
+  description: uploaded and generated artifacts.
+- name: Docker
+  description: supported deployment and development packaging.
+requirements:
+- Python 3.12+
+- Node.js 22+
+- Docker 27+ with Compose plugin
+- PostgreSQL/PostGIS, Redis, and S3-compatible storage (provided by the development Compose stack)
+local_command: |-
+  cp .env.example .env
+  docker compose up -d db redis object-storage
+  python -m pip install -r requirements/dev.txt
+  npm install
+  python manage.py migrate
+  npm run dev
+local_result: Run backend and worker processes using the commands documented in `docs/development.md`; the web client is served at `http://localhost:3000`.
+configuration_intro: Treat `.env.example` as the machine-readable inventory. The README only surfaces groups that materially affect application identity or safe deployment. Production secrets must come from the deployment platform, not committed files.
+environment:
+- group: Core
+  name: SECRET_KEY
+  required: 'Yes'
+  purpose: server-side signing secret.
+- group: Core
+  name: APP_BASE_URL
+  required: 'Yes'
+  purpose: canonical external URL.
+- group: Database
+  name: DATABASE_URL
+  required: 'Yes'
+  purpose: PostgreSQL/PostGIS connection.
+- group: Queue
+  name: REDIS_URL
+  required: 'Yes'
+  purpose: task broker/cache endpoint.
+- group: Storage
+  name: S3_ENDPOINT_URL
+  required: 'Yes'
+  purpose: object-storage endpoint.
+- group: Storage
+  name: S3_BUCKET
+  required: 'Yes'
+  purpose: bucket for uploaded and generated files.
+- group: Email
+  name: EMAIL_URL
+  required: Production-dependent
+  purpose: transactional email provider connection.
+database_text: Schema changes are shipped as Django migrations and must be applied as part of each release rollout. Do not run application replicas against mixed schema versions unless a release explicitly documents compatibility.
+migration_command: python manage.py migrate
+backup_text: Back up PostgreSQL and object storage as one logical application dataset. A database-only backup may reference objects that no longer exist, while an object-only backup cannot reconstruct permissions, metadata, or versions. Test restore procedures outside production.
+api_text: The browser client uses the same versioned application API exposed to approved integrations. Webhook consumers must tolerate retries and verify signatures.
+api_links:
+- name: API guide
+  link: docs/api.md
+- name: Webhooks
+  link: docs/webhooks.md
+auth_text: Authentication can be local or delegated to an external identity provider. Authorization remains workspace/role based inside GeoBoard. SSO authentication does not automatically grant workspace access. Production deployments should review cookie, proxy-header, origin, and tenant-boundary settings together.
+jobs_text: Celery workers execute dataset validation, imports, exports, and notification tasks. Web processes should remain able to serve read-only pages when long-running jobs are backed up, while operations that require a completed import remain pending.
+jobs_command: celery -A geoboard worker -l info
+storage_text: Uploaded source files and generated exports live in S3-compatible object storage. Buckets are private by default; downloads are authorized by the application and served through short-lived URLs.
+search_text: null
+email_text: Transactional email is optional for local development but required for production flows that send invitations, password resets, and publishing notifications.
+deployment_intro: Two deployment paths are first-class. Both assume an external TLS endpoint and persistent PostgreSQL/object-storage backups.
+deployments:
+- name: Docker Compose
+  description: Recommended for a single-host self-managed deployment.
+  command: |-
+    docker compose -f compose.production.yml pull
+    docker compose -f compose.production.yml up -d
+    python manage.py migrate
+- name: Container Platform
+  description: Use the published images on Kubernetes or another orchestrator; keep migrations as an explicit release step rather than running them independently in every replica.
+  command: helm upgrade --install geoboard deploy/helm/geoboard
+cicd_text: CI runs linting, unit/integration tests, frontend tests, build verification, and migration checks. Release pipelines build immutable images; production deployment credentials remain outside repository workflows.
+operations:
+- name: Health
+  description: expose separate liveness/readiness checks for web and worker processes.
+- name: Logs
+  description: emit structured application logs without secrets or raw uploaded data.
+- name: Metrics
+  description: track request errors/latency, queue depth, failed jobs, database health, and storage failures.
+- name: Backups
+  description: monitor successful database and object-storage backups and periodically test restore.
+- name: Capacity
+  description: watch database growth, object-storage usage, and worker queue delay.
+security_notes:
+- Never commit production secrets or `.env` files.
+- Terminate TLS at a trusted reverse proxy/ingress and configure forwarded-host/proto handling explicitly.
+- Keep uploaded source files private unless a project intentionally publishes them.
+- Validate archive and geospatial uploads before background processing; enforce file-size and extraction limits.
+- Review CORS/CSRF/origin settings together when frontend and API use different hosts.
+- Report vulnerabilities privately through the repository security policy rather than public issues.
+testing_text: Run backend, frontend, integration, and migration checks before release. Use end-to-end tests for critical authentication, permissions, upload, and publishing flows.
+test_command: |-
+  python -m pytest
+  npm test
+e2e_command: npm run test:e2e
+upgrade_notes:
+- Read release notes before upgrading across minor/major versions.
+- Back up PostgreSQL and object storage before applying schema or data migrations.
+- Apply database migrations once per rollout and wait for completion before scaling the new application version.
+- Review deprecated environment variables and reverse-proxy settings during each upgrade.
+- Run post-upgrade health checks and one representative upload/publish workflow before declaring the release complete.
+documentation:
+- name: Architecture
+  link: docs/architecture.md
+  description: component boundaries and data flows
+- name: Development
+  link: docs/development.md
+  description: full local process layout and debugging
+- name: Configuration
+  link: docs/configuration.md
+  description: complete environment-variable reference
+- name: Deployment
+  link: docs/deployment.md
+  description: Compose, ingress, volumes, and production requirements
+- name: Operations
+  link: docs/operations.md
+  description: health, logs, metrics, backup, restore, and incident hints
+- name: Security
+  link: SECURITY.md
+  description: vulnerability reporting and supported versions
+contributing_text: Open an issue or discussion before large architectural changes. Contributions should include tests for behavior changes, migrations when schema changes, and documentation for new production configuration.
+license_text: MIT.

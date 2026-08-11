@@ -1,0 +1,66 @@
+project_name: SurveyHub
+tagline: A web platform with a React client and API for collecting and reviewing field surveys.
+overview_text: SurveyHub separates the browser client and application API while keeping one PostgreSQL data model and one supported deployment bundle.
+demo_link: https://demo.example.org
+screenshot_text: Reviewers use the web client to validate submissions, photos, coordinates, and workflow state.
+features:
+- name: Field submissions
+  description: receive structured survey records.
+- name: Review workflow
+  description: approve, return, or annotate submissions.
+- name: Map review
+  description: inspect coordinates and coverage.
+- name: Export
+  description: download approved records for downstream analysis.
+stack:
+- layer: Frontend
+  technology: React + TypeScript
+  role: browser application
+- layer: API
+  technology: FastAPI
+  role: validation, workflow, and data access
+- layer: Database
+  technology: PostgreSQL
+  role: survey state and users
+requirements:
+- Node.js 22+
+- Python 3.12+
+- PostgreSQL 16+
+local_command: |-
+  cp .env.example .env
+  docker compose up -d db
+  python -m pip install -r api/requirements-dev.txt
+  npm install
+  npm run dev
+local_result: The client runs at `http://localhost:3000`; the API runs at `http://localhost:8000`.
+environment_intro: Frontend and API use separate public URLs in development and production.
+environment:
+- name: DATABASE_URL
+  required: 'Yes'
+  purpose: API database connection.
+- name: API_BASE_URL
+  required: 'Yes'
+  purpose: browser-visible API origin.
+- name: APP_BASE_URL
+  required: 'Yes'
+  purpose: canonical browser application URL.
+database_text: Apply API migrations before starting the new release.
+migration_command: alembic upgrade head
+seed_command: null
+deployment_text: The supported Compose deployment runs frontend, API, and PostgreSQL as one self-host bundle.
+deployment_command: docker compose -f compose.production.yml up -d
+deployment_note: The public reverse proxy routes `/api/` to the API service and all other application paths to the frontend.
+project_tree: |-
+  web/            # React client
+  api/            # FastAPI service
+  deploy/         # container/reverse-proxy files
+  docs/
+test_command: |-
+  python -m pytest api/tests
+  npm test --prefix web
+testing_text: API authorization and browser workflow tests are both required before release.
+documentation:
+- name: Deployment
+  link: docs/deployment.md
+  description: routing and production configuration
+license_text: MIT.

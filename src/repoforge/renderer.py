@@ -11,6 +11,7 @@ SUPPORTED_TYPES = {
     "research-algorithm",
     "research-experiment",
     "django-package",
+    "web-application",
 }
 SUPPORTED_PROFILES = {"minimal", "standard", "full"}
 

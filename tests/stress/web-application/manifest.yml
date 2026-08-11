@@ -1,0 +1,73 @@
+cases:
+- name: tiny-internal-dashboard
+  profile: minimal
+  overrides: cases/tiny-internal-dashboard.yml
+  min_lines: 45
+  max_lines: 90
+  required_sections:
+  - '## Features'
+  - '## Run Locally'
+  - '## Configuration'
+  - '## Deploy'
+  forbidden_sections:
+  - '## Architecture'
+  - '## CI/CD'
+  - '## Observability and Operations'
+- name: server-rendered-monolith
+  profile: standard
+  overrides: cases/server-rendered-monolith.yml
+  min_lines: 90
+  max_lines: 180
+  required_sections:
+  - '## Tech Stack'
+  - '## Local Development'
+  - '## Database'
+  - '## Deployment'
+  - '## Testing'
+  forbidden_sections:
+  - '## CI/CD'
+  - '## Observability and Operations'
+- name: split-frontend-api
+  profile: standard
+  overrides: cases/split-frontend-api.yml
+  min_lines: 100
+  max_lines: 190
+  required_sections:
+  - '## Tech Stack'
+  - '## Environment Variables'
+  - '## Database'
+  - '## Deployment'
+  forbidden_sections:
+  - '## Background Jobs and Queues'
+  - '## Object Storage / Media'
+- name: self-hosted-multiservice
+  profile: full
+  overrides: cases/self-hosted-multiservice.yml
+  min_lines: 180
+  max_lines: 300
+  required_sections:
+  - '## Architecture'
+  - '## Public API / Webhooks'
+  - '## Authentication and Authorization'
+  - '## Background Jobs and Queues'
+  - '## Object Storage / Media'
+  - '## Observability and Operations'
+  - '## Security'
+  forbidden_sections: []
+- name: full-monolith-no-optional-services
+  profile: full
+  overrides: cases/full-monolith-no-optional-services.yml
+  min_lines: 140
+  max_lines: 250
+  required_sections:
+  - '## Architecture'
+  - '## Database and Migrations'
+  - '## Deployment'
+  - '## CI/CD'
+  - '## Security'
+  forbidden_sections:
+  - '## Public API / Webhooks'
+  - '## Background Jobs and Queues'
+  - '## Object Storage / Media'
+  - '## Search'
+  - '## Email'

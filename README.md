@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="RepoForge" width="520">
+  <img src="assets/logo.svg" alt="RepoForge" width="280">
 </p>
 
 # RepoForge
@@ -23,7 +23,7 @@ The goal is a recognizable family style without forcing unrelated projects into 
 
 ## Implemented template families
 
-RepoForge currently has four executable renderer families:
+RepoForge currently has five executable renderer families:
 
 ```text
 scientific-python
@@ -45,6 +45,11 @@ django-package
 ├── minimal
 ├── standard
 └── full
+
+web-application
+├── minimal
+├── standard
+└── full
 ```
 
 The three profiles are **independent templates**, not conditional views inside one giant README template.
@@ -52,7 +57,8 @@ The three profiles are **independent templates**, not conditional views inside o
 - `scientific-python` — reusable scientific software packages;
 - `research-algorithm` — original scientific or technical methods;
 - `research-experiment` — paper code, benchmark studies, and reproducibility repositories;
-- `django-package` — reusable Django applications, extensions, middleware, backends, and admin integrations.
+- `django-package` — reusable Django applications, extensions, middleware, backends, and admin integrations;
+- `web-application` — complete browser products and deployable web systems, from small monoliths to multi-service self-hosted applications.
 
 Each implemented family has a contract, reference analysis, independent profile rules, Jinja templates, YAML example configs, rendered examples, branded previews, renderer tests, and deliberately difficult stress cases.
 
@@ -98,6 +104,14 @@ repoforge render django-package standard \
   --output README.generated.md
 ```
 
+Render a full web-application README:
+
+```bash
+repoforge render web-application full \
+  --config templates/web-application/full/config.example.yml \
+  --output README.generated.md
+```
+
 The renderer uses strict Jinja configuration validation: missing template variables fail visibly instead of silently producing incomplete documentation.
 
 ## Previewing profiles
@@ -114,13 +128,13 @@ RepoForge's own previews use one repository brand source:
 assets/logo.svg
 ```
 
+The shared preview configuration currently renders the RepoForge logo at 280 px. User-facing `README.example.md` files remain brand-neutral so generated projects can supply their own `logo_path` and size.
+
 Regenerate previews for implemented template families with:
 
 ```bash
 python scripts/generate_previews.py
 ```
-
-User-facing `README.example.md` files remain brand-neutral so generated projects can supply their own `logo_path`.
 
 ## Stress tests
 
@@ -131,10 +145,13 @@ tests/stress/
 ├── scientific-python/
 ├── research-algorithm/
 ├── research-experiment/
-└── django-package/
+├── django-package/
+└── web-application/
 ```
 
-They deliberately exercise project shapes that make a generic README design fail. The Django suite, for example, covers a tiny template-tag package, middleware ordering, an authorization backend, a broad admin extension, and a Full-profile middleware package with **no models or admin surface**. Full therefore means deeper documentation, not fabricated capabilities.
+They deliberately exercise project shapes that make a generic README design fail. The web-application suite covers a tiny internal dashboard, a server-rendered monolith, a split frontend/API system, a self-hosted multi-service platform, and a Full-profile monolith with **no API, queue, object storage, search, or email service**.
+
+That last case protects a core RepoForge rule: **Full means deeper documentation, not fabricated capabilities or infrastructure.**
 
 ## Project types
 
@@ -144,11 +161,11 @@ RepoForge's target template system is organized around seven project types:
 - `research-algorithm` — original methods and algorithm implementations;
 - `research-experiment` — paper code, benchmarks, experiments, and reproducibility;
 - `django-package` — reusable Django applications and extensions;
-- `web-application` — small to large web applications;
+- `web-application` — small to large deployable web applications;
 - `frontend-library` — frontend libraries, plugins, and components;
 - `desktop-application` — desktop software and cross-platform applications.
 
-The remaining three families will be implemented incrementally using the same contracts and tests.
+The remaining two families will be implemented incrementally using the same contracts and tests.
 
 ## Profiles
 
@@ -156,7 +173,9 @@ Profiles control documentation depth, but each profile is a separate artifact.
 
 - **Minimal** — the shortest complete README for a small, focused project.
 - **Standard** — the default for most maintained open-source projects.
-- **Full** — a deeper landing page for mature projects with broader integration, compatibility, validation, reproducibility, security, or upgrade boundaries.
+- **Full** — a deeper landing page for mature projects with broader integration, compatibility, validation, reproducibility, security, deployment, or upgrade boundaries.
+
+For web applications specifically, profile depth is independent from architecture: a Full monolith remains a monolith, while a Standard split frontend/API project does not become Full merely because it has two processes.
 
 ## Repository structure
 
@@ -184,6 +203,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the design.
 - **Scientific software treats validation, reproducibility, limitations, and citation as first-class concerns.**
 - **Experiment repositories make data identity, protocol, seeds, result identity, and reproduction commands explicit.**
 - **Django packages make host-project integration hooks, compatibility, migrations, security, and upgrade boundaries explicit.**
+- **Web applications separate product identity, local development, configuration, persistent data, deployment, operations, and security.**
 - **Full profiles must not invent capabilities that a project does not have.**
 - **Generated output remains ordinary readable Markdown.**
 - **Incomplete configuration should fail explicitly rather than create misleading documentation.**
@@ -198,7 +218,7 @@ GitHub Actions runs the suite on Python 3.11, 3.12, and 3.13 and performs CLI re
 
 ## Status
 
-RepoForge is in early development. Four template families are executable: `scientific-python`, `research-algorithm`, `research-experiment`, and `django-package`. The next family is `web-application`.
+RepoForge is in early development. Five template families are executable: `scientific-python`, `research-algorithm`, `research-experiment`, `django-package`, and `web-application`. The remaining planned families are `frontend-library` and `desktop-application`.
 
 ## License
 

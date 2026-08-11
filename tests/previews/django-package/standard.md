@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../../assets/logo.svg" alt="django-audit-panel" width="420">
+  <img src="../../../assets/logo.svg" alt="django-audit-panel" width="280">
 </p>
 
 # django-audit-panel

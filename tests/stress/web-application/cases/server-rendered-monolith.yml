@@ -1,0 +1,57 @@
+project_name: CivicDesk
+tagline: A server-rendered Django case-management application for small public-service teams.
+screenshot_path: docs/assets/civicdesk.png
+overview_text: 'CivicDesk is a conventional Django monolith: templates, application logic, authentication, and database-backed workflows are deployed as one web service.'
+demo_link: null
+screenshot_text: The main case queue combines filters, assignment state, due dates, and activity history.
+features:
+- name: Case queue
+  description: filter and assign incoming requests.
+- name: Activity history
+  description: keep a chronological record of case changes.
+- name: Staff roles
+  description: separate readers, case workers, and supervisors.
+- name: Server-rendered UI
+  description: avoid a separate frontend build/deployment surface.
+stack:
+- layer: Web application
+  technology: Django
+  role: templates, domain logic, authentication, and administration
+- layer: Database
+  technology: PostgreSQL
+  role: cases, users, comments, and audit history
+requirements:
+- Python 3.12+
+- PostgreSQL 16+
+local_command: |-
+  cp .env.example .env
+  python -m pip install -r requirements/dev.txt
+  python manage.py migrate
+  python manage.py runserver
+local_result: Open `http://localhost:8000`.
+environment_intro: Only startup-critical variables are shown here.
+environment:
+- name: DATABASE_URL
+  required: 'Yes'
+  purpose: PostgreSQL connection.
+- name: SECRET_KEY
+  required: 'Yes'
+  purpose: Django signing secret.
+database_text: Django migrations are applied during each deployment.
+migration_command: python manage.py migrate
+seed_command: null
+deployment_text: Deploy the application as one WSGI/ASGI service with PostgreSQL.
+deployment_command: docker compose -f compose.production.yml up -d
+deployment_note: Static assets are collected during image build; user uploads are not used.
+project_tree: |-
+  civicdesk/      # Django project
+  cases/          # case-management app
+  templates/      # server-rendered templates
+  docs/           # operator and developer notes
+test_command: python -m pytest
+testing_text: Tests cover permissions and state transitions in addition to views.
+documentation:
+- name: Operations
+  link: docs/operations.md
+  description: deployment, backup, and upgrades
+license_text: AGPL-3.0.

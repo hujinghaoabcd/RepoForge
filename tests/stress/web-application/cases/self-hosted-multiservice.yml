@@ -1,0 +1,59 @@
+project_name: ArchiveFlow
+tagline: A self-hosted document workflow platform with background ingestion, object storage, and signed integration webhooks.
+screenshot_path: docs/assets/archiveflow.png
+overview_text: ArchiveFlow is an operator-managed document platform with a browser client, application API, worker fleet, PostgreSQL, Redis, and S3-compatible storage.
+features:
+- name: Document inbox
+  description: ingest and classify uploaded documents.
+- name: Workflow
+  description: route documents through review and approval states.
+- name: Integrations
+  description: publish signed webhooks and use a documented API.
+- name: Background processing
+  description: run OCR, indexing, and export jobs asynchronously.
+- name: Private storage
+  description: keep originals outside the public web root.
+architecture:
+- component: Web client
+  technology: React
+  responsibility: user interface
+- component: API
+  technology: Django + DRF
+  responsibility: domain logic and authorization
+- component: Database
+  technology: PostgreSQL
+  responsibility: metadata and workflow state
+- component: Queue
+  technology: Celery + Redis
+  responsibility: OCR, indexing, exports
+- component: Object storage
+  technology: S3-compatible
+  responsibility: originals and generated files
+jobs_text: Workers execute OCR, indexing, and export tasks. Queue health is operationally critical even when read-only views remain available.
+jobs_command: celery -A archiveflow worker -l info
+storage_text: All originals and generated files remain private and are accessed through application-authorized signed URLs.
+api_text: The API is versioned and webhooks are signed. Consumers must handle retries and idempotency.
+api_links:
+- name: API
+  link: docs/api.md
+- name: Webhooks
+  link: docs/webhooks.md
+auth_text: Local accounts and OIDC are supported. OIDC authentication does not bypass workspace permissions.
+search_text: Search indexes extracted text and metadata; loss of the search index must be recoverable from PostgreSQL and object storage.
+email_text: Email is used for invitations and workflow notifications; local development uses a sink server.
+backup_text: PostgreSQL and object storage must be backed up together; search indexes and queues are rebuildable.
+operations:
+- name: Health
+  description: check web, workers, database, Redis, storage, and search connectivity.
+- name: Logs
+  description: emit structured logs without document contents.
+- name: Queue
+  description: alert on failed jobs and sustained queue delay.
+- name: Backups
+  description: monitor backup freshness and restore tests.
+security_notes:
+- Keep document objects private by default.
+- Validate file types and extraction limits before OCR.
+- Rotate webhook signing secrets without breaking in-flight retries.
+- Do not log extracted document text or credentials.
+- Report vulnerabilities privately.
