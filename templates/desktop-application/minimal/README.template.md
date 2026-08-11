@@ -13,7 +13,7 @@
   <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(900) }}">
 </p>
 
-{% endif %}## Features
+{% endif %}{{ "\n" }}## Features
 
 {% for feature in features %}- **{{ feature.name }}** — {{ feature.description }}
 {% endfor %}

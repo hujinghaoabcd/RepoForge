@@ -13,7 +13,7 @@
   <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(900) }}">
 </p>
 
-{% endif %}## Why {{ display_name }}?
+{% endif %}{{ "\n" }}## Why {{ display_name }}?
 
 {{ why_text }}
 
@@ -54,11 +54,7 @@
 
 {% endif %}{% if file_formats %}## Project and File Formats
 
-{% for item in file_formats %}
-- **{{ item.name }}:** {{ item.description }}{% if item.compatibility %} — {{ item.compatibility }}{% endif %}
-{% endfor %}
-
-{% endif %}{% if extensions_text %}## Plugins and Extensions
+{% for item in file_formats %}- **{{ item.name }}:** {{ item.description }}{% if item.compatibility %} — {{ item.compatibility }}{% endif %}{{ "\n" }}{% endfor %}{{ "\n" }}{% endif %}{% if extensions_text %}## Plugins and Extensions
 
 {{ extensions_text }}
 

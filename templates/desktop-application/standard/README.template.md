@@ -13,7 +13,7 @@
   <img src="{{ screenshot_path }}" alt="{{ project_name }} screenshot" width="{{ screenshot_width | default(900) }}">
 </p>
 
-{% endif %}## Overview
+{% endif %}{{ "\n" }}## Overview
 
 {{ overview_text }}
 
