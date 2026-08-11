@@ -267,8 +267,9 @@ def format_check_results(results: list[CheckResult]) -> str:
     passed = sum(item.level == "PASS" for item in results)
     warnings = sum(item.level == "WARN" for item in results)
     failed = sum(item.level == "FAIL" for item in results)
+    warning_label = "warning" if warnings == 1 else "warnings"
     lines.append("")
-    lines.append(f"Summary: {passed} passed, {warnings} warnings, {failed} failed.")
+    lines.append(f"Summary: {passed} passed, {warnings} {warning_label}, {failed} failed.")
     if failed == 0:
         lines.append("Repository standards are in sync.")
     return "\n".join(lines) + "\n"
