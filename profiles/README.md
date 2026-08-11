@@ -2,6 +2,26 @@
 
 Profiles control README depth without changing the project's semantic type.
 
+## Core rule
+
+`minimal`, `standard`, and `full` are **independent template artifacts**.
+
+They are not three branches inside one oversized README template. For every project type, RepoForge should use this shape:
+
+```text
+templates/<project-type>/
+├── minimal/
+│   └── README.template.md
+├── standard/
+│   └── README.template.md
+└── full/
+    └── README.template.md
+```
+
+Each profile has its own configuration, rendered example, and golden snapshot. A change to Minimal must not implicitly change Standard or Full output.
+
+Profiles may share small reusable partials, but section order, required fields, and overall README depth belong to the profile itself.
+
 ## Minimal
 
 For demos, prototypes, focused utilities, and small plugins.

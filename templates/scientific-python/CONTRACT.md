@@ -1,130 +1,134 @@
 # Scientific Python Template Contract
 
-This contract defines the intended README structure for reusable scientific Python packages.
+This contract defines README structures for reusable scientific Python packages.
+
+## Core rule: profiles are independent
+
+`minimal`, `standard`, and `full` are three separate templates. They are not one large Jinja template controlled by profile-condition branches.
+
+```text
+templates/scientific-python/
+├── minimal/
+│   ├── README.template.md
+│   └── README.example.md
+├── standard/
+│   ├── README.template.md
+│   └── README.example.md
+└── full/
+    ├── README.template.md
+    └── README.example.md
+```
+
+Each profile may evolve independently and must have its own rendered golden snapshot under `tests/previews/scientific-python/`.
 
 ## Audience
 
-Primary readers include:
+Primary readers include researchers evaluating fit, users installing and running a first example, developers locating API and contribution guidance, and authors needing citation and reproducibility information.
 
-- researchers evaluating whether the package fits a scientific task;
-- users who need to install and run a first example quickly;
-- developers who need links to API, contribution, and validation documentation;
-- authors who need correct citation and reproducibility information.
+## Common questions
 
-## Primary question
+Regardless of profile depth, a first-time visitor should quickly understand:
 
-A first-time visitor should be able to answer, within a short scan:
+1. what scientific problem the package addresses;
+2. how to install it;
+3. how to run a useful first example;
+4. where the authoritative documentation lives;
+5. how to cite it when academic use is expected.
 
-1. What scientific problem does this package address?
-2. Why would I use it instead of writing the method myself or using an existing package?
-3. How do I install it?
-4. What is the smallest useful example?
-5. What methods/capabilities are supported?
-6. Where are the complete docs and API?
-7. How has the implementation been validated?
-8. How should I cite it?
+Additional questions belong to Standard or Full depending on project maturity and scientific complexity.
 
-## Standard profile: section order
+## Minimal profile
+
+Use for small, focused scientific utilities.
+
+Expected structure:
 
 ```text
-Header / optional logo
+Project name
+One-line positioning
+Light badge set
+Short introduction
+Installation
+Quick Start
+Documentation
+Citation (when relevant)
+License
+```
+
+Minimal deliberately omits large capability matrices, architecture, detailed validation prose, model-selection guidance, development setup, and long limitation sections.
+
+## Standard profile
+
+Default for most reusable scientific Python packages.
+
+Expected structure:
+
+```text
+Optional logo
 Project name
 One-line scientific positioning
-Badges and key links
-Language switch (when maintained)
-
+Badges / navigation
 Why <Project>?
 Features
 Installation
 Quick Start
-Methods / Capabilities          [conditional]
-Representative Example         [conditional]
-Validation                     [conditional; recommended for numerical packages]
+Methods / capabilities
+Validation (when scientifically material)
 Documentation
-Citation                       [recommended for research software]
-Limitations                    [conditional]
+Citation
 Support / Contributing
 License
 ```
 
-This order is based on the curated reference analysis in [`references.md`](references.md).
+Standard should be complete enough for a normal package user without becoming a manual.
 
-## Required sections
+## Full profile
 
-For `standard` scientific Python packages:
+Use for mature, broad, or scientifically complex packages.
 
-- project identity and one-line positioning;
-- scientific motivation or clear problem statement;
-- key capabilities;
-- installation;
-- minimal executable quick start;
-- documentation link/map;
-- license.
-
-## Conditionally required sections
-
-Use when relevant:
-
-- **Validation** — when numerical/statistical correctness is scientifically material;
-- **Citation** — when the package is intended for academic use;
-- **Methods / Models** — when the package exposes multiple scientific methods;
-- **Limitations** — when outputs can be easily over-interpreted or methods have important validity boundaries;
-- **Examples / Gallery** — when visual or workflow examples communicate usage better than API prose;
-- **Data** — when bundled datasets or strict data contracts are central to usage.
-
-## Content that should normally move to docs
-
-When substantial, do not keep these in the README:
-
-- full mathematical derivations;
-- complete model-by-model manuals;
-- exhaustive API listings;
-- full benchmark tables;
-- long implementation-stage status reports;
-- detailed release engineering instructions;
-- complete validation protocols;
-- large troubleshooting sections.
-
-The README may summarize these topics and link to the authoritative document.
-
-## Profile mapping
-
-### Minimal
-
-Use for small, focused scientific utilities or intentionally concise mature project portals:
+Expected structure:
 
 ```text
-Header
-What it does
+Logo / project identity
+One-line scientific positioning
+Badges / language / navigation
+What <Project> Is
+Why Use It?
+Scientific Scope
+Features
 Installation
-Quick example
-Docs/support
-Citation (if relevant)
+  Stable release
+  Optional features
+  Development install
+Five-Minute Example
+Method Catalogue
+Choosing a Method
+Data Contracts and Conventions
+Representative Workflow
+Validation and Reproducibility
+Examples
+Documentation
+Project Status and API Stability
+Limitations
+Citation
+Support / Contributing
 License
 ```
 
-### Standard
+Full still treats README as an entry point. Long theory, exhaustive API listings, benchmark tables, complete validation protocols, troubleshooting, and release engineering belong in `docs/`.
 
-Default structure described above. This is the first implemented template profile.
+## Shared content principles
 
-### Full
-
-May additionally surface concise summaries of:
-
-- method selection;
-- data contracts;
-- validation scope;
-- reproducibility guarantees;
-- compatibility/API stability;
-- architecture when it helps users understand extension points.
-
-Detailed material still belongs in `docs/`.
+- the first useful code example must appear early;
+- installation commands must be copyable;
+- scientific assumptions and limitations must not be hidden by marketing language;
+- citation metadata should use `CITATION.cff` when appropriate;
+- detailed material should link to authoritative documentation rather than being duplicated in README;
+- badge density should scale with the profile instead of becoming decorative clutter.
 
 ## Reference-analysis dimensions
 
-Each external reference case is evaluated by section, not copied wholesale.
-
-Compare at least:
+Reference cases are compared by component rather than copied wholesale:
 
 - header/logo presentation;
 - tagline quality;
@@ -139,47 +143,10 @@ Compare at least:
 - validation/reliability communication;
 - citation treatment;
 - contributing/support treatment;
-- README length and what is deliberately moved elsewhere.
+- README length and deliberate documentation handoff.
 
-See [`references.md`](references.md) for the current curated pool and section-by-section decisions.
-
-## Internal stress tests
-
-Existing research packages are used as practical regression cases, especially where their current README styles differ substantially. The template should improve consistency without erasing project-specific scientific identity.
-
-Current stress-test categories include:
-
-- broad model libraries;
-- focused scientific tools;
-- packages with many executable workflows;
-- packages whose current README contains development-stage detail;
-- theory-heavy statistical packages;
-- original research methods requiring interpretation boundaries.
-
-## Implemented artifacts
-
-```text
-templates/scientific-python/
-├── CONTRACT.md
-├── references.md
-├── README.template.md
-└── README.example.md
-```
-
-The corresponding structural previews live in:
-
-```text
-tests/previews/scientific-python.md
-```
+See `references.md` for the current reference pool and design decisions.
 
 ## Status
 
-**First standard-profile draft implemented.**
-
-Next steps:
-
-1. define a machine-readable example configuration;
-2. implement the smallest Jinja renderer;
-3. generate `minimal`, `standard`, and `full` outputs automatically;
-4. compare generated output with approved golden snapshots;
-5. stress-test the standard profile against representative real scientific packages.
+The three scientific-Python profiles are now structurally separated. The next renderer must select exactly one profile directory and render exactly one README from that profile.
