@@ -6,6 +6,7 @@ from pathlib import Path
 import yaml
 from jinja2 import UndefinedError
 
+from . import __version__
 from .apply import STANDARD_KEYS, apply_to_repository, build_apply_plan
 from .check import check_exit_code, check_repository, format_check_results
 from .diff import build_repository_diff, format_repository_diff
@@ -77,6 +78,11 @@ def _add_plan_selection_args(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="repoforge")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     render = subparsers.add_parser("render", help="Render a README from one profile template.")
