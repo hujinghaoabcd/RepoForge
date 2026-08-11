@@ -16,13 +16,6 @@ jobs:
         with:
           ref: refine/unified-readme-layout-v2
           fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install RepoForge
-        run: python -m pip install -e ".[test]"
-      - name: Unify headers, move media, and regenerate snapshots
-        run: python scripts/unify_readme_layout.py
       - name: Keep preview navigation anchors aligned
         run: |
           python - <<'PY'
@@ -36,14 +29,14 @@ jobs:
               text = path.read_text(encoding="utf-8")
               path.write_text(text.replace(old, new), encoding="utf-8")
           PY
-      - name: Commit generated layout updates
+      - name: Commit navigation update
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md README.zh-CN.md templates tests/previews
+          git add README.md README.zh-CN.md
           if git diff --cached --quiet; then
             echo "No generated changes"
             exit 0
           fi
-          git commit -m "style: unify README headers and move media into content"
+          git commit -m "fix: align README preview navigation"
           git push origin HEAD:refine/unified-readme-layout-v2
