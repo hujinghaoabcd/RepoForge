@@ -17,12 +17,17 @@ Project scaffolds create code structure, but repositories still need a clear pub
 
 The goal is a recognizable family style without forcing unrelated projects into one README structure.
 
-## Current implementation
+## Implemented template families
 
-The first executable template family is:
+RepoForge currently has executable renderer contracts for:
 
 ```text
 scientific-python
+├── minimal
+├── standard
+└── full
+
+research-algorithm
 ├── minimal
 ├── standard
 └── full
@@ -30,14 +35,7 @@ scientific-python
 
 The three profiles are **independent templates**, not conditional branches inside one large README template.
 
-Each profile contains:
-
-```text
-PROFILE.md
-README.template.md
-README.example.md
-config.example.yml
-```
+`scientific-python` is the more mature family and includes profile contracts, templates, rendered examples, YAML configs, previews, and dedicated stress tests. `research-algorithm` now has its initial contract, reference notes, independent profile rules, templates, example configs, and renderer tests.
 
 ## Quick start
 
@@ -49,15 +47,7 @@ cd RepoForge
 python -m pip install -e ".[test]"
 ```
 
-Render the Minimal scientific-Python README:
-
-```bash
-repoforge render scientific-python minimal \
-  --config templates/scientific-python/minimal/config.example.yml \
-  --output README.generated.md
-```
-
-Render Standard:
+Render a Scientific Python README:
 
 ```bash
 repoforge render scientific-python standard \
@@ -65,11 +55,11 @@ repoforge render scientific-python standard \
   --output README.generated.md
 ```
 
-Render Full:
+Render an original research-method README:
 
 ```bash
-repoforge render scientific-python full \
-  --config templates/scientific-python/full/config.example.yml \
+repoforge render research-algorithm standard \
+  --config templates/research-algorithm/standard/config.example.yml \
   --output README.generated.md
 ```
 
@@ -83,22 +73,31 @@ Approved visual previews live under:
 tests/previews/<project-type>/<profile>.md
 ```
 
-For the implemented scientific-Python family:
-
-```text
-tests/previews/scientific-python/
-├── minimal.md
-├── standard.md
-└── full.md
-```
-
-Regenerate scientific-Python previews from their current templates and example configurations with:
+Regenerate previews for implemented template families with:
 
 ```bash
 python scripts/generate_previews.py
 ```
 
-## Planned project types
+## Stress tests
+
+Scientific Python profiles are also exercised against deliberately different package shapes:
+
+```text
+tests/stress/scientific-python/
+├── README.md
+├── manifest.yml
+└── cases/
+    ├── tiny-numerical-utility.yml
+    ├── multi-method-geospatial.yml
+    ├── broad-model-library.yml
+    ├── theory-heavy-statistics.yml
+    └── pre1-experimental-package.yml
+```
+
+These are renderer-backed contract tests rather than hand-written showcase READMEs. They are intended to catch cases where a profile becomes too rigid, too verbose, or semantically inappropriate for a real scientific package shape.
+
+## Project types
 
 RepoForge's template system is organized around seven project types:
 
@@ -110,7 +109,7 @@ RepoForge's template system is organized around seven project types:
 - `frontend-library` — frontend libraries, plugins, and components;
 - `desktop-application` — desktop software and cross-platform applications.
 
-Only `scientific-python` has a working renderer contract today; the other families currently have separated visual profile previews and will receive templates incrementally.
+The remaining families currently have separated visual profile previews and will receive executable templates incrementally.
 
 ## Profiles
 
@@ -129,7 +128,8 @@ RepoForge
 ├── profiles/                      # cross-project profile rules
 ├── partials/                      # reusable documentation components
 ├── tests/
-│   └── previews/                  # approved rendered views
+│   ├── previews/                  # approved rendered views
+│   └── stress/                    # high-pressure real-shape configs
 ├── scripts/                       # maintenance helpers
 └── docs/                          # architecture and standards
 ```
@@ -155,7 +155,7 @@ GitHub Actions runs the test suite on supported Python versions and performs a C
 
 ## Status
 
-RepoForge is in early development. The `scientific-python` family is the first implemented renderer target; the next work is snapshot synchronization and additional project families.
+RepoForge is in early development. `scientific-python` is the first mature renderer family; `research-algorithm` is now the second implemented family and is entering reference-case refinement and preview/snapshot hardening.
 
 ## License
 

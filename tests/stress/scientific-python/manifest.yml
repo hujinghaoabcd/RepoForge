@@ -1,0 +1,54 @@
+cases:
+  - name: tiny-numerical-utility
+    profile: minimal
+    config: cases/tiny-numerical-utility.yml
+    min_lines: 25
+    max_lines: 100
+    must_have:
+      - "# NanoFit"
+      - "## Quick Start"
+    must_not_have:
+      - "## Features"
+      - "## Method catalogue"
+  - name: multi-method-geospatial
+    profile: standard
+    config: cases/multi-method-geospatial.yml
+    min_lines: 70
+    max_lines: 240
+    must_have:
+      - "## Why GeoKernel?"
+      - "## Methods and Capabilities"
+      - "## Validation"
+    must_not_have:
+      - "## Scientific scope"
+  - name: broad-model-library
+    profile: full
+    config: cases/broad-model-library.yml
+    min_lines: 120
+    max_lines: 450
+    must_have:
+      - "## Scientific scope"
+      - "## Method catalogue"
+      - "## Choosing a method"
+      - "## Project status and API stability"
+    must_not_have: []
+  - name: theory-heavy-statistics
+    profile: full
+    config: cases/theory-heavy-statistics.yml
+    min_lines: 120
+    max_lines: 450
+    must_have:
+      - "## Scientific scope"
+      - "## Validation and reproducibility"
+      - "## Limitations and interpretation boundaries"
+    must_not_have: []
+  - name: pre1-experimental-package
+    profile: standard
+    config: cases/pre1-experimental-package.yml
+    min_lines: 70
+    max_lines: 240
+    must_have:
+      - "## Why ProtoSpectra?"
+      - "## Limitations"
+    must_not_have:
+      - "## Project status and API stability"

@@ -1,0 +1,121 @@
+logo_path: null
+project_name: ModelAtlas
+tagline: A broad scientific modelling library spanning regression, decomposition, interpolation, and local diagnostics.
+badges: '[![PyPI](https://img.shields.io/badge/PyPI-package-blue)](#installation) [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation-and-reproducibility) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-BSD--3--Clause-green)](#license)'
+language_switch: English · 简体中文
+navigation: Documentation · Model Guide · Examples · API · Citation
+overview_text: ModelAtlas provides a common result-object and validation layer for several families of numerical and spatial models.
+why_text: Research groups often accumulate incompatible implementations of related models. ModelAtlas standardizes data contracts, fitted results, prediction semantics, diagnostics, and validation reporting without pretending that the underlying methods are interchangeable.
+scope_text: The package covers reusable numerical modelling workflows. It does not automatically choose a scientifically correct model, coordinate system, causal interpretation, or preprocessing strategy for the user.
+features:
+  - name: Model families
+    description: Regression, interpolation, decomposition, and local-model interfaces.
+  - name: Unified results
+    description: Consistent fitted-result, diagnostic, and prediction contracts.
+  - name: Model selection aids
+    description: Explicit capability tables and method-selection guidance.
+  - name: Validation
+    description: Versioned numerical fixtures and independent reference comparisons.
+  - name: Interoperability
+    description: NumPy, pandas, SciPy, and GeoPandas-friendly inputs where appropriate.
+install_command: python -m pip install modelatlas
+verify_command: python -c "import modelatlas; print(modelatlas.__version__)"
+optional_install_commands:
+  - command: python -m pip install "modelatlas[geo]"
+    description: geospatial interoperability
+  - command: python -m pip install "modelatlas[plot]"
+    description: plotting helpers
+development_install: |-
+  git clone https://github.com/example/modelatlas.git
+  cd modelatlas
+  python -m pip install -e ".[dev,docs]"
+quickstart_intro: Fit a small local regression workflow using synthetic data.
+quickstart_code: |
+  import numpy as np
+  from modelatlas import LocalModel
+
+  rng = np.random.default_rng(42)
+  coords = rng.uniform(0, 1, size=(40, 2))
+  X = rng.normal(size=(40, 3))
+  y = 1.0 + X @ np.array([0.6, -0.2, 0.9])
+
+  result = LocalModel(neighbors=12).fit(X, y, coords)
+  print(result.summary())
+methods:
+  - name: GlobalRegression
+    purpose: Estimate a single global relationship
+    operation: predict
+    notes: One coefficient vector for all observations
+  - name: LocalModel
+    purpose: Estimate neighborhood-varying relationships
+    operation: predict
+    notes: Spatial or feature-space neighborhoods
+  - name: Interpolator
+    purpose: Estimate values at unsampled locations
+    operation: predict
+    notes: Requires explicit distance and kernel choices
+  - name: Decomposer
+    purpose: Separate structured components
+    operation: transform
+    notes: Interpretation depends on decomposition assumptions
+method_selection: Use global regression when one relationship is scientifically defensible across the domain; use local models only when spatial or neighborhood heterogeneity is part of the estimand; use interpolation when the primary goal is unsampled-location estimation rather than coefficient interpretation.
+data_contracts:
+  - observation axis is always the first array dimension
+  - missing values are rejected unless a method documents explicit support
+  - coordinate units and distance metrics must be scientifically meaningful
+  - fitted results record preprocessing and method metadata
+representative_example:
+  intro: A full workflow can fit a model, inspect diagnostics, and predict new observations.
+  code: |
+    import numpy as np
+    from modelatlas import GlobalRegression
+
+    X = np.array([[0.0], [1.0], [2.0], [3.0]])
+    y = np.array([1.0, 2.9, 5.1, 7.0])
+    result = GlobalRegression().fit(X, y)
+    print(result.predict(np.array([[4.0]])))
+  link: docs/workflows.md
+validation:
+  summary: Each model family documents a bounded validation claim instead of inheriting one package-wide correctness claim.
+  items:
+    - analytical cases cover simple models where closed-form checks exist
+    - selected methods are compared with independent reference implementations
+    - serialized fixtures guard against unintended numerical drift
+    - supported Python versions are exercised in CI
+  link: docs/validation/index.md
+examples:
+  - name: Global regression
+    link: examples/global_regression.py
+    description: simple fit and prediction
+  - name: Local modelling
+    link: examples/local_model.py
+    description: neighborhood-varying relationships
+  - name: Interpolation
+    link: examples/interpolation.py
+    description: unsampled-location estimation
+documentation:
+  - name: Getting Started
+    link: docs/getting-started.md
+    description: installation and first workflows
+  - name: Model Guide
+    link: docs/models/index.md
+    description: method assumptions and selection guidance
+  - name: API Reference
+    link: docs/api.md
+    description: public interfaces
+  - name: Validation Guide
+    link: docs/validation/index.md
+    description: method-specific evidence and boundaries
+project_status: ModelAtlas is pre-1.0 but maintains documented deprecation notes for public APIs. Experimental submodules are explicitly marked and excluded from stability guarantees.
+limitations:
+  - a common API does not make all model families scientifically interchangeable
+  - automatic method selection is intentionally out of scope
+  - local-model outputs must not be interpreted causally without an appropriate design
+citation:
+  intro: Cite the software release and the relevant method references used in the analysis.
+  bibtex: null
+  cff: CITATION.cff
+  doi: null
+support_text: Use discussions for usage questions and issues for reproducible defects.
+contributing_link: CONTRIBUTING.md
+license_text: ModelAtlas is released under the BSD 3-Clause License.

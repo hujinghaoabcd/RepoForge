@@ -1,0 +1,101 @@
+logo_path: null
+project_name: BayesField
+tagline: Bayesian spatial-field models with explicit priors, diagnostics, and posterior prediction contracts.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation-and-reproducibility) [![Docs](https://img.shields.io/badge/docs-online-blue)](#documentation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+language_switch: null
+navigation: Documentation · Theory · Examples · API · Citation
+overview_text: BayesField implements a focused family of Bayesian latent-field models with reusable posterior result objects and predictive workflows.
+why_text: Bayesian field models are easy to misuse when prior structure, identifiability, conditioning, and posterior summaries are hidden behind a generic fit call. BayesField keeps those scientific choices visible in the public workflow.
+scope_text: BayesField covers latent Gaussian-style spatial fields and posterior prediction for documented likelihood families. It does not provide automatic causal identification, universal prior defaults, or a substitute for model criticism.
+features:
+  - name: Explicit priors
+    description: Prior choices remain visible in model construction and saved metadata.
+  - name: Posterior diagnostics
+    description: Convergence and posterior-quality summaries are first-class result objects.
+  - name: Prediction
+    description: Posterior predictive operations distinguish fitted-location and new-location semantics.
+  - name: Validation fixtures
+    description: Small synthetic recovery cases are versioned with the package.
+install_command: python -m pip install bayesfield
+verify_command: python -c "import bayesfield; print(bayesfield.__version__)"
+optional_install_commands: []
+development_install: |-
+  git clone https://github.com/example/bayesfield.git
+  cd bayesfield
+  python -m pip install -e ".[dev,docs]"
+quickstart_intro: Fit a tiny latent-field example with an explicit prior scale.
+quickstart_code: |
+  import numpy as np
+  from bayesfield import GaussianField
+
+  coords = np.array([[0.0], [1.0], [2.0], [3.0]])
+  y = np.array([0.2, 0.8, 0.4, -0.1])
+  result = GaussianField(length_scale=1.2, prior_sd=1.0).fit(coords, y)
+  print(result.posterior_summary())
+methods:
+  - name: GaussianField
+    purpose: Fit a latent Gaussian spatial field
+    operation: posterior_predict
+    notes: Requires explicit covariance and prior choices
+  - name: FieldDiagnostics
+    purpose: Inspect posterior and convergence quality
+    operation: inspect
+    notes: Diagnostics support interpretation but do not prove model adequacy
+method_selection: Use the documented Gaussian field when its covariance and likelihood assumptions match the scientific problem; do not choose a model solely because it samples successfully.
+data_contracts:
+  - coordinate units and covariance parameters must be compatible
+  - priors are part of the scientific model and are never silently replaced
+  - posterior prediction distinguishes observed and new locations
+  - missing observations require an explicitly supported likelihood path
+representative_example:
+  intro: Posterior prediction should make the target locations explicit.
+  code: |
+    import numpy as np
+    from bayesfield import GaussianField
+
+    train_x = np.array([[0.0], [1.0], [2.0]])
+    y = np.array([0.1, 0.7, 0.2])
+    fit = GaussianField(length_scale=1.0, prior_sd=1.0).fit(train_x, y)
+    print(fit.predict(np.array([[1.5], [2.5]])))
+  link: docs/prediction.md
+validation:
+  summary: Validation focuses on bounded inferential and numerical claims rather than claiming universal statistical correctness.
+  items:
+    - synthetic recovery cases test known latent fields under documented settings
+    - posterior summaries are checked against independent calculations for small conjugate cases
+    - deterministic seeds protect regression fixtures where stochastic algorithms are involved
+    - failure modes are documented for non-identifiable or numerically unstable configurations
+  link: docs/validation.md
+examples:
+  - name: Prior sensitivity
+    link: examples/prior_sensitivity.py
+    description: compare posterior behavior under explicit prior changes
+  - name: Posterior prediction
+    link: examples/prediction.py
+    description: predict at new locations
+documentation:
+  - name: Theory Guide
+    link: docs/theory/index.md
+    description: model assumptions and derivations
+  - name: Diagnostics Guide
+    link: docs/diagnostics.md
+    description: interpretation and warning signs
+  - name: API Reference
+    link: docs/api.md
+    description: public classes and functions
+  - name: Validation Guide
+    link: docs/validation.md
+    description: bounded numerical and statistical claims
+project_status: BayesField is research software with a documented public API; new model families may remain experimental until their validation scope is complete.
+limitations:
+  - posterior concentration does not imply causal identification
+  - convergence diagnostics do not establish that the scientific model is appropriate
+  - prior sensitivity should be assessed for conclusions that materially depend on prior structure
+citation:
+  intro: Cite both BayesField and the methodological references corresponding to the model used.
+  bibtex: null
+  cff: CITATION.cff
+  doi: null
+support_text: Use the theory and diagnostics guides before opening interpretation questions; use issues for reproducible software defects.
+contributing_link: CONTRIBUTING.md
+license_text: BayesField is released under the MIT License.
