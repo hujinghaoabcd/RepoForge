@@ -1,0 +1,60 @@
+logo_path: null
+method_figure: null
+project_name: LatentMap
+tagline: A research method for learning task-aware latent distances and interpretable low-dimensional structure.
+badges: '[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](#installation) [![Paper](https://img.shields.io/badge/paper-method-blue)](#citation) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#validation) [![License](https://img.shields.io/badge/license-MIT-green)](#license)'
+navigation: Paper · Documentation · Examples · API · Citation
+problem_text: Many workflows rely on fixed Euclidean distance even when the scientific task depends on a different notion of similarity. LatentMap addresses this mismatch by learning a representation whose geometry is optimized for a documented task objective.
+method_overview:
+  text: LatentMap learns a mapping from observed features into a lower-dimensional latent space, then evaluates neighborhood structure using distances in that learned space. The learned geometry is part of the model and must be interpreted together with the training objective.
+  equation: '$$z_i = f_\theta(x_i), \qquad d_{ij}^{(z)} = \lVert z_i-z_j \rVert_2.$$'
+contributions:
+  - learns task-aware latent distances instead of assuming a fixed observed-space metric
+  - exposes the learned embedding and distance contract as inspectable model outputs
+  - separates optimization, validation, and downstream neighborhood construction
+  - provides deterministic synthetic recovery fixtures for documented settings
+install_note: Install the maintained package from PyPI.
+install_command: python -m pip install latentmap
+quickstart_intro: Fit LatentMap on a small synthetic regression-style task and inspect the learned embedding.
+quickstart_code: |
+  import numpy as np
+  from latentmap import LatentMap
+
+  X = np.array([[0.0, 1.0], [1.0, 1.2], [2.0, 2.1], [3.0, 2.8], [4.0, 4.2]])
+  y = np.array([0.0, 0.2, 0.9, 1.1, 1.8])
+
+  model = LatentMap(n_components=2, random_state=42)
+  result = model.fit(X, y)
+  print(result.embedding_)
+validation:
+  summary: LatentMap separates implementation validation from downstream predictive performance claims.
+  checks:
+    - deterministic fixtures check the optimization and distance contracts
+    - synthetic recovery cases verify expected neighborhood ordering under documented settings
+    - degenerate inputs and unsupported objectives fail explicitly
+  link: docs/validation.md
+limitations:
+  - the learned latent geometry depends on the supplied objective and training data
+  - a visually separated embedding does not by itself establish causal or physical structure
+  - downstream scientific conclusions remain sensitive to the choice of objective and model capacity
+documentation:
+  - name: Method Guide
+    link: docs/method.md
+    description: scientific formulation and assumptions
+  - name: Examples
+    link: examples/
+    description: complete runnable workflows
+  - name: Validation Guide
+    link: docs/validation.md
+    description: recovery cases, tolerances, and claim boundaries
+  - name: API Reference
+    link: docs/api.md
+    description: public implementation surface
+citation:
+  intro: Cite the LatentMap method paper for the scientific method and the software release when the implementation contributes materially to the work.
+  paper: docs/paper.md
+  bibtex: null
+  cff: CITATION.cff
+support_text: Use the documentation for method questions and the issue tracker for reproducible software defects.
+contributing_link: CONTRIBUTING.md
+license_text: LatentMap is released under the MIT License.
